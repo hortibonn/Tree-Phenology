@@ -60,7 +60,7 @@ jobs:
 
       # Step 4: Install renv and restore dependencies integrated with github cache
       - name: Install renv and restore dependencies
-      	uses: r-lib/actions/setup-renv@v2
+        uses: r-lib/actions/setup-renv@v2
 
       # Step 5: Render Bookdown
       - name: Render Bookdown
