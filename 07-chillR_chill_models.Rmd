@@ -54,7 +54,7 @@ df<-data.frame(
 kable(df) %>%
   kable_styling("striped", position = "left", font_size = 10)
 
-custom<-function(x) step_model(x,df)
+custom <- function(x) step_model(x, df)
 
 custom(Winters_hours_gaps$Temp)[1:100]
 
@@ -69,22 +69,30 @@ Dynamic_Model(Winters_hours_gaps$Temp)[1:100]
 So `chillR` has a few functions that can be applied to hourly temperature data. It also has wrapper functions that allow computing chill between specific start and end dates. The `chilling()` function automatically calculates a few basic metrics for us. Note that we have to use the `chillR` function `make_JDay()` here to add the Julian dates (counts the days of the year) to the dataset for this to work.
 
 ```{r chilling}
-output<-chilling(make_JDay(Winters_hours_gaps),Start_JDay = 90, End_JDay = 100)
+output <- chilling(make_JDay(Winters_hours_gaps),
+                   Start_JDay = 90,
+                   End_JDay = 100)
 
 kable(output) %>%
-  kable_styling("striped", position = "left", font_size = 10)
+  kable_styling("striped",
+                position = "left",
+                font_size = 10)
 
 ```
 
 So the `chilling()` function implements the Chilling Hours, Utah and Dynamic Models, and it also calculates Growing Degree Days (GDH). But maybe we don't want all of these, or we want other metrics. In that case, we can make use of the `tempResponse` function, which is somewhat similar to `chilling()`, but it takes as input a list of temperature models to be computed.
 
 ```{r tempResponse}
-output<-tempResponse(make_JDay(Winters_hours_gaps),
-                     Start_JDay = 90, End_JDay = 100,
-                     models=list(Chill_Portions=Dynamic_Model, GDH=GDH))
+output <- tempResponse(make_JDay(Winters_hours_gaps),
+                       Start_JDay = 90,
+                       End_JDay = 100,
+                       models = list(Chill_Portions = Dynamic_Model, 
+                                     GDH = GDH))
 
 kable(output) %>%
-  kable_styling("striped", position = "left", font_size = 10)
+  kable_styling("striped", 
+                position = "left",
+                font_size = 10)
 ```
 
 ## `Exercises` on chill models {-#exercises_chill_models}

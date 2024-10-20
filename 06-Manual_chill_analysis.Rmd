@@ -49,7 +49,12 @@ kable(Winters_hours_gaps[1:10,])  %>%
 The dataset contains a column that we don't need (`Temps_gaps`, which I added to demonstrate the use of a `chillR` function that can fill such gaps), so I'm creating a new dataset (`hourtemps`) that only contains the columns we want.
 
 ```{r show_Winters_no_gaps}
-hourtemps<-Winters_hours_gaps[,c("Year","Month","Day","Hour","Temp")]
+hourtemps <- Winters_hours_gaps[,
+                                c("Year",
+                                  "Month",
+                                  "Day",
+                                  "Hour",
+                                  "Temp")]
 ```
 
 What we get now is the standard format of an hourly `chillR` temperature record - with separate columns for `Year`, `Month`, `Day`, `Hour` and `Temp`. The last column contains hourly temperatures (without gaps), which we can use to calculate Chilling Hours.
@@ -57,10 +62,10 @@ What we get now is the standard format of an hourly `chillR` temperature record 
 The data format of this dataset is called `data.frame`. This is a structure with multiple columns and rows. We can access information in this `hourtemps` `data.frame` by referring to it as `hourtemps[row,column]`. Here `row` can be a number, a range of numbers (e.g. `c(1,2,4)`, `1:5`), or even a name, if you're using the option to assign names to rows (we're not doing that here). `column` is the same for the columns, except that for this we are using names (e.g. `Year`, `Temp`). If you want all rows (columns), leave the column (row) argument blank. To refer to a column, you can also add the name directly after the data.frame name, separated by a `$` sign.
 
 ```{r check_out_data.frame}
-hourtemps[3,]
-hourtemps[3,"Temp"]
+hourtemps[3, ]
+hourtemps[3, "Temp"]
 hourtemps$Temp[1:5]
-hourtemps[1:5,]
+hourtemps[1:5, ]
 ```
 
 To assign new values to R objects, you can use the `<-` sign. You already saw an example of this above, where the `hourtemps` `data.frame` was defined. You can also use such an assignment to create a new column in a `data.frame`. To do this, you just assign new values to a column with the name of your choice `hourtemps[,"myColumn"]<-NA`. `NA` means 'not available'. It's R's way of saying there's no data here. But let's directly jump to a more useful example that will set us on the path to calculating Chilling Hours.
@@ -70,15 +75,15 @@ We've already talked about Chilling Hours, but here's a reminder of what they ar
 So what we have to do is check for every hour whether temperatures fall in this range. Such checks can be implemented in R with fairly simple comparison commands (`<`, `<=`, `==`, `=>` and `>`). These can be applied to single numbers, or to so-called `vectors`, which are strings of numbers (such as the ones created by the `c()` command - we already used this above). We can combine multiple such comparisons with the `&` command.
 
 ```{r comparisons,results='as.is'}
-1==2
-1==1
-c(1,2,3)>2
+1 == 2
+1 == 1
+c(1, 2, 3) > 2
 
-a<-1
-b<-2
-c<-3
-c(a,b,c)>=2
-c(a,b,c)>=2&c(a,b,c)<3
+a <- 1
+b <- 2
+c <- 3
+c(a, b, c) >= 2
+c(a, b, c) >= 2 & c(a, b, c) < 3
 
 ```
 
@@ -86,9 +91,10 @@ So now we want to check if temperatures in a given hour are within the range con
 
 ```{r manual_chilling_weight}
 
-hourtemps[,"Chilling_Hour"]<-hourtemps$Temp>=0&hourtemps$Temp<=7.2
+hourtemps[, "Chilling_Hour"] <-
+  hourtemps$Temp >= 0 & hourtemps$Temp <= 7.2
 
-hourtemps[13:20,]
+hourtemps[13:20, ]
 ```
 
 I'm showing you here the rows 13-20 of the dataset, because temperatures only then reached the interesting range. The `Chilling_Hour` column now reads `FALSE` and `TRUE`, but these values are equivalent to `0` and `1`, and we can calculate with them. It's now easy to add up the Chilling Hours of a particular period, which we can do with the `sum` command.
@@ -99,14 +105,14 @@ sum(hourtemps$Chilling_Hour[13:20])
 So between the 13^th^ and 20^th^ hour, we had 4 Chilling Hours. With a slightly more complex command, we can calculate chill between actual dates. We'll use the `which` command to identify the hours in the dataset that correspond to the date we're interested in.
 ```{r summing_CH_dates}
 
-Start_Date<-which(hourtemps$Year==2008 &
-                  hourtemps$Month==10 &
-                  hourtemps$Day==1 & 
-                  hourtemps$Hour==12)
-End_Date<-which(hourtemps$Year==2008 &
-                hourtemps$Month==10 &
-                hourtemps$Day==31 &
-                hourtemps$Hour==12)
+Start_Date <- which(hourtemps$Year == 2008 &
+                      hourtemps$Month == 10 &
+                      hourtemps$Day == 1 &
+                      hourtemps$Hour == 12)
+End_Date <- which(hourtemps$Year == 2008 &
+                    hourtemps$Month == 10 &
+                    hourtemps$Day == 31 &
+                    hourtemps$Hour == 12)
 
 sum(hourtemps$Chilling_Hour[Start_Date:End_Date])
 
@@ -122,7 +128,8 @@ A function consists of a name, some arguments that are passed to the function, a
 ```{r CH_function}
 CH<-function(hourtemps)
 {
-  hourtemps[,"Chilling_Hour"]<-hourtemps$Temp>=0&hourtemps$Temp<=7.2
+  hourtemps[, "Chilling_Hour"] <-
+    hourtemps$Temp >= 0 & hourtemps$Temp <= 7.2
   return(hourtemps)
 }
 ```
@@ -130,34 +137,38 @@ CH<-function(hourtemps)
 Now we have a function that adds a column called `Chilling_Hour` to our dataframe, which indicates whether an hour is a Chilling Hour or not. Here's how we can use this:
 
 ```{r apply_CH}
-CH(hourtemps)[13:20,]  # again restricted to rows 13-20,
+CH(hourtemps)[13:20, ]  # again restricted to rows 13-20,
                        # because we don't want to see the whole output here.
 ```
 
 We can also make more complex functions, e.g. to calculate the number of Chilling Hours between two dates, which we can specify in the `YEARMODA` format (i.e. year, month and day, combined in one number).
 
 ```{r calculate_CH}
-sum_CH<-function(hourtemps, Start_YEARMODA, End_YEARMODA)
+sum_CH <- function(hourtemps,
+                   Start_YEARMODA,
+                   End_YEARMODA)
 {
-  Start_Year<-trunc(Start_YEARMODA/10000) # "trunc" removes all decimals
-  Start_Month<-trunc((Start_YEARMODA-Start_Year*10000)/100)
-  Start_Day<-Start_YEARMODA-Start_Year*10000-Start_Month*100
-  Start_Hour<-12 # This could also be flexible, but let's skip this for now
-  End_Year<-trunc(End_YEARMODA/10000)
-  End_Month<-trunc((End_YEARMODA-End_Year*10000)/100)
-  End_Day<-End_YEARMODA-End_Year*10000-End_Month*100
-  End_Hour<-12 # This could also be flexible, but let's skip this for now
+  Start_Year <- trunc(Start_YEARMODA / 10000) # "trunc" removes all decimals
+  Start_Month <-
+    trunc((Start_YEARMODA - Start_Year*10000) / 100)
+  Start_Day <- 
+    Start_YEARMODA - Start_Year * 10000 - Start_Month * 100
+  Start_Hour <- 12 # This could also be flexible, but let's skip this for now
+  End_Year <- trunc(End_YEARMODA / 10000)
+  End_Month <- trunc((End_YEARMODA - End_Year * 10000) / 100)
+  End_Day <- End_YEARMODA - End_Year * 10000 - End_Month * 100
+  End_Hour <- 12 # This could also be flexible, but let's skip this for now
 
-  Start_Date<-which(hourtemps$Year==Start_Year &
-                    hourtemps$Month==Start_Month &
-                    hourtemps$Day==Start_Day &
-                    hourtemps$Hour==Start_Hour)
-  End_Date<-which(hourtemps$Year==End_Year &
-                  hourtemps$Month==End_Month &
-                  hourtemps$Day==End_Day &
-                  hourtemps$Hour==End_Hour)
+  Start_Date <- which(hourtemps$Year == Start_Year &
+                        hourtemps$Month == Start_Month &
+                        hourtemps$Day == Start_Day &
+                        hourtemps$Hour == Start_Hour)
+  End_Date <- which(hourtemps$Year == End_Year &
+                    hourtemps$Month == End_Month &
+                    hourtemps$Day == End_Day &
+                    hourtemps$Hour == End_Hour)
 
-  Chill_hours<-CH(hourtemps)
+  Chill_hours <- CH(hourtemps)
   
   return(sum(Chill_hours$Chilling_Hour[Start_Date:End_Date]))
 
@@ -169,7 +180,7 @@ This function now includes the pretty annoying conversion between YEARMODA forma
 With one call, we can now compute chill accumulation between two dates. Note that the dataset only goes from 3^rd^ March to 11^th^ November 2008, so use of any dates outside that range will generate an error message. If we want to make a more user-friendly function, we'd now add checks for date validity etc. Maybe we'll do such things later. Here's how we can now calculate Chilling Hours between two dates:
 
 ```{r calc_CH_example}
-sum_CH(hourtemps,20080401,20081011)
+sum_CH(hourtemps, 20080401, 20081011)
 ```
 
 This is basically how functions work, and we'll encounter lots of this throughout this course. `chillR` contains many small functions that do specific things. These are then used by other functions to achieve bigger and better things, and in the end we can manage to automatically do some pretty complex analyses.
