@@ -23,7 +23,7 @@
 <meta name="author" content="Eike Luedeling" />
 
 
-<meta name="date" content="2024-09-29" />
+<meta name="date" content="2024-10-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -842,17 +842,22 @@ Temp
 </tbody>
 </table>
 <p>The dataset contains a column that we don’t need (<code>Temps_gaps</code>, which I added to demonstrate the use of a <code>chillR</code> function that can fill such gaps), so I’m creating a new dataset (<code>hourtemps</code>) that only contains the columns we want.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="manual-chill-analysis.html#cb5-1" tabindex="-1"></a>hourtemps<span class="ot">&lt;-</span>Winters_hours_gaps[,<span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>,<span class="st">&quot;Month&quot;</span>,<span class="st">&quot;Day&quot;</span>,<span class="st">&quot;Hour&quot;</span>,<span class="st">&quot;Temp&quot;</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="manual-chill-analysis.html#cb5-1" tabindex="-1"></a>hourtemps <span class="ot">&lt;-</span> Winters_hours_gaps[,</span>
+<span id="cb5-2"><a href="manual-chill-analysis.html#cb5-2" tabindex="-1"></a>                                <span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>,</span>
+<span id="cb5-3"><a href="manual-chill-analysis.html#cb5-3" tabindex="-1"></a>                                  <span class="st">&quot;Month&quot;</span>,</span>
+<span id="cb5-4"><a href="manual-chill-analysis.html#cb5-4" tabindex="-1"></a>                                  <span class="st">&quot;Day&quot;</span>,</span>
+<span id="cb5-5"><a href="manual-chill-analysis.html#cb5-5" tabindex="-1"></a>                                  <span class="st">&quot;Hour&quot;</span>,</span>
+<span id="cb5-6"><a href="manual-chill-analysis.html#cb5-6" tabindex="-1"></a>                                  <span class="st">&quot;Temp&quot;</span>)]</span></code></pre></div>
 <p>What we get now is the standard format of an hourly <code>chillR</code> temperature record - with separate columns for <code>Year</code>, <code>Month</code>, <code>Day</code>, <code>Hour</code> and <code>Temp</code>. The last column contains hourly temperatures (without gaps), which we can use to calculate Chilling Hours.</p>
 <p>The data format of this dataset is called <code>data.frame</code>. This is a structure with multiple columns and rows. We can access information in this <code>hourtemps</code> <code>data.frame</code> by referring to it as <code>hourtemps[row,column]</code>. Here <code>row</code> can be a number, a range of numbers (e.g. <code>c(1,2,4)</code>, <code>1:5</code>), or even a name, if you’re using the option to assign names to rows (we’re not doing that here). <code>column</code> is the same for the columns, except that for this we are using names (e.g. <code>Year</code>, <code>Temp</code>). If you want all rows (columns), leave the column (row) argument blank. To refer to a column, you can also add the name directly after the data.frame name, separated by a <code>$</code> sign.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="manual-chill-analysis.html#cb6-1" tabindex="-1"></a>hourtemps[<span class="dv">3</span>,]</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="manual-chill-analysis.html#cb6-1" tabindex="-1"></a>hourtemps[<span class="dv">3</span>, ]</span></code></pre></div>
 <pre><code>##   Year Month Day Hour   Temp
 ## 3 2008     3   3   12 18.699</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="manual-chill-analysis.html#cb8-1" tabindex="-1"></a>hourtemps[<span class="dv">3</span>,<span class="st">&quot;Temp&quot;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="manual-chill-analysis.html#cb8-1" tabindex="-1"></a>hourtemps[<span class="dv">3</span>, <span class="st">&quot;Temp&quot;</span>]</span></code></pre></div>
 <pre><code>## [1] 18.699</code></pre>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="manual-chill-analysis.html#cb10-1" tabindex="-1"></a>hourtemps<span class="sc">$</span>Temp[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div>
 <pre><code>## [1] 15.127 17.153 18.699 18.699 18.842</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="manual-chill-analysis.html#cb12-1" tabindex="-1"></a>hourtemps[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,]</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="manual-chill-analysis.html#cb12-1" tabindex="-1"></a>hourtemps[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, ]</span></code></pre></div>
 <pre><code>##   Year Month Day Hour   Temp
 ## 1 2008     3   3   10 15.127
 ## 2 2008     3   3   11 17.153
@@ -862,23 +867,24 @@ Temp
 <p>To assign new values to R objects, you can use the <code>&lt;-</code> sign. You already saw an example of this above, where the <code>hourtemps</code> <code>data.frame</code> was defined. You can also use such an assignment to create a new column in a <code>data.frame</code>. To do this, you just assign new values to a column with the name of your choice <code>hourtemps[,"myColumn"]&lt;-NA</code>. <code>NA</code> means ‘not available’. It’s R’s way of saying there’s no data here. But let’s directly jump to a more useful example that will set us on the path to calculating Chilling Hours.</p>
 <p>We’ve already talked about Chilling Hours, but here’s a reminder of what they are: Every hour with temperatures above (and including) 0°C and below (and including) 7.2°C is considered a Chilling Hour.</p>
 <p>So what we have to do is check for every hour whether temperatures fall in this range. Such checks can be implemented in R with fairly simple comparison commands (<code>&lt;</code>, <code>&lt;=</code>, <code>==</code>, <code>=&gt;</code> and <code>&gt;</code>). These can be applied to single numbers, or to so-called <code>vectors</code>, which are strings of numbers (such as the ones created by the <code>c()</code> command - we already used this above). We can combine multiple such comparisons with the <code>&amp;</code> command.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="manual-chill-analysis.html#cb14-1" tabindex="-1"></a><span class="dv">1</span><span class="sc">==</span><span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="manual-chill-analysis.html#cb14-1" tabindex="-1"></a><span class="dv">1</span> <span class="sc">==</span> <span class="dv">2</span></span></code></pre></div>
 <pre><code>## [1] FALSE</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="manual-chill-analysis.html#cb16-1" tabindex="-1"></a><span class="dv">1</span><span class="sc">==</span><span class="dv">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="manual-chill-analysis.html#cb16-1" tabindex="-1"></a><span class="dv">1</span> <span class="sc">==</span> <span class="dv">1</span></span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="manual-chill-analysis.html#cb18-1" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)<span class="sc">&gt;</span><span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="manual-chill-analysis.html#cb18-1" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>) <span class="sc">&gt;</span> <span class="dv">2</span></span></code></pre></div>
 <pre><code>## [1] FALSE FALSE  TRUE</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="manual-chill-analysis.html#cb20-1" tabindex="-1"></a>a<span class="ot">&lt;-</span><span class="dv">1</span></span>
-<span id="cb20-2"><a href="manual-chill-analysis.html#cb20-2" tabindex="-1"></a>b<span class="ot">&lt;-</span><span class="dv">2</span></span>
-<span id="cb20-3"><a href="manual-chill-analysis.html#cb20-3" tabindex="-1"></a>c<span class="ot">&lt;-</span><span class="dv">3</span></span>
-<span id="cb20-4"><a href="manual-chill-analysis.html#cb20-4" tabindex="-1"></a><span class="fu">c</span>(a,b,c)<span class="sc">&gt;=</span><span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="manual-chill-analysis.html#cb20-1" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb20-2"><a href="manual-chill-analysis.html#cb20-2" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb20-3"><a href="manual-chill-analysis.html#cb20-3" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb20-4"><a href="manual-chill-analysis.html#cb20-4" tabindex="-1"></a><span class="fu">c</span>(a, b, c) <span class="sc">&gt;=</span> <span class="dv">2</span></span></code></pre></div>
 <pre><code>## [1] FALSE  TRUE  TRUE</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="manual-chill-analysis.html#cb22-1" tabindex="-1"></a><span class="fu">c</span>(a,b,c)<span class="sc">&gt;=</span><span class="dv">2</span><span class="sc">&amp;</span><span class="fu">c</span>(a,b,c)<span class="sc">&lt;</span><span class="dv">3</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="manual-chill-analysis.html#cb22-1" tabindex="-1"></a><span class="fu">c</span>(a, b, c) <span class="sc">&gt;=</span> <span class="dv">2</span> <span class="sc">&amp;</span> <span class="fu">c</span>(a, b, c) <span class="sc">&lt;</span> <span class="dv">3</span></span></code></pre></div>
 <pre><code>## [1] FALSE  TRUE FALSE</code></pre>
 <p>So now we want to check if temperatures in a given hour are within the range considered to be effective for chill accumulation by the Chilling Hours Model. We then want to assign this result to a new column <code>Chilling_Hour</code>.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="manual-chill-analysis.html#cb24-1" tabindex="-1"></a>hourtemps[,<span class="st">&quot;Chilling_Hour&quot;</span>]<span class="ot">&lt;-</span>hourtemps<span class="sc">$</span>Temp<span class="sc">&gt;=</span><span class="dv">0</span><span class="sc">&amp;</span>hourtemps<span class="sc">$</span>Temp<span class="sc">&lt;=</span><span class="fl">7.2</span></span>
-<span id="cb24-2"><a href="manual-chill-analysis.html#cb24-2" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="manual-chill-analysis.html#cb24-3" tabindex="-1"></a>hourtemps[<span class="dv">13</span><span class="sc">:</span><span class="dv">20</span>,]</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="manual-chill-analysis.html#cb24-1" tabindex="-1"></a>hourtemps[, <span class="st">&quot;Chilling_Hour&quot;</span>] <span class="ot">&lt;-</span></span>
+<span id="cb24-2"><a href="manual-chill-analysis.html#cb24-2" tabindex="-1"></a>  hourtemps<span class="sc">$</span>Temp <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> hourtemps<span class="sc">$</span>Temp <span class="sc">&lt;=</span> <span class="fl">7.2</span></span>
+<span id="cb24-3"><a href="manual-chill-analysis.html#cb24-3" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="manual-chill-analysis.html#cb24-4" tabindex="-1"></a>hourtemps[<span class="dv">13</span><span class="sc">:</span><span class="dv">20</span>, ]</span></code></pre></div>
 <pre><code>##    Year Month Day Hour  Temp Chilling_Hour
 ## 13 2008     3   3   22 9.040         FALSE
 ## 14 2008     3   3   23 7.920         FALSE
@@ -892,14 +898,14 @@ Temp
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="manual-chill-analysis.html#cb26-1" tabindex="-1"></a><span class="fu">sum</span>(hourtemps<span class="sc">$</span>Chilling_Hour[<span class="dv">13</span><span class="sc">:</span><span class="dv">20</span>])</span></code></pre></div>
 <pre><code>## [1] 4</code></pre>
 <p>So between the 13<sup>th</sup> and 20<sup>th</sup> hour, we had 4 Chilling Hours. With a slightly more complex command, we can calculate chill between actual dates. We’ll use the <code>which</code> command to identify the hours in the dataset that correspond to the date we’re interested in.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="manual-chill-analysis.html#cb28-1" tabindex="-1"></a>Start_Date<span class="ot">&lt;-</span><span class="fu">which</span>(hourtemps<span class="sc">$</span>Year<span class="sc">==</span><span class="dv">2008</span> <span class="sc">&amp;</span></span>
-<span id="cb28-2"><a href="manual-chill-analysis.html#cb28-2" tabindex="-1"></a>                  hourtemps<span class="sc">$</span>Month<span class="sc">==</span><span class="dv">10</span> <span class="sc">&amp;</span></span>
-<span id="cb28-3"><a href="manual-chill-analysis.html#cb28-3" tabindex="-1"></a>                  hourtemps<span class="sc">$</span>Day<span class="sc">==</span><span class="dv">1</span> <span class="sc">&amp;</span> </span>
-<span id="cb28-4"><a href="manual-chill-analysis.html#cb28-4" tabindex="-1"></a>                  hourtemps<span class="sc">$</span>Hour<span class="sc">==</span><span class="dv">12</span>)</span>
-<span id="cb28-5"><a href="manual-chill-analysis.html#cb28-5" tabindex="-1"></a>End_Date<span class="ot">&lt;-</span><span class="fu">which</span>(hourtemps<span class="sc">$</span>Year<span class="sc">==</span><span class="dv">2008</span> <span class="sc">&amp;</span></span>
-<span id="cb28-6"><a href="manual-chill-analysis.html#cb28-6" tabindex="-1"></a>                hourtemps<span class="sc">$</span>Month<span class="sc">==</span><span class="dv">10</span> <span class="sc">&amp;</span></span>
-<span id="cb28-7"><a href="manual-chill-analysis.html#cb28-7" tabindex="-1"></a>                hourtemps<span class="sc">$</span>Day<span class="sc">==</span><span class="dv">31</span> <span class="sc">&amp;</span></span>
-<span id="cb28-8"><a href="manual-chill-analysis.html#cb28-8" tabindex="-1"></a>                hourtemps<span class="sc">$</span>Hour<span class="sc">==</span><span class="dv">12</span>)</span>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="manual-chill-analysis.html#cb28-1" tabindex="-1"></a>Start_Date <span class="ot">&lt;-</span> <span class="fu">which</span>(hourtemps<span class="sc">$</span>Year <span class="sc">==</span> <span class="dv">2008</span> <span class="sc">&amp;</span></span>
+<span id="cb28-2"><a href="manual-chill-analysis.html#cb28-2" tabindex="-1"></a>                      hourtemps<span class="sc">$</span>Month <span class="sc">==</span> <span class="dv">10</span> <span class="sc">&amp;</span></span>
+<span id="cb28-3"><a href="manual-chill-analysis.html#cb28-3" tabindex="-1"></a>                      hourtemps<span class="sc">$</span>Day <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span></span>
+<span id="cb28-4"><a href="manual-chill-analysis.html#cb28-4" tabindex="-1"></a>                      hourtemps<span class="sc">$</span>Hour <span class="sc">==</span> <span class="dv">12</span>)</span>
+<span id="cb28-5"><a href="manual-chill-analysis.html#cb28-5" tabindex="-1"></a>End_Date <span class="ot">&lt;-</span> <span class="fu">which</span>(hourtemps<span class="sc">$</span>Year <span class="sc">==</span> <span class="dv">2008</span> <span class="sc">&amp;</span></span>
+<span id="cb28-6"><a href="manual-chill-analysis.html#cb28-6" tabindex="-1"></a>                    hourtemps<span class="sc">$</span>Month <span class="sc">==</span> <span class="dv">10</span> <span class="sc">&amp;</span></span>
+<span id="cb28-7"><a href="manual-chill-analysis.html#cb28-7" tabindex="-1"></a>                    hourtemps<span class="sc">$</span>Day <span class="sc">==</span> <span class="dv">31</span> <span class="sc">&amp;</span></span>
+<span id="cb28-8"><a href="manual-chill-analysis.html#cb28-8" tabindex="-1"></a>                    hourtemps<span class="sc">$</span>Hour <span class="sc">==</span> <span class="dv">12</span>)</span>
 <span id="cb28-9"><a href="manual-chill-analysis.html#cb28-9" tabindex="-1"></a></span>
 <span id="cb28-10"><a href="manual-chill-analysis.html#cb28-10" tabindex="-1"></a><span class="fu">sum</span>(hourtemps<span class="sc">$</span>Chilling_Hour[Start_Date<span class="sc">:</span>End_Date])</span></code></pre></div>
 <pre><code>## [1] 28</code></pre>
@@ -911,11 +917,12 @@ Temp
 <p>A function consists of a name, some arguments that are passed to the function, and some code that should be executed. We can define is as <code>OurFunctionName &lt;- function(argument1, argument2, ...) {ourCode}</code>. All the arguments can be used in the function. What’s returned is either the last object that’s mentioned in the function code or some content specified by the <code>return()</code> function. Here’s an example of this for the Chilling Hours calculation:</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="manual-chill-analysis.html#cb30-1" tabindex="-1"></a>CH<span class="ot">&lt;-</span><span class="cf">function</span>(hourtemps)</span>
 <span id="cb30-2"><a href="manual-chill-analysis.html#cb30-2" tabindex="-1"></a>{</span>
-<span id="cb30-3"><a href="manual-chill-analysis.html#cb30-3" tabindex="-1"></a>  hourtemps[,<span class="st">&quot;Chilling_Hour&quot;</span>]<span class="ot">&lt;-</span>hourtemps<span class="sc">$</span>Temp<span class="sc">&gt;=</span><span class="dv">0</span><span class="sc">&amp;</span>hourtemps<span class="sc">$</span>Temp<span class="sc">&lt;=</span><span class="fl">7.2</span></span>
-<span id="cb30-4"><a href="manual-chill-analysis.html#cb30-4" tabindex="-1"></a>  <span class="fu">return</span>(hourtemps)</span>
-<span id="cb30-5"><a href="manual-chill-analysis.html#cb30-5" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb30-3"><a href="manual-chill-analysis.html#cb30-3" tabindex="-1"></a>  hourtemps[, <span class="st">&quot;Chilling_Hour&quot;</span>] <span class="ot">&lt;-</span></span>
+<span id="cb30-4"><a href="manual-chill-analysis.html#cb30-4" tabindex="-1"></a>    hourtemps<span class="sc">$</span>Temp <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> hourtemps<span class="sc">$</span>Temp <span class="sc">&lt;=</span> <span class="fl">7.2</span></span>
+<span id="cb30-5"><a href="manual-chill-analysis.html#cb30-5" tabindex="-1"></a>  <span class="fu">return</span>(hourtemps)</span>
+<span id="cb30-6"><a href="manual-chill-analysis.html#cb30-6" tabindex="-1"></a>}</span></code></pre></div>
 <p>Now we have a function that adds a column called <code>Chilling_Hour</code> to our dataframe, which indicates whether an hour is a Chilling Hour or not. Here’s how we can use this:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="manual-chill-analysis.html#cb31-1" tabindex="-1"></a><span class="fu">CH</span>(hourtemps)[<span class="dv">13</span><span class="sc">:</span><span class="dv">20</span>,]  <span class="co"># again restricted to rows 13-20,</span></span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="manual-chill-analysis.html#cb31-1" tabindex="-1"></a><span class="fu">CH</span>(hourtemps)[<span class="dv">13</span><span class="sc">:</span><span class="dv">20</span>, ]  <span class="co"># again restricted to rows 13-20,</span></span></code></pre></div>
 <pre><code>##    Year Month Day Hour  Temp Chilling_Hour
 ## 13 2008     3   3   22 9.040         FALSE
 ## 14 2008     3   3   23 7.920         FALSE
@@ -927,34 +934,38 @@ Temp
 ## 20 2008     3   4    5 5.076          TRUE</code></pre>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="manual-chill-analysis.html#cb33-1" tabindex="-1"></a>                       <span class="co"># because we don&#39;t want to see the whole output here.</span></span></code></pre></div>
 <p>We can also make more complex functions, e.g. to calculate the number of Chilling Hours between two dates, which we can specify in the <code>YEARMODA</code> format (i.e. year, month and day, combined in one number).</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="manual-chill-analysis.html#cb34-1" tabindex="-1"></a>sum_CH<span class="ot">&lt;-</span><span class="cf">function</span>(hourtemps, Start_YEARMODA, End_YEARMODA)</span>
-<span id="cb34-2"><a href="manual-chill-analysis.html#cb34-2" tabindex="-1"></a>{</span>
-<span id="cb34-3"><a href="manual-chill-analysis.html#cb34-3" tabindex="-1"></a>  Start_Year<span class="ot">&lt;-</span><span class="fu">trunc</span>(Start_YEARMODA<span class="sc">/</span><span class="dv">10000</span>) <span class="co"># &quot;trunc&quot; removes all decimals</span></span>
-<span id="cb34-4"><a href="manual-chill-analysis.html#cb34-4" tabindex="-1"></a>  Start_Month<span class="ot">&lt;-</span><span class="fu">trunc</span>((Start_YEARMODA<span class="sc">-</span>Start_Year<span class="sc">*</span><span class="dv">10000</span>)<span class="sc">/</span><span class="dv">100</span>)</span>
-<span id="cb34-5"><a href="manual-chill-analysis.html#cb34-5" tabindex="-1"></a>  Start_Day<span class="ot">&lt;-</span>Start_YEARMODA<span class="sc">-</span>Start_Year<span class="sc">*</span><span class="dv">10000</span><span class="sc">-</span>Start_Month<span class="sc">*</span><span class="dv">100</span></span>
-<span id="cb34-6"><a href="manual-chill-analysis.html#cb34-6" tabindex="-1"></a>  Start_Hour<span class="ot">&lt;-</span><span class="dv">12</span> <span class="co"># This could also be flexible, but let&#39;s skip this for now</span></span>
-<span id="cb34-7"><a href="manual-chill-analysis.html#cb34-7" tabindex="-1"></a>  End_Year<span class="ot">&lt;-</span><span class="fu">trunc</span>(End_YEARMODA<span class="sc">/</span><span class="dv">10000</span>)</span>
-<span id="cb34-8"><a href="manual-chill-analysis.html#cb34-8" tabindex="-1"></a>  End_Month<span class="ot">&lt;-</span><span class="fu">trunc</span>((End_YEARMODA<span class="sc">-</span>End_Year<span class="sc">*</span><span class="dv">10000</span>)<span class="sc">/</span><span class="dv">100</span>)</span>
-<span id="cb34-9"><a href="manual-chill-analysis.html#cb34-9" tabindex="-1"></a>  End_Day<span class="ot">&lt;-</span>End_YEARMODA<span class="sc">-</span>End_Year<span class="sc">*</span><span class="dv">10000</span><span class="sc">-</span>End_Month<span class="sc">*</span><span class="dv">100</span></span>
-<span id="cb34-10"><a href="manual-chill-analysis.html#cb34-10" tabindex="-1"></a>  End_Hour<span class="ot">&lt;-</span><span class="dv">12</span> <span class="co"># This could also be flexible, but let&#39;s skip this for now</span></span>
-<span id="cb34-11"><a href="manual-chill-analysis.html#cb34-11" tabindex="-1"></a></span>
-<span id="cb34-12"><a href="manual-chill-analysis.html#cb34-12" tabindex="-1"></a>  Start_Date<span class="ot">&lt;-</span><span class="fu">which</span>(hourtemps<span class="sc">$</span>Year<span class="sc">==</span>Start_Year <span class="sc">&amp;</span></span>
-<span id="cb34-13"><a href="manual-chill-analysis.html#cb34-13" tabindex="-1"></a>                    hourtemps<span class="sc">$</span>Month<span class="sc">==</span>Start_Month <span class="sc">&amp;</span></span>
-<span id="cb34-14"><a href="manual-chill-analysis.html#cb34-14" tabindex="-1"></a>                    hourtemps<span class="sc">$</span>Day<span class="sc">==</span>Start_Day <span class="sc">&amp;</span></span>
-<span id="cb34-15"><a href="manual-chill-analysis.html#cb34-15" tabindex="-1"></a>                    hourtemps<span class="sc">$</span>Hour<span class="sc">==</span>Start_Hour)</span>
-<span id="cb34-16"><a href="manual-chill-analysis.html#cb34-16" tabindex="-1"></a>  End_Date<span class="ot">&lt;-</span><span class="fu">which</span>(hourtemps<span class="sc">$</span>Year<span class="sc">==</span>End_Year <span class="sc">&amp;</span></span>
-<span id="cb34-17"><a href="manual-chill-analysis.html#cb34-17" tabindex="-1"></a>                  hourtemps<span class="sc">$</span>Month<span class="sc">==</span>End_Month <span class="sc">&amp;</span></span>
-<span id="cb34-18"><a href="manual-chill-analysis.html#cb34-18" tabindex="-1"></a>                  hourtemps<span class="sc">$</span>Day<span class="sc">==</span>End_Day <span class="sc">&amp;</span></span>
-<span id="cb34-19"><a href="manual-chill-analysis.html#cb34-19" tabindex="-1"></a>                  hourtemps<span class="sc">$</span>Hour<span class="sc">==</span>End_Hour)</span>
-<span id="cb34-20"><a href="manual-chill-analysis.html#cb34-20" tabindex="-1"></a></span>
-<span id="cb34-21"><a href="manual-chill-analysis.html#cb34-21" tabindex="-1"></a>  Chill_hours<span class="ot">&lt;-</span><span class="fu">CH</span>(hourtemps)</span>
-<span id="cb34-22"><a href="manual-chill-analysis.html#cb34-22" tabindex="-1"></a>  </span>
-<span id="cb34-23"><a href="manual-chill-analysis.html#cb34-23" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">sum</span>(Chill_hours<span class="sc">$</span>Chilling_Hour[Start_Date<span class="sc">:</span>End_Date]))</span>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="manual-chill-analysis.html#cb34-1" tabindex="-1"></a>sum_CH <span class="ot">&lt;-</span> <span class="cf">function</span>(hourtemps,</span>
+<span id="cb34-2"><a href="manual-chill-analysis.html#cb34-2" tabindex="-1"></a>                   Start_YEARMODA,</span>
+<span id="cb34-3"><a href="manual-chill-analysis.html#cb34-3" tabindex="-1"></a>                   End_YEARMODA)</span>
+<span id="cb34-4"><a href="manual-chill-analysis.html#cb34-4" tabindex="-1"></a>{</span>
+<span id="cb34-5"><a href="manual-chill-analysis.html#cb34-5" tabindex="-1"></a>  Start_Year <span class="ot">&lt;-</span> <span class="fu">trunc</span>(Start_YEARMODA <span class="sc">/</span> <span class="dv">10000</span>) <span class="co"># &quot;trunc&quot; removes all decimals</span></span>
+<span id="cb34-6"><a href="manual-chill-analysis.html#cb34-6" tabindex="-1"></a>  Start_Month <span class="ot">&lt;-</span></span>
+<span id="cb34-7"><a href="manual-chill-analysis.html#cb34-7" tabindex="-1"></a>    <span class="fu">trunc</span>((Start_YEARMODA <span class="sc">-</span> Start_Year<span class="sc">*</span><span class="dv">10000</span>) <span class="sc">/</span> <span class="dv">100</span>)</span>
+<span id="cb34-8"><a href="manual-chill-analysis.html#cb34-8" tabindex="-1"></a>  Start_Day <span class="ot">&lt;-</span> </span>
+<span id="cb34-9"><a href="manual-chill-analysis.html#cb34-9" tabindex="-1"></a>    Start_YEARMODA <span class="sc">-</span> Start_Year <span class="sc">*</span> <span class="dv">10000</span> <span class="sc">-</span> Start_Month <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb34-10"><a href="manual-chill-analysis.html#cb34-10" tabindex="-1"></a>  Start_Hour <span class="ot">&lt;-</span> <span class="dv">12</span> <span class="co"># This could also be flexible, but let&#39;s skip this for now</span></span>
+<span id="cb34-11"><a href="manual-chill-analysis.html#cb34-11" tabindex="-1"></a>  End_Year <span class="ot">&lt;-</span> <span class="fu">trunc</span>(End_YEARMODA <span class="sc">/</span> <span class="dv">10000</span>)</span>
+<span id="cb34-12"><a href="manual-chill-analysis.html#cb34-12" tabindex="-1"></a>  End_Month <span class="ot">&lt;-</span> <span class="fu">trunc</span>((End_YEARMODA <span class="sc">-</span> End_Year <span class="sc">*</span> <span class="dv">10000</span>) <span class="sc">/</span> <span class="dv">100</span>)</span>
+<span id="cb34-13"><a href="manual-chill-analysis.html#cb34-13" tabindex="-1"></a>  End_Day <span class="ot">&lt;-</span> End_YEARMODA <span class="sc">-</span> End_Year <span class="sc">*</span> <span class="dv">10000</span> <span class="sc">-</span> End_Month <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb34-14"><a href="manual-chill-analysis.html#cb34-14" tabindex="-1"></a>  End_Hour <span class="ot">&lt;-</span> <span class="dv">12</span> <span class="co"># This could also be flexible, but let&#39;s skip this for now</span></span>
+<span id="cb34-15"><a href="manual-chill-analysis.html#cb34-15" tabindex="-1"></a></span>
+<span id="cb34-16"><a href="manual-chill-analysis.html#cb34-16" tabindex="-1"></a>  Start_Date <span class="ot">&lt;-</span> <span class="fu">which</span>(hourtemps<span class="sc">$</span>Year <span class="sc">==</span> Start_Year <span class="sc">&amp;</span></span>
+<span id="cb34-17"><a href="manual-chill-analysis.html#cb34-17" tabindex="-1"></a>                        hourtemps<span class="sc">$</span>Month <span class="sc">==</span> Start_Month <span class="sc">&amp;</span></span>
+<span id="cb34-18"><a href="manual-chill-analysis.html#cb34-18" tabindex="-1"></a>                        hourtemps<span class="sc">$</span>Day <span class="sc">==</span> Start_Day <span class="sc">&amp;</span></span>
+<span id="cb34-19"><a href="manual-chill-analysis.html#cb34-19" tabindex="-1"></a>                        hourtemps<span class="sc">$</span>Hour <span class="sc">==</span> Start_Hour)</span>
+<span id="cb34-20"><a href="manual-chill-analysis.html#cb34-20" tabindex="-1"></a>  End_Date <span class="ot">&lt;-</span> <span class="fu">which</span>(hourtemps<span class="sc">$</span>Year <span class="sc">==</span> End_Year <span class="sc">&amp;</span></span>
+<span id="cb34-21"><a href="manual-chill-analysis.html#cb34-21" tabindex="-1"></a>                    hourtemps<span class="sc">$</span>Month <span class="sc">==</span> End_Month <span class="sc">&amp;</span></span>
+<span id="cb34-22"><a href="manual-chill-analysis.html#cb34-22" tabindex="-1"></a>                    hourtemps<span class="sc">$</span>Day <span class="sc">==</span> End_Day <span class="sc">&amp;</span></span>
+<span id="cb34-23"><a href="manual-chill-analysis.html#cb34-23" tabindex="-1"></a>                    hourtemps<span class="sc">$</span>Hour <span class="sc">==</span> End_Hour)</span>
 <span id="cb34-24"><a href="manual-chill-analysis.html#cb34-24" tabindex="-1"></a></span>
-<span id="cb34-25"><a href="manual-chill-analysis.html#cb34-25" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb34-25"><a href="manual-chill-analysis.html#cb34-25" tabindex="-1"></a>  Chill_hours <span class="ot">&lt;-</span> <span class="fu">CH</span>(hourtemps)</span>
+<span id="cb34-26"><a href="manual-chill-analysis.html#cb34-26" tabindex="-1"></a>  </span>
+<span id="cb34-27"><a href="manual-chill-analysis.html#cb34-27" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">sum</span>(Chill_hours<span class="sc">$</span>Chilling_Hour[Start_Date<span class="sc">:</span>End_Date]))</span>
+<span id="cb34-28"><a href="manual-chill-analysis.html#cb34-28" tabindex="-1"></a></span>
+<span id="cb34-29"><a href="manual-chill-analysis.html#cb34-29" tabindex="-1"></a>}</span></code></pre></div>
 <p>This function now includes the pretty annoying conversion between YEARMODA format and the separate columns that are required by <code>chillR</code>. This is stuff you wouldn’t want to program again and again… You see that we’re already making use of our <code>CH()</code> function here, to abbreviate the check for whether temperatures during a particular hour are in the ‘chilling range’.</p>
 <p>With one call, we can now compute chill accumulation between two dates. Note that the dataset only goes from 3<sup>rd</sup> March to 11<sup>th</sup> November 2008, so use of any dates outside that range will generate an error message. If we want to make a more user-friendly function, we’d now add checks for date validity etc. Maybe we’ll do such things later. Here’s how we can now calculate Chilling Hours between two dates:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="manual-chill-analysis.html#cb35-1" tabindex="-1"></a><span class="fu">sum_CH</span>(hourtemps,<span class="dv">20080401</span>,<span class="dv">20081011</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="manual-chill-analysis.html#cb35-1" tabindex="-1"></a><span class="fu">sum_CH</span>(hourtemps, <span class="dv">20080401</span>, <span class="dv">20081011</span>)</span></code></pre></div>
 <pre><code>## [1] 77</code></pre>
 <p>This is basically how functions work, and we’ll encounter lots of this throughout this course. <code>chillR</code> contains many small functions that do specific things. These are then used by other functions to achieve bigger and better things, and in the end we can manage to automatically do some pretty complex analyses.</p>
 </div>

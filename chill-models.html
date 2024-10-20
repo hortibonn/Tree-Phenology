@@ -23,7 +23,7 @@
 <meta name="author" content="Eike Luedeling" />
 
 
-<meta name="date" content="2024-09-29" />
+<meta name="date" content="2024-10-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -600,7 +600,7 @@ div.csl-indent {
 ##   if(summ==TRUE) return(cumsum(CH_weights)) else
 ##     return(CH_weights)
 ## }
-## &lt;bytecode: 0x565430cb8460&gt;
+## &lt;bytecode: 0x556b9e966ce0&gt;
 ## &lt;environment: namespace:chillR&gt;</code></pre>
 <p>This is a pretty basic function that takes an hourly temperature dataset (<code>HourTemp</code>) as input and determines for each hour if temperatures are below 7.2°C and above 0°C. If the argument <code>summ</code> is <code>TRUE</code>, the function returns the cumulative Chilling Hours that have accumulated by every hour of the record. If this argument is <code>FALSE</code>, we just get a list of 1s and 0s to indicate which hours are Chilling Hours and which ones aren’t. The default version of the function is to run it with <code>summ==TRUE</code>, as you can see in the first line of the function. So if you don’t specify anything for the <code>summ</code> argument, it will return the cumulative sum of Chilling Hours.</p>
 <p>We can easily apply this now to our <code>Winters_hours_gap</code> dataset:</p>
@@ -615,7 +615,7 @@ div.csl-indent {
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="chill-models.html#cb41-1" tabindex="-1"></a>Utah_Model</span></code></pre></div>
 <pre><code>## function(HourTemp,summ=TRUE)
 ##   return(step_model(HourTemp,df=data.frame(lower=c(-1000,1.4,2.4,9.1,12.4,15.9,18),upper=c(1.4,2.4,9.1,12.4,15.9,18,1000),weight=c(0,0.5,1,0.5,0,-0.5,-1)),summ=summ))
-## &lt;bytecode: 0x56542a754c40&gt;
+## &lt;bytecode: 0x556b99561480&gt;
 ## &lt;environment: namespace:chillR&gt;</code></pre>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="chill-models.html#cb43-1" tabindex="-1"></a><span class="fu">Utah_Model</span>(Winters_hours_gaps<span class="sc">$</span>Temp)[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>]</span></code></pre></div>
 <pre><code>##   [1]  0.0 -0.5 -1.5 -2.5 -3.5 -4.5 -5.5 -6.0 -6.0 -6.0 -5.5 -5.0 -4.0 -3.0 -2.0
@@ -728,7 +728,7 @@ weight
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="chill-models.html#cb46-1" tabindex="-1"></a>custom<span class="ot">&lt;-</span><span class="cf">function</span>(x) <span class="fu">step_model</span>(x,df)</span>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="chill-models.html#cb46-1" tabindex="-1"></a>custom <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">step_model</span>(x, df)</span>
 <span id="cb46-2"><a href="chill-models.html#cb46-2" tabindex="-1"></a></span>
 <span id="cb46-3"><a href="chill-models.html#cb46-3" tabindex="-1"></a><span class="fu">custom</span>(Winters_hours_gaps<span class="sc">$</span>Temp)[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>]</span></code></pre></div>
 <pre><code>##   [1]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  4  7  7  7  7
@@ -753,10 +753,14 @@ weight
 ##  [92] 0.9698435 0.9698435 0.9698435 0.9698435 0.9698435 0.9698435 0.9698435
 ##  [99] 0.9698435 0.9698435</code></pre>
 <p>So <code>chillR</code> has a few functions that can be applied to hourly temperature data. It also has wrapper functions that allow computing chill between specific start and end dates. The <code>chilling()</code> function automatically calculates a few basic metrics for us. Note that we have to use the <code>chillR</code> function <code>make_JDay()</code> here to add the Julian dates (counts the days of the year) to the dataset for this to work.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="chill-models.html#cb50-1" tabindex="-1"></a>output<span class="ot">&lt;-</span><span class="fu">chilling</span>(<span class="fu">make_JDay</span>(Winters_hours_gaps),<span class="at">Start_JDay =</span> <span class="dv">90</span>, <span class="at">End_JDay =</span> <span class="dv">100</span>)</span>
-<span id="cb50-2"><a href="chill-models.html#cb50-2" tabindex="-1"></a></span>
-<span id="cb50-3"><a href="chill-models.html#cb50-3" tabindex="-1"></a><span class="fu">kable</span>(output) <span class="sc">%&gt;%</span></span>
-<span id="cb50-4"><a href="chill-models.html#cb50-4" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">&quot;striped&quot;</span>, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>, <span class="at">font_size =</span> <span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="chill-models.html#cb50-1" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">chilling</span>(<span class="fu">make_JDay</span>(Winters_hours_gaps),</span>
+<span id="cb50-2"><a href="chill-models.html#cb50-2" tabindex="-1"></a>                   <span class="at">Start_JDay =</span> <span class="dv">90</span>,</span>
+<span id="cb50-3"><a href="chill-models.html#cb50-3" tabindex="-1"></a>                   <span class="at">End_JDay =</span> <span class="dv">100</span>)</span>
+<span id="cb50-4"><a href="chill-models.html#cb50-4" tabindex="-1"></a></span>
+<span id="cb50-5"><a href="chill-models.html#cb50-5" tabindex="-1"></a><span class="fu">kable</span>(output) <span class="sc">%&gt;%</span></span>
+<span id="cb50-6"><a href="chill-models.html#cb50-6" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">&quot;striped&quot;</span>,</span>
+<span id="cb50-7"><a href="chill-models.html#cb50-7" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&quot;left&quot;</span>,</span>
+<span id="cb50-8"><a href="chill-models.html#cb50-8" tabindex="-1"></a>                <span class="at">font_size =</span> <span class="dv">10</span>)</span></code></pre></div>
 <table class="table table-striped" style="font-size: 10px; ">
 <thead>
 <tr>
@@ -822,12 +826,16 @@ GDH
 </tbody>
 </table>
 <p>So the <code>chilling()</code> function implements the Chilling Hours, Utah and Dynamic Models, and it also calculates Growing Degree Days (GDH). But maybe we don’t want all of these, or we want other metrics. In that case, we can make use of the <code>tempResponse</code> function, which is somewhat similar to <code>chilling()</code>, but it takes as input a list of temperature models to be computed.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="chill-models.html#cb51-1" tabindex="-1"></a>output<span class="ot">&lt;-</span><span class="fu">tempResponse</span>(<span class="fu">make_JDay</span>(Winters_hours_gaps),</span>
-<span id="cb51-2"><a href="chill-models.html#cb51-2" tabindex="-1"></a>                     <span class="at">Start_JDay =</span> <span class="dv">90</span>, <span class="at">End_JDay =</span> <span class="dv">100</span>,</span>
-<span id="cb51-3"><a href="chill-models.html#cb51-3" tabindex="-1"></a>                     <span class="at">models=</span><span class="fu">list</span>(<span class="at">Chill_Portions=</span>Dynamic_Model, <span class="at">GDH=</span>GDH))</span>
-<span id="cb51-4"><a href="chill-models.html#cb51-4" tabindex="-1"></a></span>
-<span id="cb51-5"><a href="chill-models.html#cb51-5" tabindex="-1"></a><span class="fu">kable</span>(output) <span class="sc">%&gt;%</span></span>
-<span id="cb51-6"><a href="chill-models.html#cb51-6" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">&quot;striped&quot;</span>, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>, <span class="at">font_size =</span> <span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="chill-models.html#cb51-1" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">tempResponse</span>(<span class="fu">make_JDay</span>(Winters_hours_gaps),</span>
+<span id="cb51-2"><a href="chill-models.html#cb51-2" tabindex="-1"></a>                       <span class="at">Start_JDay =</span> <span class="dv">90</span>,</span>
+<span id="cb51-3"><a href="chill-models.html#cb51-3" tabindex="-1"></a>                       <span class="at">End_JDay =</span> <span class="dv">100</span>,</span>
+<span id="cb51-4"><a href="chill-models.html#cb51-4" tabindex="-1"></a>                       <span class="at">models =</span> <span class="fu">list</span>(<span class="at">Chill_Portions =</span> Dynamic_Model, </span>
+<span id="cb51-5"><a href="chill-models.html#cb51-5" tabindex="-1"></a>                                     <span class="at">GDH =</span> GDH))</span>
+<span id="cb51-6"><a href="chill-models.html#cb51-6" tabindex="-1"></a></span>
+<span id="cb51-7"><a href="chill-models.html#cb51-7" tabindex="-1"></a><span class="fu">kable</span>(output) <span class="sc">%&gt;%</span></span>
+<span id="cb51-8"><a href="chill-models.html#cb51-8" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">&quot;striped&quot;</span>, </span>
+<span id="cb51-9"><a href="chill-models.html#cb51-9" tabindex="-1"></a>                <span class="at">position =</span> <span class="st">&quot;left&quot;</span>,</span>
+<span id="cb51-10"><a href="chill-models.html#cb51-10" tabindex="-1"></a>                <span class="at">font_size =</span> <span class="dv">10</span>)</span></code></pre></div>
 <table class="table table-striped" style="font-size: 10px; ">
 <thead>
 <tr>
