@@ -70,7 +70,7 @@ The code below provides some use examples of the `daylength` function, which is 
 ```{r daily_curves, out.width="80%", out.height="50%", exercise=TRUE}
 require(chillR)
 require(ggplot2)
-require(reshape2)
+require(tidyr)
 Days <- daylength(latitude = 50.4, JDay = 1:365)
 Days_df <-
   data.frame(

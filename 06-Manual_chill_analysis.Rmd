@@ -17,7 +17,7 @@ Let me first say that I always have to swallow a toad when I use Chilling Hours,
 
 First, we have to get data into R. The most obvious way to achieve this is reading a data table into R with the `read.table` or `read.csv` functions. There are also packages that can read in `.xls` or `.xlsx` files.
 
-For this initial example, we won't do this, but work with a sample dataset that comes with `chillR`. The package contains the dataset `winters_hours_gaps`, which was recorded in a walnut orchard near Winters, California, in 2008. You can get some impressions of the setting here:
+For this initial example, we won't do this, but work with a sample dataset that comes with `chillR`. The package contains the dataset `Winters_hours_gaps`, which was recorded in a walnut orchard near Winters, California, in 2008. You can get some impressions of the setting here:
 
 ![Temperature logger in a walnut orchard in California, March 2008.](pictures/Walnuts_March.JPG){width=33%} ![Temperature logger in a walnut orchard in California, April 2008.](pictures/Walnuts_April.JPG){width=33%} ![Temperature logger in a walnut orchard in California, May 2008.](pictures/Walnuts_May.JPG){width=33%}
 
