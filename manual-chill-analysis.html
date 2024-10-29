@@ -23,7 +23,7 @@
 <meta name="author" content="Eike Luedeling" />
 
 
-<meta name="date" content="2024-10-20" />
+<meta name="date" content="2024-10-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -595,7 +595,7 @@ div.csl-indent {
 <p>One important challenge that most people who want to compute Chilling Hours quickly realize is that we need hourly temperature data. Quite often, such data aren’t available, and that’s already where the problems start. For now, we’re going to ignore this problem and work with data that already has an hourly time step. A bit later, we’ll talk about ways to make pretty good approximations of hourly temperature data from daily records, for which <code>chillR</code> offers a few neat tools.</p>
 <p>Let me first say that I always have to swallow a toad when I use Chilling Hours, because I don’t think they are very useful. They are, however, the chill model that is most widely known, they are very easy to explain, and they are not hard to calculate. Since at this point we’re absolute beginners in chill modeling, let’s start there.</p>
 <p>First, we have to get data into R. The most obvious way to achieve this is reading a data table into R with the <code>read.table</code> or <code>read.csv</code> functions. There are also packages that can read in <code>.xls</code> or <code>.xlsx</code> files.</p>
-<p>For this initial example, we won’t do this, but work with a sample dataset that comes with <code>chillR</code>. The package contains the dataset <code>winters_hours_gaps</code>, which was recorded in a walnut orchard near Winters, California, in 2008. You can get some impressions of the setting here:</p>
+<p>For this initial example, we won’t do this, but work with a sample dataset that comes with <code>chillR</code>. The package contains the dataset <code>Winters_hours_gaps</code>, which was recorded in a walnut orchard near Winters, California, in 2008. You can get some impressions of the setting here:</p>
 <p><img src="pictures/Walnuts_March.JPG" style="width:33.0%" alt="Temperature logger in a walnut orchard in California, March 2008." /> <img src="pictures/Walnuts_April.JPG" style="width:33.0%" alt="Temperature logger in a walnut orchard in California, April 2008." /> <img src="pictures/Walnuts_May.JPG" style="width:33.0%" alt="Temperature logger in a walnut orchard in California, May 2008." /></p>
 <p>These three pictures were taken between March and May of 2008. Note how the light conditions change over time. This impacts the daily temperature dynamics, which we’ll talk about in one of the next chapters</p>
 <p>To gain access to the <code>Winters_hours_gaps</code> dataset, and to all other functionality in the <code>chillR</code> package, we have to first install and load <code>chillR</code>.</p>

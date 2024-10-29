@@ -23,7 +23,7 @@
 <meta name="author" content="Eike Luedeling" />
 
 
-<meta name="date" content="2024-10-20" />
+<meta name="date" content="2024-10-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -603,7 +603,7 @@ div.csl-indent {
 <p>The code below provides some use examples of the <code>daylength</code> function, which is involved in producing daily temperature curves. Let’s make plots of the sunrise time, sunset time and daylength at Klein-Altendorf (Latitude: 50.4°N) over the course of the year.</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="making-hourly-temperatures.html#cb52-1" tabindex="-1"></a><span class="fu">require</span>(chillR)</span>
 <span id="cb52-2"><a href="making-hourly-temperatures.html#cb52-2" tabindex="-1"></a><span class="fu">require</span>(ggplot2)</span>
-<span id="cb52-3"><a href="making-hourly-temperatures.html#cb52-3" tabindex="-1"></a><span class="fu">require</span>(reshape2)</span>
+<span id="cb52-3"><a href="making-hourly-temperatures.html#cb52-3" tabindex="-1"></a><span class="fu">require</span>(tidyr)</span>
 <span id="cb52-4"><a href="making-hourly-temperatures.html#cb52-4" tabindex="-1"></a>Days <span class="ot">&lt;-</span> <span class="fu">daylength</span>(<span class="at">latitude =</span> <span class="fl">50.4</span>, <span class="at">JDay =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>)</span>
 <span id="cb52-5"><a href="making-hourly-temperatures.html#cb52-5" tabindex="-1"></a>Days_df <span class="ot">&lt;-</span></span>
 <span id="cb52-6"><a href="making-hourly-temperatures.html#cb52-6" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
