@@ -42,3 +42,20 @@ To help you stay on track with the development of your logbook, we'll occasional
 In this course, we'll gradually work our way into the `chillR` package. At the end of the semester, you should be able to do some state-of-the-art analyses in this space. Yet even if it's not your ambition to become a phenology analyst, you'll have picked up a bunch of useful skills along the way. I'll try to teach you how to use some staple programming tools and techniques that can be used for all kinds of programming challenges. These will include the use of github and Rmarkdown, as well the the ability to create, manipulate and use R functions and packages. You'll also gain familiarity with the challenges of modeling tree dormancy and making state-of-the-art climate change impact projections. For impacts that depend entirely on temperature, you'll learn how to use tools that can produce projections that (as far as I'm aware) are robust enough to be acceptable by an academic journal - even one specialized on the study of climate change impacts.
 
 What is expected of you is to be engaged in this class, and to diligently complete the assignments you receive. Learning things in R requires practice, through which many things that seem cumbersome at first eventually become almost automatic. I'm absolutely convinced that the things you'll get exposed to in this class can be great assets in your scientific (or other) career. So please take the materials seriously!
+
+
+```{r package_check, echo=FALSE}
+library(chillR)
+library(leaflet)
+library(pander)
+library(ggpmisc)
+library(devtools)
+install_github("EduardoFernandezC/dormancyR")
+library(dormancyR)
+library(colorRamps)
+library(gganimate)
+library(downloadthis)
+library(cowplot)
+library(tufte)
+library(ggrepel)
+```
