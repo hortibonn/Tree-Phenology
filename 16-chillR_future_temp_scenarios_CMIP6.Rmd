@@ -53,8 +53,6 @@ download_cmip6_ecmwfr(
   variable = c('Tmin', 'Tmax'),
   year_start = 2015,
   year_end = 2100)
-  )
-
 ```
 
 This function took a while to run, and it generated a bunch of files in a subfolder of our working directory. We could change the name of this folder (using the `path_download` parameter), but since we didn't do this, the data should be stored in the `cmip6_downloaded` folder. We also received a message about *Dropped models*. These are climate models, for which the database contained no data with the specifications we provided. For these models, the function attempted to download data but didn't find anything in the database. These models are then **blacklisted**, i.e. the function leaves a note in the download folder to prevent the function from trying to download these data again. 
