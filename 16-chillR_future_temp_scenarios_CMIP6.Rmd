@@ -73,13 +73,13 @@ download_cmip6_ecmwfr(
 
 Assuming that this worked well, we should now expand the download to additional SSP scenarios. We can simply provide a vector of such scenarios as the `scenarios` parameter. I'll use the scenarios SSP126, SSP245, SSP370 and SSP585. These are the standard scenarios of CMIP6 (and currently the only ones that this function can download). Note that we can add "ssp126" here again, because the function is able to detect whether the respective data have already been downloaded. It automatically skips all files that are already present.
 
-```{r, echo=FALSE, eval=FALSE}
+```{r, echo=FALSE}
 
 download_cmip6_ecmwfr(
   scenarios = c("ssp126", "ssp245", "ssp370", "ssp585"), 
   area = area,
-  user = "268511",
-  key = "a984a842-8633-4838-b18d-3b57ded40d9d",
+  user = "4cdedeb2-d3db-4c9e-8b7b-7ede68be142a",
+  key = "48fe5079-b173-4339-af59-55abb2a936d4",
   model = 'default',
   frequency = 'monthly',
   variable = c('Tmin', 'Tmax'),
@@ -135,12 +135,12 @@ download_baseline_cmip6_ecmwfr(
 ```
 
 
-```{r, eval=FALSE, echo=FALSE}
+```{r, echo=FALSE}
 
 download_baseline_cmip6_ecmwfr(
   area = area,
-  user = "268511",
-  key = "a984a842-8633-4838-b18d-3b57ded40d9d",
+  user = "4cdedeb2-d3db-4c9e-8b7b-7ede68be142a",
+  key = "48fe5079-b173-4339-af59-55abb2a936d4",
   model = 'match_downloaded',
   frequency = 'monthly',
   variable = c('Tmin', 'Tmax'),
@@ -168,7 +168,7 @@ extracted <- extract_cmip6_data(stations = station)
 
 ```
 
-```{r, eval=FALSE, echo=FALSE}
+```{r, echo=FALSE}
 
 station <- data.frame(
   station_name = c("Bonn"),
@@ -221,7 +221,7 @@ head(change_scenarios)
 
 ```
 
-```{r, eval=FALSE, echo=FALSE}
+```{r, echo=FALSE}
 
 change_scenarios <- gen_rel_change_scenario(extracted)
 write.csv(change_scenarios, "data/all_change_scenarios.csv", row.names = FALSE)
@@ -330,7 +330,7 @@ adjusted_list <-
 Now we can start the temperature generation process. Note that, since we have many scenarios, this can take hours. Maybe this seems long, but keep in mind that we're doing a lot of operations here and imagine you'd have to do them all manually. Since the computer is doing this for us, you can do something else (get a good night's sleep?) in the meantime. 
 
 
-```{r, eval=FALSE}
+```{r}
 
 temps <- temperature_generation(
   Bonn_temps, 
@@ -369,7 +369,7 @@ models <- list(Chill_Portions = Dynamic_Model,
 
 ```
 
-```{r, eval=FALSE}
+```{r}
 chill_future_scenario_list <- tempResponse_daily_list(temps,
                                                     latitude = 50.8,
                                                     Start_JDay = 305,
@@ -422,7 +422,7 @@ Now we run through the same process for all the future climate scenarios. For ea
 
 ```{r}
 
-SSPs <- c("ssp126", "ssp245", "ssp585")
+SSPs <- c("ssp126", "ssp245", "ssp370", "ssp585")
 Times <- c(2050, 2085)
 
 list_ssp <- 
@@ -450,6 +450,7 @@ for(SSP in SSPs)
     names(chill) <- list_gcm[list_ssp == SSP & list_time == Time]
     if(SSP == "ssp126") SSPcaption <- "SSP1"
     if(SSP == "ssp245") SSPcaption <- "SSP2"
+    if(SSP == "ssp370") SSPcaption <- "SSP3"
     if(SSP == "ssp585") SSPcaption <- "SSP5"    
     if(Time == "2050") Time_caption <- "2050"
     if(Time == "2085") Time_caption <- "2085"

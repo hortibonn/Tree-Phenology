@@ -36,7 +36,7 @@ chills <- make_climate_scenario(
   historic_data = actual_chill,
   time_series = TRUE)
 
-SSPs <- c("ssp126", "ssp245", "ssp585")
+SSPs <- c("ssp126", "ssp245", "ssp370", "ssp585")
 Times <- c(2050, 2085)
 
 list_ssp <- 
