@@ -2,13 +2,13 @@
 
 ## Learning goals for this lesson {-#goals_future_plots}
 
-- Learn how we can use the `ggplot2` package to make an appealing illustrations of the chill projection results
+- Learn how we can use the `ggplot2` package to make an appealing illustration of the chill projection results
 
 ## Making attractive plots
 
 The default function in `chillR` can produce plots of the output of climate impact projections, but you may not like their design. With the current version of the `plot_climate_scenarios` function, there's not much you can do to change the appearance of the plot. This is mainly because this function was written a while ago, before I became familiar with the `ggplot2` functions. Today we want to try and reproduce a similar figure using `ggplot`.
 
-In fact, [Eduardo Fernandez](https://scholar.google.de/citations?hl=de&user=ibSma_AAAAAJ) has already produced a function for this, which is included in `chillR`. We'll still build this up gradually in this chapter because this provides a nice opportunity for demonstrating how we can build up complex plots using `ggplot`. I've Eduardo's code a bit to make this easier to follow, but the basic ideas are from him.
+In fact, [Eduardo Fernandez](https://scholar.google.de/citations?hl=de&user=ibSma_AAAAAJ) has already produced a function for this, which is included in `chillR`. We'll still build this up gradually in this chapter because this provides a nice opportunity for demonstrating how we can build up complex plots using `ggplot`. I edited Eduardo's code a bit to make this easier to follow, but the basic ideas are from him.
 
 Let's first (install and) load all needed packages. New ones we're using here are `ggpmisc` and `patchwork`.
 
@@ -64,6 +64,7 @@ for(SSP in SSPs)
     names(chill) <- list_gcm[list_ssp == SSP & list_time == Time]
     if(SSP == "ssp126") SSPcaption <- "SSP1"
     if(SSP == "ssp245") SSPcaption <- "SSP2"
+    if(SSP == "ssp370") SSPcaption <- "SSP3"
     if(SSP == "ssp585") SSPcaption <- "SSP5"    
     if(Time == "2050") Time_caption <- "2050"
     if(Time == "2085") Time_caption <- "2085"
@@ -266,7 +267,7 @@ So far, we have all SSPs mixed together here. We also can't read anything on the
 ```{r}
 
 future_2050 <- future_2050 +
-  facet_wrap(vars(SSP)) +
+  facet_wrap(vars(SSP), nrow = 1) +
    scale_x_discrete(labels = NULL,
                     expand = expansion(add = 1)) 
 
@@ -322,16 +323,16 @@ Now let's implement the same procedure in a loop, where we make a list of two pl
 ```{r}
 future_plot_list <- list()
 
-for(y in c(2050,
-           2085))
+time_points <- c(2050, 2085)
+
+for(y in time_points)
 {
-  future_plot_list[[which(y == c(2050,
-                                 2085))]] <-
+  future_plot_list[[which(y == time_points)]] <-
     ggplot(data = future_data[which(future_data$Year==y),]) +
     geom_boxplot(aes_string("GCM",
                             metric,
                             fill="GCM")) +
-    facet_wrap(vars(SSP)) +
+    facet_wrap(vars(SSP), nrow = 1) +
     scale_x_discrete(labels = NULL,
                      expand = expansion(add = 1)) +
     scale_y_continuous(limits = c(0, 
@@ -441,15 +442,14 @@ past_plot <- ggplot() +
 
 future_plot_list <- list()
 
-for(y in c(2050,
-           2085))
+for(y in time_points)
 {
-  future_plot_list[[which(y == c(2050,2085))]] <-
+  future_plot_list[[which(y == time_points)]] <-
     ggplot(data = future_data[which(future_data$Year==y),]) +
     geom_boxplot(aes_string("GCM", 
                             metric, 
                             fill="GCM")) +
-  facet_wrap(vars(SSP)) +
+  facet_wrap(vars(SSP), nrow = 1) +
    scale_x_discrete(labels = NULL,
                     expand = expansion(add = 1)) +
   scale_y_continuous(limits = c(0,
@@ -520,15 +520,14 @@ past_plot <- ggplot() +
 
 future_plot_list <- list()
 
-for(y in c(2050,
-           2085))
+for(y in time_points)
 {
-  future_plot_list[[which(y == c(2050,2085))]] <-
+  future_plot_list[[which(y == time_points)]] <-
     ggplot(data = future_data[which(future_data$Year==y),]) +
     geom_boxplot(aes_string("GCM", 
                             metric, 
                             fill="GCM")) +
-  facet_wrap(vars(SSP)) +
+  facet_wrap(vars(SSP), nrow = 1) +
    scale_x_discrete(labels = NULL,
                     expand = expansion(add = 1)) +
   scale_y_continuous(limits = c(0,
@@ -576,7 +575,8 @@ plot_scenarios_gg <- function(past_observed,
                               past_simulated,
                               future_data,
                               metric,
-                              axis_label)
+                              axis_label,
+                              time_points)
 {
   rng <- range(past_observed[[metric]],
                past_simulated[[metric]],
@@ -603,15 +603,14 @@ plot_scenarios_gg <- function(past_observed,
   
   future_plot_list <- list()
   
-  for(y in c(2050,
-             2085))
+  for(y in time_points)
   {
-    future_plot_list[[which(y == c(2050,2085))]] <-
+    future_plot_list[[which(y == time_points)]] <-
       ggplot(data = future_data[which(future_data$Year==y),]) +
       geom_boxplot(aes_string("GCM", 
                               metric, 
                               fill="GCM")) +
-      facet_wrap(vars(SSP)) +
+      facet_wrap(vars(SSP), nrow = 1) +
       scale_x_discrete(labels = NULL,
                        expand = expansion(add = 1)) +
       scale_y_continuous(limits = c(0, 
@@ -665,17 +664,20 @@ plot_scenarios_gg(past_observed=past_observed,
                   past_simulated=past_simulated,
                   future_data=future_data,
                   metric="GDH",
-                  axis_label="Heat (in Growing Degree Hours)")
+                  axis_label="Heat (in Growing Degree Hours)",
+                  time_points = c(2050, 2085))
 plot_scenarios_gg(past_observed=past_observed,
                   past_simulated=past_simulated,
                   future_data=future_data,
                   metric="Chill_Portions",
-                  axis_label="Chill (in Chill Portions)")
+                  axis_label="Chill (in Chill Portions)",
+                  time_points = c(2050, 2085))
 plot_scenarios_gg(past_observed=past_observed,
                   past_simulated=past_simulated,
                   future_data=future_data,
                   metric="Frost_H",
-                  axis_label="Frost duration (in hours)")
+                  axis_label="Frost duration (in hours)",
+                  time_points = c(2050, 2085))
 
 
 ```
