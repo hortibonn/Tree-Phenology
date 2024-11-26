@@ -23,7 +23,7 @@
 <meta name="author" content="Eike Luedeling" />
 
 
-<meta name="date" content="2024-11-18" />
+<meta name="date" content="2024-11-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -583,13 +583,13 @@ div.csl-indent {
 <div id="goals_future_plots" class="section level2 unnumbered hasAnchor">
 <h2>Learning goals for this lesson<a href="plot_future.html#goals_future_plots" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
-<li>Learn how we can use the <code>ggplot2</code> package to make an appealing illustrations of the chill projection results</li>
+<li>Learn how we can use the <code>ggplot2</code> package to make an appealing illustration of the chill projection results</li>
 </ul>
 </div>
 <div id="making-attractive-plots" class="section level2 hasAnchor" number="18.1">
 <h2><span class="header-section-number">18.1</span> Making attractive plots<a href="plot_future.html#making-attractive-plots" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The default function in <code>chillR</code> can produce plots of the output of climate impact projections, but you may not like their design. With the current version of the <code>plot_climate_scenarios</code> function, there’s not much you can do to change the appearance of the plot. This is mainly because this function was written a while ago, before I became familiar with the <code>ggplot2</code> functions. Today we want to try and reproduce a similar figure using <code>ggplot</code>.</p>
-<p>In fact, <a href="https://scholar.google.de/citations?hl=de&amp;user=ibSma_AAAAAJ">Eduardo Fernandez</a> has already produced a function for this, which is included in <code>chillR</code>. We’ll still build this up gradually in this chapter because this provides a nice opportunity for demonstrating how we can build up complex plots using <code>ggplot</code>. I’ve Eduardo’s code a bit to make this easier to follow, but the basic ideas are from him.</p>
+<p>In fact, <a href="https://scholar.google.de/citations?hl=de&amp;user=ibSma_AAAAAJ">Eduardo Fernandez</a> has already produced a function for this, which is included in <code>chillR</code>. We’ll still build this up gradually in this chapter because this provides a nice opportunity for demonstrating how we can build up complex plots using <code>ggplot</code>. I edited Eduardo’s code a bit to make this easier to follow, but the basic ideas are from him.</p>
 <p>Let’s first (install and) load all needed packages. New ones we’re using here are <code>ggpmisc</code> and <code>patchwork</code>.</p>
 <p>We’ll be building on our previous work, so we’ll have to load the outputs we produced in chapters <a href="historic-temperature-scenarios.html#historic-temperature-scenarios">Historic temperature scenarios</a> and <a href="making-cmip6-scenarios.html#making-cmip6-scenarios">Making CMIP6 scenarios</a> now.</p>
 <div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="plot_future.html#cb246-1" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span></code></pre></div>
@@ -638,15 +638,16 @@ div.csl-indent {
 <span id="cb247-43"><a href="plot_future.html#cb247-43" tabindex="-1"></a>    <span class="fu">names</span>(chill) <span class="ot">&lt;-</span> list_gcm[list_ssp <span class="sc">==</span> SSP <span class="sc">&amp;</span> list_time <span class="sc">==</span> Time]</span>
 <span id="cb247-44"><a href="plot_future.html#cb247-44" tabindex="-1"></a>    <span class="cf">if</span>(SSP <span class="sc">==</span> <span class="st">&quot;ssp126&quot;</span>) SSPcaption <span class="ot">&lt;-</span> <span class="st">&quot;SSP1&quot;</span></span>
 <span id="cb247-45"><a href="plot_future.html#cb247-45" tabindex="-1"></a>    <span class="cf">if</span>(SSP <span class="sc">==</span> <span class="st">&quot;ssp245&quot;</span>) SSPcaption <span class="ot">&lt;-</span> <span class="st">&quot;SSP2&quot;</span></span>
-<span id="cb247-46"><a href="plot_future.html#cb247-46" tabindex="-1"></a>    <span class="cf">if</span>(SSP <span class="sc">==</span> <span class="st">&quot;ssp585&quot;</span>) SSPcaption <span class="ot">&lt;-</span> <span class="st">&quot;SSP5&quot;</span>    </span>
-<span id="cb247-47"><a href="plot_future.html#cb247-47" tabindex="-1"></a>    <span class="cf">if</span>(Time <span class="sc">==</span> <span class="st">&quot;2050&quot;</span>) Time_caption <span class="ot">&lt;-</span> <span class="st">&quot;2050&quot;</span></span>
-<span id="cb247-48"><a href="plot_future.html#cb247-48" tabindex="-1"></a>    <span class="cf">if</span>(Time <span class="sc">==</span> <span class="st">&quot;2085&quot;</span>) Time_caption <span class="ot">&lt;-</span> <span class="st">&quot;2085&quot;</span></span>
-<span id="cb247-49"><a href="plot_future.html#cb247-49" tabindex="-1"></a>    chills <span class="ot">&lt;-</span> chill <span class="sc">%&gt;%</span> </span>
-<span id="cb247-50"><a href="plot_future.html#cb247-50" tabindex="-1"></a>      <span class="fu">make_climate_scenario</span>(</span>
-<span id="cb247-51"><a href="plot_future.html#cb247-51" tabindex="-1"></a>        <span class="at">caption =</span> <span class="fu">c</span>(SSPcaption,</span>
-<span id="cb247-52"><a href="plot_future.html#cb247-52" tabindex="-1"></a>                    Time_caption),</span>
-<span id="cb247-53"><a href="plot_future.html#cb247-53" tabindex="-1"></a>        <span class="at">add_to =</span> chills)</span>
-<span id="cb247-54"><a href="plot_future.html#cb247-54" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb247-46"><a href="plot_future.html#cb247-46" tabindex="-1"></a>    <span class="cf">if</span>(SSP <span class="sc">==</span> <span class="st">&quot;ssp370&quot;</span>) SSPcaption <span class="ot">&lt;-</span> <span class="st">&quot;SSP3&quot;</span></span>
+<span id="cb247-47"><a href="plot_future.html#cb247-47" tabindex="-1"></a>    <span class="cf">if</span>(SSP <span class="sc">==</span> <span class="st">&quot;ssp585&quot;</span>) SSPcaption <span class="ot">&lt;-</span> <span class="st">&quot;SSP5&quot;</span>    </span>
+<span id="cb247-48"><a href="plot_future.html#cb247-48" tabindex="-1"></a>    <span class="cf">if</span>(Time <span class="sc">==</span> <span class="st">&quot;2050&quot;</span>) Time_caption <span class="ot">&lt;-</span> <span class="st">&quot;2050&quot;</span></span>
+<span id="cb247-49"><a href="plot_future.html#cb247-49" tabindex="-1"></a>    <span class="cf">if</span>(Time <span class="sc">==</span> <span class="st">&quot;2085&quot;</span>) Time_caption <span class="ot">&lt;-</span> <span class="st">&quot;2085&quot;</span></span>
+<span id="cb247-50"><a href="plot_future.html#cb247-50" tabindex="-1"></a>    chills <span class="ot">&lt;-</span> chill <span class="sc">%&gt;%</span> </span>
+<span id="cb247-51"><a href="plot_future.html#cb247-51" tabindex="-1"></a>      <span class="fu">make_climate_scenario</span>(</span>
+<span id="cb247-52"><a href="plot_future.html#cb247-52" tabindex="-1"></a>        <span class="at">caption =</span> <span class="fu">c</span>(SSPcaption,</span>
+<span id="cb247-53"><a href="plot_future.html#cb247-53" tabindex="-1"></a>                    Time_caption),</span>
+<span id="cb247-54"><a href="plot_future.html#cb247-54" tabindex="-1"></a>        <span class="at">add_to =</span> chills)</span>
+<span id="cb247-55"><a href="plot_future.html#cb247-55" tabindex="-1"></a>}</span></code></pre></div>
 <p>As you may know by now, <code>ggplot</code> works best with all data arranged in a single <code>data.frame</code> rather than the kind of list we’ve stored our projection data in. Each row of this <code>data.frame</code> should contain information about the GCM, the SSP and the Year. This is most easily done by looping through the elements of our chill projection list, extracting the needed information and assembling it in a new, long <code>data.frame</code>.</p>
 <div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="plot_future.html#cb248-1" tabindex="-1"></a><span class="co"># We&#39;ll first process the past scenarios (element 1 of the chills list).</span></span>
 <span id="cb248-2"><a href="plot_future.html#cb248-2" tabindex="-1"></a><span class="co"># Within the data element, we have a list of multiple data.frames for</span></span>
@@ -1503,7 +1504,7 @@ SSP1
 <p><img src="Book_files/figure-html/unnamed-chunk-138-1.png" width="672" />
 So far, we have all SSPs mixed together here. We also can’t read anything on the y-axis. That’s no big deal, because the same information is contained in the color scheme, but it sure looks ugly. We’ll also add a bit of padding on the side of the plots (with the <code>expand</code> parameter), to ensure that the plot doesn’t look too crowded:</p>
 <div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="plot_future.html#cb263-1" tabindex="-1"></a>future_2050 <span class="ot">&lt;-</span> future_2050 <span class="sc">+</span></span>
-<span id="cb263-2"><a href="plot_future.html#cb263-2" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(SSP)) <span class="sc">+</span></span>
+<span id="cb263-2"><a href="plot_future.html#cb263-2" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(SSP), <span class="at">nrow =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb263-3"><a href="plot_future.html#cb263-3" tabindex="-1"></a>   <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> <span class="cn">NULL</span>,</span>
 <span id="cb263-4"><a href="plot_future.html#cb263-4" tabindex="-1"></a>                    <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">add =</span> <span class="dv">1</span>)) </span></code></pre></div>
 <p>Also here, we need to adjust the axis limits, so that the future plots can use the same axis as the past plots. I’ll also add the scenario year to the plots. For this, I’m using the <code>geom_text_npc</code> function from the <a href="https://cran.r-project.org/web/packages/ggpmisc/ggpmisc.pdf"><code>ggpmisc</code></a> package:</p>
@@ -1544,16 +1545,16 @@ So far, we have all SSPs mixed together here. We also can’t read anything on t
 <p>Now let’s implement the same procedure in a loop, where we make a list of two plots - one for 2050 and one for 2085:</p>
 <div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="plot_future.html#cb266-1" tabindex="-1"></a>future_plot_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
 <span id="cb266-2"><a href="plot_future.html#cb266-2" tabindex="-1"></a></span>
-<span id="cb266-3"><a href="plot_future.html#cb266-3" tabindex="-1"></a><span class="cf">for</span>(y <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">2050</span>,</span>
-<span id="cb266-4"><a href="plot_future.html#cb266-4" tabindex="-1"></a>           <span class="dv">2085</span>))</span>
-<span id="cb266-5"><a href="plot_future.html#cb266-5" tabindex="-1"></a>{</span>
-<span id="cb266-6"><a href="plot_future.html#cb266-6" tabindex="-1"></a>  future_plot_list[[<span class="fu">which</span>(y <span class="sc">==</span> <span class="fu">c</span>(<span class="dv">2050</span>,</span>
-<span id="cb266-7"><a href="plot_future.html#cb266-7" tabindex="-1"></a>                                 <span class="dv">2085</span>))]] <span class="ot">&lt;-</span></span>
+<span id="cb266-3"><a href="plot_future.html#cb266-3" tabindex="-1"></a>time_points <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2050</span>, <span class="dv">2085</span>)</span>
+<span id="cb266-4"><a href="plot_future.html#cb266-4" tabindex="-1"></a></span>
+<span id="cb266-5"><a href="plot_future.html#cb266-5" tabindex="-1"></a><span class="cf">for</span>(y <span class="cf">in</span> time_points)</span>
+<span id="cb266-6"><a href="plot_future.html#cb266-6" tabindex="-1"></a>{</span>
+<span id="cb266-7"><a href="plot_future.html#cb266-7" tabindex="-1"></a>  future_plot_list[[<span class="fu">which</span>(y <span class="sc">==</span> time_points)]] <span class="ot">&lt;-</span></span>
 <span id="cb266-8"><a href="plot_future.html#cb266-8" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="at">data =</span> future_data[<span class="fu">which</span>(future_data<span class="sc">$</span>Year<span class="sc">==</span>y),]) <span class="sc">+</span></span>
 <span id="cb266-9"><a href="plot_future.html#cb266-9" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="fu">aes_string</span>(<span class="st">&quot;GCM&quot;</span>,</span>
 <span id="cb266-10"><a href="plot_future.html#cb266-10" tabindex="-1"></a>                            metric,</span>
 <span id="cb266-11"><a href="plot_future.html#cb266-11" tabindex="-1"></a>                            <span class="at">fill=</span><span class="st">&quot;GCM&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb266-12"><a href="plot_future.html#cb266-12" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(SSP)) <span class="sc">+</span></span>
+<span id="cb266-12"><a href="plot_future.html#cb266-12" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(SSP), <span class="at">nrow =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb266-13"><a href="plot_future.html#cb266-13" tabindex="-1"></a>    <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> <span class="cn">NULL</span>,</span>
 <span id="cb266-14"><a href="plot_future.html#cb266-14" tabindex="-1"></a>                     <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">add =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
 <span id="cb266-15"><a href="plot_future.html#cb266-15" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, </span>
@@ -1618,42 +1619,42 @@ So far, we have all SSPs mixed together here. We also can’t read anything on t
 <span id="cb273-2"><a href="plot_future.html#cb273-2" tabindex="-1"></a>                              past_simulated,</span>
 <span id="cb273-3"><a href="plot_future.html#cb273-3" tabindex="-1"></a>                              future_data,</span>
 <span id="cb273-4"><a href="plot_future.html#cb273-4" tabindex="-1"></a>                              metric,</span>
-<span id="cb273-5"><a href="plot_future.html#cb273-5" tabindex="-1"></a>                              axis_label)</span>
-<span id="cb273-6"><a href="plot_future.html#cb273-6" tabindex="-1"></a>{</span>
-<span id="cb273-7"><a href="plot_future.html#cb273-7" tabindex="-1"></a>  rng <span class="ot">&lt;-</span> <span class="fu">range</span>(past_observed[[metric]],</span>
-<span id="cb273-8"><a href="plot_future.html#cb273-8" tabindex="-1"></a>               past_simulated[[metric]],</span>
-<span id="cb273-9"><a href="plot_future.html#cb273-9" tabindex="-1"></a>               future_data[[metric]])  </span>
-<span id="cb273-10"><a href="plot_future.html#cb273-10" tabindex="-1"></a>  past_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb273-11"><a href="plot_future.html#cb273-11" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="at">data =</span> past_simulated,</span>
-<span id="cb273-12"><a href="plot_future.html#cb273-12" tabindex="-1"></a>                 <span class="fu">aes_string</span>(<span class="st">&quot;as.numeric(Year)&quot;</span>,</span>
-<span id="cb273-13"><a href="plot_future.html#cb273-13" tabindex="-1"></a>                            metric,</span>
-<span id="cb273-14"><a href="plot_future.html#cb273-14" tabindex="-1"></a>                            <span class="at">group=</span><span class="st">&quot;Year&quot;</span>),</span>
-<span id="cb273-15"><a href="plot_future.html#cb273-15" tabindex="-1"></a>                 <span class="at">fill=</span><span class="st">&quot;skyblue&quot;</span>) <span class="sc">+</span></span>
-<span id="cb273-16"><a href="plot_future.html#cb273-16" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, </span>
-<span id="cb273-17"><a href="plot_future.html#cb273-17" tabindex="-1"></a>                                  <span class="fu">round</span>(<span class="fu">round</span>(<span class="fl">1.1</span><span class="sc">*</span>rng[<span class="dv">2</span>])))) <span class="sc">+</span></span>
-<span id="cb273-18"><a href="plot_future.html#cb273-18" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Year&quot;</span>, <span class="at">y =</span> axis_label) <span class="sc">+</span></span>
-<span id="cb273-19"><a href="plot_future.html#cb273-19" tabindex="-1"></a>    <span class="fu">facet_grid</span>(<span class="sc">~</span> Scenario) <span class="sc">+</span></span>
-<span id="cb273-20"><a href="plot_future.html#cb273-20" tabindex="-1"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>) <span class="sc">+</span>  </span>
-<span id="cb273-21"><a href="plot_future.html#cb273-21" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb273-22"><a href="plot_future.html#cb273-22" tabindex="-1"></a>          <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
-<span id="cb273-23"><a href="plot_future.html#cb273-23" tabindex="-1"></a>          <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">45</span>, </span>
-<span id="cb273-24"><a href="plot_future.html#cb273-24" tabindex="-1"></a>                                     <span class="at">hjust=</span><span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb273-25"><a href="plot_future.html#cb273-25" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">data =</span> past_observed,</span>
-<span id="cb273-26"><a href="plot_future.html#cb273-26" tabindex="-1"></a>               <span class="fu">aes_string</span>(<span class="st">&quot;End_year&quot;</span>,</span>
-<span id="cb273-27"><a href="plot_future.html#cb273-27" tabindex="-1"></a>                          metric),</span>
-<span id="cb273-28"><a href="plot_future.html#cb273-28" tabindex="-1"></a>               <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span>
-<span id="cb273-29"><a href="plot_future.html#cb273-29" tabindex="-1"></a>  </span>
-<span id="cb273-30"><a href="plot_future.html#cb273-30" tabindex="-1"></a>  future_plot_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb273-31"><a href="plot_future.html#cb273-31" tabindex="-1"></a>  </span>
-<span id="cb273-32"><a href="plot_future.html#cb273-32" tabindex="-1"></a>  <span class="cf">for</span>(y <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">2050</span>,</span>
-<span id="cb273-33"><a href="plot_future.html#cb273-33" tabindex="-1"></a>             <span class="dv">2085</span>))</span>
+<span id="cb273-5"><a href="plot_future.html#cb273-5" tabindex="-1"></a>                              axis_label,</span>
+<span id="cb273-6"><a href="plot_future.html#cb273-6" tabindex="-1"></a>                              time_points)</span>
+<span id="cb273-7"><a href="plot_future.html#cb273-7" tabindex="-1"></a>{</span>
+<span id="cb273-8"><a href="plot_future.html#cb273-8" tabindex="-1"></a>  rng <span class="ot">&lt;-</span> <span class="fu">range</span>(past_observed[[metric]],</span>
+<span id="cb273-9"><a href="plot_future.html#cb273-9" tabindex="-1"></a>               past_simulated[[metric]],</span>
+<span id="cb273-10"><a href="plot_future.html#cb273-10" tabindex="-1"></a>               future_data[[metric]])  </span>
+<span id="cb273-11"><a href="plot_future.html#cb273-11" tabindex="-1"></a>  past_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb273-12"><a href="plot_future.html#cb273-12" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="at">data =</span> past_simulated,</span>
+<span id="cb273-13"><a href="plot_future.html#cb273-13" tabindex="-1"></a>                 <span class="fu">aes_string</span>(<span class="st">&quot;as.numeric(Year)&quot;</span>,</span>
+<span id="cb273-14"><a href="plot_future.html#cb273-14" tabindex="-1"></a>                            metric,</span>
+<span id="cb273-15"><a href="plot_future.html#cb273-15" tabindex="-1"></a>                            <span class="at">group=</span><span class="st">&quot;Year&quot;</span>),</span>
+<span id="cb273-16"><a href="plot_future.html#cb273-16" tabindex="-1"></a>                 <span class="at">fill=</span><span class="st">&quot;skyblue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb273-17"><a href="plot_future.html#cb273-17" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, </span>
+<span id="cb273-18"><a href="plot_future.html#cb273-18" tabindex="-1"></a>                                  <span class="fu">round</span>(<span class="fu">round</span>(<span class="fl">1.1</span><span class="sc">*</span>rng[<span class="dv">2</span>])))) <span class="sc">+</span></span>
+<span id="cb273-19"><a href="plot_future.html#cb273-19" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Year&quot;</span>, <span class="at">y =</span> axis_label) <span class="sc">+</span></span>
+<span id="cb273-20"><a href="plot_future.html#cb273-20" tabindex="-1"></a>    <span class="fu">facet_grid</span>(<span class="sc">~</span> Scenario) <span class="sc">+</span></span>
+<span id="cb273-21"><a href="plot_future.html#cb273-21" tabindex="-1"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>) <span class="sc">+</span>  </span>
+<span id="cb273-22"><a href="plot_future.html#cb273-22" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb273-23"><a href="plot_future.html#cb273-23" tabindex="-1"></a>          <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb273-24"><a href="plot_future.html#cb273-24" tabindex="-1"></a>          <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">45</span>, </span>
+<span id="cb273-25"><a href="plot_future.html#cb273-25" tabindex="-1"></a>                                     <span class="at">hjust=</span><span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb273-26"><a href="plot_future.html#cb273-26" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">data =</span> past_observed,</span>
+<span id="cb273-27"><a href="plot_future.html#cb273-27" tabindex="-1"></a>               <span class="fu">aes_string</span>(<span class="st">&quot;End_year&quot;</span>,</span>
+<span id="cb273-28"><a href="plot_future.html#cb273-28" tabindex="-1"></a>                          metric),</span>
+<span id="cb273-29"><a href="plot_future.html#cb273-29" tabindex="-1"></a>               <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb273-30"><a href="plot_future.html#cb273-30" tabindex="-1"></a>  </span>
+<span id="cb273-31"><a href="plot_future.html#cb273-31" tabindex="-1"></a>  future_plot_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb273-32"><a href="plot_future.html#cb273-32" tabindex="-1"></a>  </span>
+<span id="cb273-33"><a href="plot_future.html#cb273-33" tabindex="-1"></a>  <span class="cf">for</span>(y <span class="cf">in</span> time_points)</span>
 <span id="cb273-34"><a href="plot_future.html#cb273-34" tabindex="-1"></a>  {</span>
-<span id="cb273-35"><a href="plot_future.html#cb273-35" tabindex="-1"></a>    future_plot_list[[<span class="fu">which</span>(y <span class="sc">==</span> <span class="fu">c</span>(<span class="dv">2050</span>,<span class="dv">2085</span>))]] <span class="ot">&lt;-</span></span>
+<span id="cb273-35"><a href="plot_future.html#cb273-35" tabindex="-1"></a>    future_plot_list[[<span class="fu">which</span>(y <span class="sc">==</span> time_points)]] <span class="ot">&lt;-</span></span>
 <span id="cb273-36"><a href="plot_future.html#cb273-36" tabindex="-1"></a>      <span class="fu">ggplot</span>(<span class="at">data =</span> future_data[<span class="fu">which</span>(future_data<span class="sc">$</span>Year<span class="sc">==</span>y),]) <span class="sc">+</span></span>
 <span id="cb273-37"><a href="plot_future.html#cb273-37" tabindex="-1"></a>      <span class="fu">geom_boxplot</span>(<span class="fu">aes_string</span>(<span class="st">&quot;GCM&quot;</span>, </span>
 <span id="cb273-38"><a href="plot_future.html#cb273-38" tabindex="-1"></a>                              metric, </span>
 <span id="cb273-39"><a href="plot_future.html#cb273-39" tabindex="-1"></a>                              <span class="at">fill=</span><span class="st">&quot;GCM&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb273-40"><a href="plot_future.html#cb273-40" tabindex="-1"></a>      <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(SSP)) <span class="sc">+</span></span>
+<span id="cb273-40"><a href="plot_future.html#cb273-40" tabindex="-1"></a>      <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(SSP), <span class="at">nrow =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb273-41"><a href="plot_future.html#cb273-41" tabindex="-1"></a>      <span class="fu">scale_x_discrete</span>(<span class="at">labels =</span> <span class="cn">NULL</span>,</span>
 <span id="cb273-42"><a href="plot_future.html#cb273-42" tabindex="-1"></a>                       <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">add =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
 <span id="cb273-43"><a href="plot_future.html#cb273-43" tabindex="-1"></a>      <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, </span>
@@ -1698,19 +1699,22 @@ So far, we have all SSPs mixed together here. We also can’t read anything on t
 <span id="cb274-2"><a href="plot_future.html#cb274-2" tabindex="-1"></a>                  <span class="at">past_simulated=</span>past_simulated,</span>
 <span id="cb274-3"><a href="plot_future.html#cb274-3" tabindex="-1"></a>                  <span class="at">future_data=</span>future_data,</span>
 <span id="cb274-4"><a href="plot_future.html#cb274-4" tabindex="-1"></a>                  <span class="at">metric=</span><span class="st">&quot;GDH&quot;</span>,</span>
-<span id="cb274-5"><a href="plot_future.html#cb274-5" tabindex="-1"></a>                  <span class="at">axis_label=</span><span class="st">&quot;Heat (in Growing Degree Hours)&quot;</span>)</span></code></pre></div>
+<span id="cb274-5"><a href="plot_future.html#cb274-5" tabindex="-1"></a>                  <span class="at">axis_label=</span><span class="st">&quot;Heat (in Growing Degree Hours)&quot;</span>,</span>
+<span id="cb274-6"><a href="plot_future.html#cb274-6" tabindex="-1"></a>                  <span class="at">time_points =</span> <span class="fu">c</span>(<span class="dv">2050</span>, <span class="dv">2085</span>))</span></code></pre></div>
 <p><img src="Book_files/figure-html/unnamed-chunk-150-1.png" width="672" /></p>
 <div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="plot_future.html#cb275-1" tabindex="-1"></a><span class="fu">plot_scenarios_gg</span>(<span class="at">past_observed=</span>past_observed,</span>
 <span id="cb275-2"><a href="plot_future.html#cb275-2" tabindex="-1"></a>                  <span class="at">past_simulated=</span>past_simulated,</span>
 <span id="cb275-3"><a href="plot_future.html#cb275-3" tabindex="-1"></a>                  <span class="at">future_data=</span>future_data,</span>
 <span id="cb275-4"><a href="plot_future.html#cb275-4" tabindex="-1"></a>                  <span class="at">metric=</span><span class="st">&quot;Chill_Portions&quot;</span>,</span>
-<span id="cb275-5"><a href="plot_future.html#cb275-5" tabindex="-1"></a>                  <span class="at">axis_label=</span><span class="st">&quot;Chill (in Chill Portions)&quot;</span>)</span></code></pre></div>
+<span id="cb275-5"><a href="plot_future.html#cb275-5" tabindex="-1"></a>                  <span class="at">axis_label=</span><span class="st">&quot;Chill (in Chill Portions)&quot;</span>,</span>
+<span id="cb275-6"><a href="plot_future.html#cb275-6" tabindex="-1"></a>                  <span class="at">time_points =</span> <span class="fu">c</span>(<span class="dv">2050</span>, <span class="dv">2085</span>))</span></code></pre></div>
 <p><img src="Book_files/figure-html/unnamed-chunk-150-2.png" width="672" /></p>
 <div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="plot_future.html#cb276-1" tabindex="-1"></a><span class="fu">plot_scenarios_gg</span>(<span class="at">past_observed=</span>past_observed,</span>
 <span id="cb276-2"><a href="plot_future.html#cb276-2" tabindex="-1"></a>                  <span class="at">past_simulated=</span>past_simulated,</span>
 <span id="cb276-3"><a href="plot_future.html#cb276-3" tabindex="-1"></a>                  <span class="at">future_data=</span>future_data,</span>
 <span id="cb276-4"><a href="plot_future.html#cb276-4" tabindex="-1"></a>                  <span class="at">metric=</span><span class="st">&quot;Frost_H&quot;</span>,</span>
-<span id="cb276-5"><a href="plot_future.html#cb276-5" tabindex="-1"></a>                  <span class="at">axis_label=</span><span class="st">&quot;Frost duration (in hours)&quot;</span>)</span></code></pre></div>
+<span id="cb276-5"><a href="plot_future.html#cb276-5" tabindex="-1"></a>                  <span class="at">axis_label=</span><span class="st">&quot;Frost duration (in hours)&quot;</span>,</span>
+<span id="cb276-6"><a href="plot_future.html#cb276-6" tabindex="-1"></a>                  <span class="at">time_points =</span> <span class="fu">c</span>(<span class="dv">2050</span>, <span class="dv">2085</span>))</span></code></pre></div>
 <p><img src="Book_files/figure-html/unnamed-chunk-150-3.png" width="672" /></p>
 </div>
 <div id="exercises_future_plots" class="section level2 unnumbered hasAnchor">
