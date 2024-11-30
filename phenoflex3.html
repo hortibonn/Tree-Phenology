@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 32 Can we improve the performance of PhenoFlex? | Tree phenology analysis with R</title>
   <meta name="description" content="This lecture introduces the chillR package for R." />
-  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 32 Can we improve the performance of PhenoFlex? | Tree phenology analysis with R" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Eike Luedeling" />
 
 
-<meta name="date" content="2024-11-26" />
+<meta name="date" content="2024-11-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -606,43 +606,43 @@ div.csl-indent {
 <a href="data/final_bio_data_S1_S2_apple.csv">
 <button class="btn btn-warning"><i class="fa fa-save"></i> Download phenology data from the experiment</button>
 </a>
-<div class="sourceCode" id="cb432"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb432-1"><a href="phenoflex3.html#cb432-1" tabindex="-1"></a><span class="fu">library</span>(chillR)</span>
-<span id="cb432-2"><a href="phenoflex3.html#cb432-2" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb432-3"><a href="phenoflex3.html#cb432-3" tabindex="-1"></a></span>
-<span id="cb432-4"><a href="phenoflex3.html#cb432-4" tabindex="-1"></a><span class="co"># Load the data from the folder</span></span>
-<span id="cb432-5"><a href="phenoflex3.html#cb432-5" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_tab</span>(<span class="st">&quot;data/final_weather_data_S1_S2_apple_hourly.csv&quot;</span>)</span>
-<span id="cb432-6"><a href="phenoflex3.html#cb432-6" tabindex="-1"></a></span>
-<span id="cb432-7"><a href="phenoflex3.html#cb432-7" tabindex="-1"></a><span class="co"># Generate a new column (Year_2) to simulate the year and comply with the format of PhenoFlex functions</span></span>
-<span id="cb432-8"><a href="phenoflex3.html#cb432-8" tabindex="-1"></a>data[<span class="st">&quot;Year_2&quot;</span>] <span class="ot">&lt;-</span> data<span class="sc">$</span>Treatment <span class="sc">+</span> data<span class="sc">$</span>Year </span>
-<span id="cb432-9"><a href="phenoflex3.html#cb432-9" tabindex="-1"></a></span>
-<span id="cb432-10"><a href="phenoflex3.html#cb432-10" tabindex="-1"></a><span class="co"># Since this experiment was conducted during two consecutive seasons, the next step will fix a small continuity issue</span></span>
-<span id="cb432-11"><a href="phenoflex3.html#cb432-11" tabindex="-1"></a><span class="co"># generated during the season 2</span></span>
-<span id="cb432-12"><a href="phenoflex3.html#cb432-12" tabindex="-1"></a>data[data<span class="sc">$</span>Treatment <span class="sc">&gt;=</span> <span class="dv">34</span>, <span class="st">&quot;Year_2&quot;</span>] <span class="ot">&lt;-</span></span>
-<span id="cb432-13"><a href="phenoflex3.html#cb432-13" tabindex="-1"></a>  data[data<span class="sc">$</span>Treatment <span class="sc">&gt;=</span> <span class="dv">34</span>, <span class="st">&quot;Year_2&quot;</span>] <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb432-14"><a href="phenoflex3.html#cb432-14" tabindex="-1"></a></span>
-<span id="cb432-15"><a href="phenoflex3.html#cb432-15" tabindex="-1"></a><span class="co"># For further compatibility, I will now select the columns needed and will drop &quot;Year&quot; (the original one)</span></span>
-<span id="cb432-16"><a href="phenoflex3.html#cb432-16" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[<span class="fu">c</span>(<span class="st">&quot;YEARMODA&quot;</span>, <span class="st">&quot;Year_2&quot;</span>, <span class="st">&quot;Month&quot;</span>,</span>
-<span id="cb432-17"><a href="phenoflex3.html#cb432-17" tabindex="-1"></a>               <span class="st">&quot;Day&quot;</span>, <span class="st">&quot;Hour&quot;</span>, <span class="st">&quot;JDay&quot;</span>, <span class="st">&quot;Temp&quot;</span>)]</span>
-<span id="cb432-18"><a href="phenoflex3.html#cb432-18" tabindex="-1"></a></span>
-<span id="cb432-19"><a href="phenoflex3.html#cb432-19" tabindex="-1"></a><span class="co"># To replace the missing &quot;Year&quot; column, I will now change the name of the column</span></span>
-<span id="cb432-20"><a href="phenoflex3.html#cb432-20" tabindex="-1"></a><span class="fu">colnames</span>(data)[<span class="fu">which</span>(<span class="fu">colnames</span>(data) <span class="sc">==</span> <span class="st">&quot;Year_2&quot;</span>)] <span class="ot">&lt;-</span> <span class="st">&quot;Year&quot;</span></span>
-<span id="cb432-21"><a href="phenoflex3.html#cb432-21" tabindex="-1"></a></span>
-<span id="cb432-22"><a href="phenoflex3.html#cb432-22" tabindex="-1"></a></span>
-<span id="cb432-23"><a href="phenoflex3.html#cb432-23" tabindex="-1"></a><span class="co"># Import the phenology data from the repository</span></span>
-<span id="cb432-24"><a href="phenoflex3.html#cb432-24" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">read_tab</span>(<span class="st">&quot;data/final_bio_data_S1_S2_apple.csv&quot;</span>)</span>
-<span id="cb432-25"><a href="phenoflex3.html#cb432-25" tabindex="-1"></a></span>
-<span id="cb432-26"><a href="phenoflex3.html#cb432-26" tabindex="-1"></a><span class="co"># Remove troubling treatments</span></span>
-<span id="cb432-27"><a href="phenoflex3.html#cb432-27" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> pheno[<span class="sc">!</span>(pheno<span class="sc">$</span>Treatment <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">36</span>, <span class="dv">3</span>, <span class="dv">23</span>, <span class="dv">24</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">61</span>)), </span>
-<span id="cb432-28"><a href="phenoflex3.html#cb432-28" tabindex="-1"></a>               <span class="fu">c</span>(<span class="st">&quot;Treatment&quot;</span>, <span class="st">&quot;pheno&quot;</span>)]</span>
-<span id="cb432-29"><a href="phenoflex3.html#cb432-29" tabindex="-1"></a></span>
-<span id="cb432-30"><a href="phenoflex3.html#cb432-30" tabindex="-1"></a>pheno[<span class="st">&quot;Treatment&quot;</span>] <span class="ot">&lt;-</span> pheno<span class="sc">$</span>Treatment <span class="sc">+</span> <span class="dv">2019</span></span>
-<span id="cb432-31"><a href="phenoflex3.html#cb432-31" tabindex="-1"></a></span>
-<span id="cb432-32"><a href="phenoflex3.html#cb432-32" tabindex="-1"></a><span class="fu">colnames</span>(pheno) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;pheno&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb429-1"><a href="phenoflex3.html#cb429-1" tabindex="-1"></a><span class="fu">library</span>(chillR)</span>
+<span id="cb429-2"><a href="phenoflex3.html#cb429-2" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb429-3"><a href="phenoflex3.html#cb429-3" tabindex="-1"></a></span>
+<span id="cb429-4"><a href="phenoflex3.html#cb429-4" tabindex="-1"></a><span class="co"># Load the data from the folder</span></span>
+<span id="cb429-5"><a href="phenoflex3.html#cb429-5" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_tab</span>(<span class="st">&quot;data/final_weather_data_S1_S2_apple_hourly.csv&quot;</span>)</span>
+<span id="cb429-6"><a href="phenoflex3.html#cb429-6" tabindex="-1"></a></span>
+<span id="cb429-7"><a href="phenoflex3.html#cb429-7" tabindex="-1"></a><span class="co"># Generate a new column (Year_2) to simulate the year and comply with the format of PhenoFlex functions</span></span>
+<span id="cb429-8"><a href="phenoflex3.html#cb429-8" tabindex="-1"></a>data[<span class="st">&quot;Year_2&quot;</span>] <span class="ot">&lt;-</span> data<span class="sc">$</span>Treatment <span class="sc">+</span> data<span class="sc">$</span>Year </span>
+<span id="cb429-9"><a href="phenoflex3.html#cb429-9" tabindex="-1"></a></span>
+<span id="cb429-10"><a href="phenoflex3.html#cb429-10" tabindex="-1"></a><span class="co"># Since this experiment was conducted during two consecutive seasons, the next step will fix a small continuity issue</span></span>
+<span id="cb429-11"><a href="phenoflex3.html#cb429-11" tabindex="-1"></a><span class="co"># generated during the season 2</span></span>
+<span id="cb429-12"><a href="phenoflex3.html#cb429-12" tabindex="-1"></a>data[data<span class="sc">$</span>Treatment <span class="sc">&gt;=</span> <span class="dv">34</span>, <span class="st">&quot;Year_2&quot;</span>] <span class="ot">&lt;-</span></span>
+<span id="cb429-13"><a href="phenoflex3.html#cb429-13" tabindex="-1"></a>  data[data<span class="sc">$</span>Treatment <span class="sc">&gt;=</span> <span class="dv">34</span>, <span class="st">&quot;Year_2&quot;</span>] <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb429-14"><a href="phenoflex3.html#cb429-14" tabindex="-1"></a></span>
+<span id="cb429-15"><a href="phenoflex3.html#cb429-15" tabindex="-1"></a><span class="co"># For further compatibility, I will now select the columns needed and will drop &quot;Year&quot; (the original one)</span></span>
+<span id="cb429-16"><a href="phenoflex3.html#cb429-16" tabindex="-1"></a>data <span class="ot">&lt;-</span> data[<span class="fu">c</span>(<span class="st">&quot;YEARMODA&quot;</span>, <span class="st">&quot;Year_2&quot;</span>, <span class="st">&quot;Month&quot;</span>,</span>
+<span id="cb429-17"><a href="phenoflex3.html#cb429-17" tabindex="-1"></a>               <span class="st">&quot;Day&quot;</span>, <span class="st">&quot;Hour&quot;</span>, <span class="st">&quot;JDay&quot;</span>, <span class="st">&quot;Temp&quot;</span>)]</span>
+<span id="cb429-18"><a href="phenoflex3.html#cb429-18" tabindex="-1"></a></span>
+<span id="cb429-19"><a href="phenoflex3.html#cb429-19" tabindex="-1"></a><span class="co"># To replace the missing &quot;Year&quot; column, I will now change the name of the column</span></span>
+<span id="cb429-20"><a href="phenoflex3.html#cb429-20" tabindex="-1"></a><span class="fu">colnames</span>(data)[<span class="fu">which</span>(<span class="fu">colnames</span>(data) <span class="sc">==</span> <span class="st">&quot;Year_2&quot;</span>)] <span class="ot">&lt;-</span> <span class="st">&quot;Year&quot;</span></span>
+<span id="cb429-21"><a href="phenoflex3.html#cb429-21" tabindex="-1"></a></span>
+<span id="cb429-22"><a href="phenoflex3.html#cb429-22" tabindex="-1"></a></span>
+<span id="cb429-23"><a href="phenoflex3.html#cb429-23" tabindex="-1"></a><span class="co"># Import the phenology data from the repository</span></span>
+<span id="cb429-24"><a href="phenoflex3.html#cb429-24" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> <span class="fu">read_tab</span>(<span class="st">&quot;data/final_bio_data_S1_S2_apple.csv&quot;</span>)</span>
+<span id="cb429-25"><a href="phenoflex3.html#cb429-25" tabindex="-1"></a></span>
+<span id="cb429-26"><a href="phenoflex3.html#cb429-26" tabindex="-1"></a><span class="co"># Remove troubling treatments</span></span>
+<span id="cb429-27"><a href="phenoflex3.html#cb429-27" tabindex="-1"></a>pheno <span class="ot">&lt;-</span> pheno[<span class="sc">!</span>(pheno<span class="sc">$</span>Treatment <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">36</span>, <span class="dv">3</span>, <span class="dv">23</span>, <span class="dv">24</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">61</span>)), </span>
+<span id="cb429-28"><a href="phenoflex3.html#cb429-28" tabindex="-1"></a>               <span class="fu">c</span>(<span class="st">&quot;Treatment&quot;</span>, <span class="st">&quot;pheno&quot;</span>)]</span>
+<span id="cb429-29"><a href="phenoflex3.html#cb429-29" tabindex="-1"></a></span>
+<span id="cb429-30"><a href="phenoflex3.html#cb429-30" tabindex="-1"></a>pheno[<span class="st">&quot;Treatment&quot;</span>] <span class="ot">&lt;-</span> pheno<span class="sc">$</span>Treatment <span class="sc">+</span> <span class="dv">2019</span></span>
+<span id="cb429-31"><a href="phenoflex3.html#cb429-31" tabindex="-1"></a></span>
+<span id="cb429-32"><a href="phenoflex3.html#cb429-32" tabindex="-1"></a><span class="fu">colnames</span>(pheno) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;pheno&quot;</span>)</span></code></pre></div>
 <p>We can now take a look at the format of both datasets with the help of the <code>head()</code> function to see how they look:</p>
 <ul>
 <li>Weather records show the hourly temperature trees were exposed to during the experiment.</li>
 </ul>
-<div class="sourceCode" id="cb433"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb433-1"><a href="phenoflex3.html#cb433-1" tabindex="-1"></a><span class="fu">head</span>(data)</span></code></pre></div>
+<div class="sourceCode" id="cb430"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb430-1"><a href="phenoflex3.html#cb430-1" tabindex="-1"></a><span class="fu">head</span>(data)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -715,7 +715,7 @@ div.csl-indent {
 <ul>
 <li>Phenology data show the date of full bloom (in day of the year), which was recorded as the moment we observed 50% of flowers open with first petals falling according to the BBCH scale.</li>
 </ul>
-<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb434-1"><a href="phenoflex3.html#cb434-1" tabindex="-1"></a><span class="fu">head</span>(pheno)</span></code></pre></div>
+<div class="sourceCode" id="cb431"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb431-1"><a href="phenoflex3.html#cb431-1" tabindex="-1"></a><span class="fu">head</span>(pheno)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -758,119 +758,119 @@ div.csl-indent {
 </div>
 <p>As you can see in the figure above, we identified these five marginal seasons as a small cluster at the upper limit of the distribution after sorting the seasons according to the mean temperature experienced by the trees between the beginning of the experiment and the moment we recorded full bloom.</p>
 <p>In the following chunk we are just creating different datasets for the two versions of the analysis. The treatments represented by the years <code>c(2032, 2061, 2065, 2077, 2081)</code> were identified as marginal seasons and removed from the calibration data set in <code>PhenoFlex_normal</code>.</p>
-<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb435-1"><a href="phenoflex3.html#cb435-1" tabindex="-1"></a>pheno_marginal <span class="ot">&lt;-</span> pheno</span>
-<span id="cb435-2"><a href="phenoflex3.html#cb435-2" tabindex="-1"></a></span>
-<span id="cb435-3"><a href="phenoflex3.html#cb435-3" tabindex="-1"></a>pheno_normal <span class="ot">&lt;-</span> pheno[<span class="sc">!</span>(pheno<span class="sc">$</span>Year <span class="sc">%in%</span> </span>
-<span id="cb435-4"><a href="phenoflex3.html#cb435-4" tabindex="-1"></a>                          <span class="fu">c</span>(<span class="dv">2032</span>, <span class="dv">2061</span>, <span class="dv">2065</span>, <span class="dv">2077</span>, <span class="dv">2081</span>)), ]</span></code></pre></div>
+<div class="sourceCode" id="cb432"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb432-1"><a href="phenoflex3.html#cb432-1" tabindex="-1"></a>pheno_marginal <span class="ot">&lt;-</span> pheno</span>
+<span id="cb432-2"><a href="phenoflex3.html#cb432-2" tabindex="-1"></a></span>
+<span id="cb432-3"><a href="phenoflex3.html#cb432-3" tabindex="-1"></a>pheno_normal <span class="ot">&lt;-</span> pheno[<span class="sc">!</span>(pheno<span class="sc">$</span>Year <span class="sc">%in%</span> </span>
+<span id="cb432-4"><a href="phenoflex3.html#cb432-4" tabindex="-1"></a>                          <span class="fu">c</span>(<span class="dv">2032</span>, <span class="dv">2061</span>, <span class="dv">2065</span>, <span class="dv">2077</span>, <span class="dv">2081</span>)), ]</span></code></pre></div>
 <p>We can now do the same for the weather data by defining two vectors containing the seasons we want to use for model calibration. We will randomly select 40 seasons for calibration in both versions of the analysis, leaving the remaining 14 experimental seasons for validation.</p>
-<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb436-1"><a href="phenoflex3.html#cb436-1" tabindex="-1"></a><span class="co"># Define a vector of calibration and validation seasons. Marginal includes</span></span>
-<span id="cb436-2"><a href="phenoflex3.html#cb436-2" tabindex="-1"></a><span class="co"># the marginal seasons</span></span>
-<span id="cb436-3"><a href="phenoflex3.html#cb436-3" tabindex="-1"></a>calibration_seasons <span class="ot">&lt;-</span></span>
-<span id="cb436-4"><a href="phenoflex3.html#cb436-4" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="fu">sample</span>(pheno_normal<span class="sc">$</span>Year, </span>
-<span id="cb436-5"><a href="phenoflex3.html#cb436-5" tabindex="-1"></a>              <span class="dv">40</span>, </span>
-<span id="cb436-6"><a href="phenoflex3.html#cb436-6" tabindex="-1"></a>              <span class="at">replace =</span> <span class="cn">FALSE</span>))</span>
-<span id="cb436-7"><a href="phenoflex3.html#cb436-7" tabindex="-1"></a></span>
-<span id="cb436-8"><a href="phenoflex3.html#cb436-8" tabindex="-1"></a>calibration_seasons_marginal <span class="ot">&lt;-</span></span>
-<span id="cb436-9"><a href="phenoflex3.html#cb436-9" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="fu">c</span>(<span class="fu">sample</span>(calibration_seasons, </span>
-<span id="cb436-10"><a href="phenoflex3.html#cb436-10" tabindex="-1"></a>                <span class="dv">35</span>,</span>
-<span id="cb436-11"><a href="phenoflex3.html#cb436-11" tabindex="-1"></a>                <span class="at">replace =</span> <span class="cn">FALSE</span>),</span>
-<span id="cb436-12"><a href="phenoflex3.html#cb436-12" tabindex="-1"></a>         pheno_marginal<span class="sc">$</span>Year[<span class="fu">which</span>(<span class="sc">!</span>(pheno_marginal<span class="sc">$</span>Year <span class="sc">%in%</span></span>
-<span id="cb436-13"><a href="phenoflex3.html#cb436-13" tabindex="-1"></a>                                       pheno_normal<span class="sc">$</span>Year))]))</span>
-<span id="cb436-14"><a href="phenoflex3.html#cb436-14" tabindex="-1"></a></span>
-<span id="cb436-15"><a href="phenoflex3.html#cb436-15" tabindex="-1"></a>calibration_seasons_normal <span class="ot">&lt;-</span> calibration_seasons</span>
-<span id="cb436-16"><a href="phenoflex3.html#cb436-16" tabindex="-1"></a></span>
-<span id="cb436-17"><a href="phenoflex3.html#cb436-17" tabindex="-1"></a><span class="co"># Common validation seasons</span></span>
-<span id="cb436-18"><a href="phenoflex3.html#cb436-18" tabindex="-1"></a>validation_seasons <span class="ot">&lt;-</span> </span>
-<span id="cb436-19"><a href="phenoflex3.html#cb436-19" tabindex="-1"></a>  <span class="fu">sort</span>(pheno_normal[<span class="sc">!</span>(pheno_normal<span class="sc">$</span>Year <span class="sc">%in%</span> </span>
-<span id="cb436-20"><a href="phenoflex3.html#cb436-20" tabindex="-1"></a>                        calibration_seasons), <span class="st">&quot;Year&quot;</span>])</span>
-<span id="cb436-21"><a href="phenoflex3.html#cb436-21" tabindex="-1"></a></span>
-<span id="cb436-22"><a href="phenoflex3.html#cb436-22" tabindex="-1"></a><span class="co"># Define the list of seasons (weather data)</span></span>
-<span id="cb436-23"><a href="phenoflex3.html#cb436-23" tabindex="-1"></a>season_list_marginal <span class="ot">&lt;-</span> </span>
-<span id="cb436-24"><a href="phenoflex3.html#cb436-24" tabindex="-1"></a>  <span class="fu">genSeasonList</span>(data,</span>
-<span id="cb436-25"><a href="phenoflex3.html#cb436-25" tabindex="-1"></a>                <span class="at">mrange =</span> <span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">7</span>),</span>
-<span id="cb436-26"><a href="phenoflex3.html#cb436-26" tabindex="-1"></a>                <span class="at">years =</span> calibration_seasons_marginal)</span>
-<span id="cb436-27"><a href="phenoflex3.html#cb436-27" tabindex="-1"></a></span>
-<span id="cb436-28"><a href="phenoflex3.html#cb436-28" tabindex="-1"></a>season_list_normal <span class="ot">&lt;-</span></span>
-<span id="cb436-29"><a href="phenoflex3.html#cb436-29" tabindex="-1"></a>  <span class="fu">genSeasonList</span>(data,</span>
-<span id="cb436-30"><a href="phenoflex3.html#cb436-30" tabindex="-1"></a>                <span class="at">mrange =</span> <span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">7</span>),</span>
-<span id="cb436-31"><a href="phenoflex3.html#cb436-31" tabindex="-1"></a>                <span class="at">years =</span> calibration_seasons_normal)</span></code></pre></div>
+<div class="sourceCode" id="cb433"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb433-1"><a href="phenoflex3.html#cb433-1" tabindex="-1"></a><span class="co"># Define a vector of calibration and validation seasons. Marginal includes</span></span>
+<span id="cb433-2"><a href="phenoflex3.html#cb433-2" tabindex="-1"></a><span class="co"># the marginal seasons</span></span>
+<span id="cb433-3"><a href="phenoflex3.html#cb433-3" tabindex="-1"></a>calibration_seasons <span class="ot">&lt;-</span></span>
+<span id="cb433-4"><a href="phenoflex3.html#cb433-4" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="fu">sample</span>(pheno_normal<span class="sc">$</span>Year, </span>
+<span id="cb433-5"><a href="phenoflex3.html#cb433-5" tabindex="-1"></a>              <span class="dv">40</span>, </span>
+<span id="cb433-6"><a href="phenoflex3.html#cb433-6" tabindex="-1"></a>              <span class="at">replace =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb433-7"><a href="phenoflex3.html#cb433-7" tabindex="-1"></a></span>
+<span id="cb433-8"><a href="phenoflex3.html#cb433-8" tabindex="-1"></a>calibration_seasons_marginal <span class="ot">&lt;-</span></span>
+<span id="cb433-9"><a href="phenoflex3.html#cb433-9" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="fu">c</span>(<span class="fu">sample</span>(calibration_seasons, </span>
+<span id="cb433-10"><a href="phenoflex3.html#cb433-10" tabindex="-1"></a>                <span class="dv">35</span>,</span>
+<span id="cb433-11"><a href="phenoflex3.html#cb433-11" tabindex="-1"></a>                <span class="at">replace =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb433-12"><a href="phenoflex3.html#cb433-12" tabindex="-1"></a>         pheno_marginal<span class="sc">$</span>Year[<span class="fu">which</span>(<span class="sc">!</span>(pheno_marginal<span class="sc">$</span>Year <span class="sc">%in%</span></span>
+<span id="cb433-13"><a href="phenoflex3.html#cb433-13" tabindex="-1"></a>                                       pheno_normal<span class="sc">$</span>Year))]))</span>
+<span id="cb433-14"><a href="phenoflex3.html#cb433-14" tabindex="-1"></a></span>
+<span id="cb433-15"><a href="phenoflex3.html#cb433-15" tabindex="-1"></a>calibration_seasons_normal <span class="ot">&lt;-</span> calibration_seasons</span>
+<span id="cb433-16"><a href="phenoflex3.html#cb433-16" tabindex="-1"></a></span>
+<span id="cb433-17"><a href="phenoflex3.html#cb433-17" tabindex="-1"></a><span class="co"># Common validation seasons</span></span>
+<span id="cb433-18"><a href="phenoflex3.html#cb433-18" tabindex="-1"></a>validation_seasons <span class="ot">&lt;-</span> </span>
+<span id="cb433-19"><a href="phenoflex3.html#cb433-19" tabindex="-1"></a>  <span class="fu">sort</span>(pheno_normal[<span class="sc">!</span>(pheno_normal<span class="sc">$</span>Year <span class="sc">%in%</span> </span>
+<span id="cb433-20"><a href="phenoflex3.html#cb433-20" tabindex="-1"></a>                        calibration_seasons), <span class="st">&quot;Year&quot;</span>])</span>
+<span id="cb433-21"><a href="phenoflex3.html#cb433-21" tabindex="-1"></a></span>
+<span id="cb433-22"><a href="phenoflex3.html#cb433-22" tabindex="-1"></a><span class="co"># Define the list of seasons (weather data)</span></span>
+<span id="cb433-23"><a href="phenoflex3.html#cb433-23" tabindex="-1"></a>season_list_marginal <span class="ot">&lt;-</span> </span>
+<span id="cb433-24"><a href="phenoflex3.html#cb433-24" tabindex="-1"></a>  <span class="fu">genSeasonList</span>(data,</span>
+<span id="cb433-25"><a href="phenoflex3.html#cb433-25" tabindex="-1"></a>                <span class="at">mrange =</span> <span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">7</span>),</span>
+<span id="cb433-26"><a href="phenoflex3.html#cb433-26" tabindex="-1"></a>                <span class="at">years =</span> calibration_seasons_marginal)</span>
+<span id="cb433-27"><a href="phenoflex3.html#cb433-27" tabindex="-1"></a></span>
+<span id="cb433-28"><a href="phenoflex3.html#cb433-28" tabindex="-1"></a>season_list_normal <span class="ot">&lt;-</span></span>
+<span id="cb433-29"><a href="phenoflex3.html#cb433-29" tabindex="-1"></a>  <span class="fu">genSeasonList</span>(data,</span>
+<span id="cb433-30"><a href="phenoflex3.html#cb433-30" tabindex="-1"></a>                <span class="at">mrange =</span> <span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">7</span>),</span>
+<span id="cb433-31"><a href="phenoflex3.html#cb433-31" tabindex="-1"></a>                <span class="at">years =</span> calibration_seasons_normal)</span></code></pre></div>
 <p>Now we can apply what we learned in the chapter <a href="phenoflex.html#phenoflex">The <code>PhenoFlex</code> model</a> and fit the model parameters to data. Note that we start the fitting procedure with wide ranges (particularly for <code>yc</code> and <code>zc</code>) in order to let the model find the best estimates.</p>
-<div class="sourceCode" id="cb437"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb437-1"><a href="phenoflex3.html#cb437-1" tabindex="-1"></a><span class="co"># Set the initial parameters (wide ranges)</span></span>
-<span id="cb437-2"><a href="phenoflex3.html#cb437-2" tabindex="-1"></a><span class="co">#   yc,  zc,  s1, Tu,     E0,      E1,     A0,          A1,   Tf, Tc, Tb, slope</span></span>
-<span id="cb437-3"><a href="phenoflex3.html#cb437-3" tabindex="-1"></a>lower <span class="ot">&lt;-</span> </span>
-<span id="cb437-4"><a href="phenoflex3.html#cb437-4" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">100</span>, <span class="fl">0.1</span>,  <span class="dv">0</span>, <span class="fl">3000.0</span>,  <span class="fl">9000.0</span>, <span class="fl">6000.0</span>,       <span class="dv">5</span>.e13,    <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="fl">0.05</span>)</span>
-<span id="cb437-5"><a href="phenoflex3.html#cb437-5" tabindex="-1"></a>par   <span class="ot">&lt;-</span> </span>
-<span id="cb437-6"><a href="phenoflex3.html#cb437-6" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">190</span>, <span class="fl">0.5</span>, <span class="dv">25</span>, <span class="fl">3372.8</span>,  <span class="fl">9900.3</span>, <span class="fl">6319.5</span>, <span class="fl">5.939917e13</span>,    <span class="dv">4</span>, <span class="dv">36</span>,  <span class="dv">4</span>,  <span class="fl">1.60</span>)</span>
-<span id="cb437-7"><a href="phenoflex3.html#cb437-7" tabindex="-1"></a>upper <span class="ot">&lt;-</span></span>
-<span id="cb437-8"><a href="phenoflex3.html#cb437-8" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">80</span>, <span class="dv">500</span>, <span class="fl">1.0</span>, <span class="dv">30</span>, <span class="fl">4000.0</span>, <span class="fl">10000.0</span>, <span class="fl">7000.0</span>,       <span class="dv">6</span>.e13,   <span class="dv">10</span>, <span class="dv">40</span>, <span class="dv">10</span>, <span class="fl">50.00</span>)</span>
-<span id="cb437-9"><a href="phenoflex3.html#cb437-9" tabindex="-1"></a></span>
-<span id="cb437-10"><a href="phenoflex3.html#cb437-10" tabindex="-1"></a><span class="co"># Run the fitter</span></span>
-<span id="cb437-11"><a href="phenoflex3.html#cb437-11" tabindex="-1"></a>pheno_fit_marginal <span class="ot">&lt;-</span> </span>
-<span id="cb437-12"><a href="phenoflex3.html#cb437-12" tabindex="-1"></a>  <span class="fu">phenologyFitter</span>(<span class="at">par.guess =</span> par,</span>
-<span id="cb437-13"><a href="phenoflex3.html#cb437-13" tabindex="-1"></a>                  <span class="at">modelfn =</span> PhenoFlex_GDHwrapper,</span>
-<span id="cb437-14"><a href="phenoflex3.html#cb437-14" tabindex="-1"></a>                  <span class="at">bloomJDays =</span> pheno_marginal[pheno_marginal<span class="sc">$</span>Year <span class="sc">%in%</span></span>
-<span id="cb437-15"><a href="phenoflex3.html#cb437-15" tabindex="-1"></a>                                                calibration_seasons_marginal,</span>
-<span id="cb437-16"><a href="phenoflex3.html#cb437-16" tabindex="-1"></a>                                              <span class="st">&quot;pheno&quot;</span>],</span>
-<span id="cb437-17"><a href="phenoflex3.html#cb437-17" tabindex="-1"></a>                  <span class="at">SeasonList =</span> season_list_marginal,</span>
-<span id="cb437-18"><a href="phenoflex3.html#cb437-18" tabindex="-1"></a>                  <span class="at">lower =</span> lower,</span>
-<span id="cb437-19"><a href="phenoflex3.html#cb437-19" tabindex="-1"></a>                  <span class="at">upper =</span> upper,</span>
-<span id="cb437-20"><a href="phenoflex3.html#cb437-20" tabindex="-1"></a>                  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">smooth =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb437-21"><a href="phenoflex3.html#cb437-21" tabindex="-1"></a>                                 <span class="at">verbose =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb437-22"><a href="phenoflex3.html#cb437-22" tabindex="-1"></a>                                 <span class="at">maxit =</span> <span class="dv">100</span>,</span>
-<span id="cb437-23"><a href="phenoflex3.html#cb437-23" tabindex="-1"></a>                                 <span class="at">nb.stop.improvement =</span> <span class="dv">10</span>))</span>
-<span id="cb437-24"><a href="phenoflex3.html#cb437-24" tabindex="-1"></a></span>
-<span id="cb437-25"><a href="phenoflex3.html#cb437-25" tabindex="-1"></a><span class="co"># Same for version 2</span></span>
-<span id="cb437-26"><a href="phenoflex3.html#cb437-26" tabindex="-1"></a>pheno_fit_normal <span class="ot">&lt;-</span> </span>
-<span id="cb437-27"><a href="phenoflex3.html#cb437-27" tabindex="-1"></a>  <span class="fu">phenologyFitter</span>(<span class="at">par.guess =</span> par,</span>
-<span id="cb437-28"><a href="phenoflex3.html#cb437-28" tabindex="-1"></a>                  <span class="at">modelfn =</span> PhenoFlex_GDHwrapper,</span>
-<span id="cb437-29"><a href="phenoflex3.html#cb437-29" tabindex="-1"></a>                  <span class="at">bloomJDays =</span> pheno_normal[pheno_normal<span class="sc">$</span>Year <span class="sc">%in%</span></span>
-<span id="cb437-30"><a href="phenoflex3.html#cb437-30" tabindex="-1"></a>                                              calibration_seasons_normal,</span>
-<span id="cb437-31"><a href="phenoflex3.html#cb437-31" tabindex="-1"></a>                                            <span class="st">&quot;pheno&quot;</span>],</span>
-<span id="cb437-32"><a href="phenoflex3.html#cb437-32" tabindex="-1"></a>                  <span class="at">SeasonList =</span> season_list_normal,</span>
-<span id="cb437-33"><a href="phenoflex3.html#cb437-33" tabindex="-1"></a>                  <span class="at">lower =</span> lower,</span>
-<span id="cb437-34"><a href="phenoflex3.html#cb437-34" tabindex="-1"></a>                  <span class="at">upper =</span> upper,</span>
-<span id="cb437-35"><a href="phenoflex3.html#cb437-35" tabindex="-1"></a>                  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">smooth =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb437-36"><a href="phenoflex3.html#cb437-36" tabindex="-1"></a>                                 <span class="at">verbose =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb437-37"><a href="phenoflex3.html#cb437-37" tabindex="-1"></a>                                 <span class="at">maxit =</span> <span class="dv">100</span>,</span>
-<span id="cb437-38"><a href="phenoflex3.html#cb437-38" tabindex="-1"></a>                                 <span class="at">nb.stop.improvement =</span> <span class="dv">10</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb434-1"><a href="phenoflex3.html#cb434-1" tabindex="-1"></a><span class="co"># Set the initial parameters (wide ranges)</span></span>
+<span id="cb434-2"><a href="phenoflex3.html#cb434-2" tabindex="-1"></a><span class="co">#   yc,  zc,  s1, Tu,     E0,      E1,     A0,          A1,   Tf, Tc, Tb, slope</span></span>
+<span id="cb434-3"><a href="phenoflex3.html#cb434-3" tabindex="-1"></a>lower <span class="ot">&lt;-</span> </span>
+<span id="cb434-4"><a href="phenoflex3.html#cb434-4" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">100</span>, <span class="fl">0.1</span>,  <span class="dv">0</span>, <span class="fl">3000.0</span>,  <span class="fl">9000.0</span>, <span class="fl">6000.0</span>,       <span class="dv">5</span>.e13,    <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="dv">0</span>,  <span class="fl">0.05</span>)</span>
+<span id="cb434-5"><a href="phenoflex3.html#cb434-5" tabindex="-1"></a>par   <span class="ot">&lt;-</span> </span>
+<span id="cb434-6"><a href="phenoflex3.html#cb434-6" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">190</span>, <span class="fl">0.5</span>, <span class="dv">25</span>, <span class="fl">3372.8</span>,  <span class="fl">9900.3</span>, <span class="fl">6319.5</span>, <span class="fl">5.939917e13</span>,    <span class="dv">4</span>, <span class="dv">36</span>,  <span class="dv">4</span>,  <span class="fl">1.60</span>)</span>
+<span id="cb434-7"><a href="phenoflex3.html#cb434-7" tabindex="-1"></a>upper <span class="ot">&lt;-</span></span>
+<span id="cb434-8"><a href="phenoflex3.html#cb434-8" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">80</span>, <span class="dv">500</span>, <span class="fl">1.0</span>, <span class="dv">30</span>, <span class="fl">4000.0</span>, <span class="fl">10000.0</span>, <span class="fl">7000.0</span>,       <span class="dv">6</span>.e13,   <span class="dv">10</span>, <span class="dv">40</span>, <span class="dv">10</span>, <span class="fl">50.00</span>)</span>
+<span id="cb434-9"><a href="phenoflex3.html#cb434-9" tabindex="-1"></a></span>
+<span id="cb434-10"><a href="phenoflex3.html#cb434-10" tabindex="-1"></a><span class="co"># Run the fitter</span></span>
+<span id="cb434-11"><a href="phenoflex3.html#cb434-11" tabindex="-1"></a>pheno_fit_marginal <span class="ot">&lt;-</span> </span>
+<span id="cb434-12"><a href="phenoflex3.html#cb434-12" tabindex="-1"></a>  <span class="fu">phenologyFitter</span>(<span class="at">par.guess =</span> par,</span>
+<span id="cb434-13"><a href="phenoflex3.html#cb434-13" tabindex="-1"></a>                  <span class="at">modelfn =</span> PhenoFlex_GDHwrapper,</span>
+<span id="cb434-14"><a href="phenoflex3.html#cb434-14" tabindex="-1"></a>                  <span class="at">bloomJDays =</span> pheno_marginal[pheno_marginal<span class="sc">$</span>Year <span class="sc">%in%</span></span>
+<span id="cb434-15"><a href="phenoflex3.html#cb434-15" tabindex="-1"></a>                                                calibration_seasons_marginal,</span>
+<span id="cb434-16"><a href="phenoflex3.html#cb434-16" tabindex="-1"></a>                                              <span class="st">&quot;pheno&quot;</span>],</span>
+<span id="cb434-17"><a href="phenoflex3.html#cb434-17" tabindex="-1"></a>                  <span class="at">SeasonList =</span> season_list_marginal,</span>
+<span id="cb434-18"><a href="phenoflex3.html#cb434-18" tabindex="-1"></a>                  <span class="at">lower =</span> lower,</span>
+<span id="cb434-19"><a href="phenoflex3.html#cb434-19" tabindex="-1"></a>                  <span class="at">upper =</span> upper,</span>
+<span id="cb434-20"><a href="phenoflex3.html#cb434-20" tabindex="-1"></a>                  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">smooth =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb434-21"><a href="phenoflex3.html#cb434-21" tabindex="-1"></a>                                 <span class="at">verbose =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb434-22"><a href="phenoflex3.html#cb434-22" tabindex="-1"></a>                                 <span class="at">maxit =</span> <span class="dv">100</span>,</span>
+<span id="cb434-23"><a href="phenoflex3.html#cb434-23" tabindex="-1"></a>                                 <span class="at">nb.stop.improvement =</span> <span class="dv">10</span>))</span>
+<span id="cb434-24"><a href="phenoflex3.html#cb434-24" tabindex="-1"></a></span>
+<span id="cb434-25"><a href="phenoflex3.html#cb434-25" tabindex="-1"></a><span class="co"># Same for version 2</span></span>
+<span id="cb434-26"><a href="phenoflex3.html#cb434-26" tabindex="-1"></a>pheno_fit_normal <span class="ot">&lt;-</span> </span>
+<span id="cb434-27"><a href="phenoflex3.html#cb434-27" tabindex="-1"></a>  <span class="fu">phenologyFitter</span>(<span class="at">par.guess =</span> par,</span>
+<span id="cb434-28"><a href="phenoflex3.html#cb434-28" tabindex="-1"></a>                  <span class="at">modelfn =</span> PhenoFlex_GDHwrapper,</span>
+<span id="cb434-29"><a href="phenoflex3.html#cb434-29" tabindex="-1"></a>                  <span class="at">bloomJDays =</span> pheno_normal[pheno_normal<span class="sc">$</span>Year <span class="sc">%in%</span></span>
+<span id="cb434-30"><a href="phenoflex3.html#cb434-30" tabindex="-1"></a>                                              calibration_seasons_normal,</span>
+<span id="cb434-31"><a href="phenoflex3.html#cb434-31" tabindex="-1"></a>                                            <span class="st">&quot;pheno&quot;</span>],</span>
+<span id="cb434-32"><a href="phenoflex3.html#cb434-32" tabindex="-1"></a>                  <span class="at">SeasonList =</span> season_list_normal,</span>
+<span id="cb434-33"><a href="phenoflex3.html#cb434-33" tabindex="-1"></a>                  <span class="at">lower =</span> lower,</span>
+<span id="cb434-34"><a href="phenoflex3.html#cb434-34" tabindex="-1"></a>                  <span class="at">upper =</span> upper,</span>
+<span id="cb434-35"><a href="phenoflex3.html#cb434-35" tabindex="-1"></a>                  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">smooth =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb434-36"><a href="phenoflex3.html#cb434-36" tabindex="-1"></a>                                 <span class="at">verbose =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb434-37"><a href="phenoflex3.html#cb434-37" tabindex="-1"></a>                                 <span class="at">maxit =</span> <span class="dv">100</span>,</span>
+<span id="cb434-38"><a href="phenoflex3.html#cb434-38" tabindex="-1"></a>                                 <span class="at">nb.stop.improvement =</span> <span class="dv">10</span>))</span></code></pre></div>
 <p><em>Note that we set the argument <code>maxit</code> in the <code>control</code> list to 100 to make the code run fast. For a real assessment, we should probably use greater values (e.g. 1,000).</em></p>
 <p>We are saving the results of the fitting (model parameters and predicted bloom dates) and reading them from the folder to save time in future analyses.</p>
-<div class="sourceCode" id="cb438"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb438-1"><a href="phenoflex3.html#cb438-1" tabindex="-1"></a><span class="fu">write.csv</span>(pheno_fit_marginal<span class="sc">$</span>par,</span>
-<span id="cb438-2"><a href="phenoflex3.html#cb438-2" tabindex="-1"></a>          <span class="st">&quot;data/PhenoFlex_marginal_params.csv&quot;</span>,</span>
-<span id="cb438-3"><a href="phenoflex3.html#cb438-3" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb438-4"><a href="phenoflex3.html#cb438-4" tabindex="-1"></a></span>
-<span id="cb438-5"><a href="phenoflex3.html#cb438-5" tabindex="-1"></a><span class="fu">write.csv</span>(pheno_fit_normal<span class="sc">$</span>par,</span>
-<span id="cb438-6"><a href="phenoflex3.html#cb438-6" tabindex="-1"></a>          <span class="st">&quot;data/PhenoFlex_normal_params.csv&quot;</span>,</span>
-<span id="cb438-7"><a href="phenoflex3.html#cb438-7" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb438-8"><a href="phenoflex3.html#cb438-8" tabindex="-1"></a></span>
-<span id="cb438-9"><a href="phenoflex3.html#cb438-9" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(pheno_marginal[pheno_marginal<span class="sc">$</span>Year <span class="sc">%in%</span></span>
-<span id="cb438-10"><a href="phenoflex3.html#cb438-10" tabindex="-1"></a>                                      calibration_seasons_marginal, ],</span>
-<span id="cb438-11"><a href="phenoflex3.html#cb438-11" tabindex="-1"></a>                     <span class="st">&quot;Predicted&quot;</span> <span class="ot">=</span> pheno_fit_marginal<span class="sc">$</span>pbloomJDays),</span>
-<span id="cb438-12"><a href="phenoflex3.html#cb438-12" tabindex="-1"></a>          <span class="st">&quot;data/PhenoFlex_marginal_predicted_bloom.csv&quot;</span>,</span>
-<span id="cb438-13"><a href="phenoflex3.html#cb438-13" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb438-14"><a href="phenoflex3.html#cb438-14" tabindex="-1"></a></span>
-<span id="cb438-15"><a href="phenoflex3.html#cb438-15" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(pheno_normal[pheno_normal<span class="sc">$</span>Year <span class="sc">%in%</span></span>
-<span id="cb438-16"><a href="phenoflex3.html#cb438-16" tabindex="-1"></a>                                    calibration_seasons_normal, ],</span>
-<span id="cb438-17"><a href="phenoflex3.html#cb438-17" tabindex="-1"></a>                     <span class="st">&quot;Predicted&quot;</span> <span class="ot">=</span> pheno_fit_normal<span class="sc">$</span>pbloomJDays),</span>
-<span id="cb438-18"><a href="phenoflex3.html#cb438-18" tabindex="-1"></a>          <span class="st">&quot;data/PhenoFlex_normal_predicted_bloom.csv&quot;</span>,</span>
-<span id="cb438-19"><a href="phenoflex3.html#cb438-19" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb435-1"><a href="phenoflex3.html#cb435-1" tabindex="-1"></a><span class="fu">write.csv</span>(pheno_fit_marginal<span class="sc">$</span>par,</span>
+<span id="cb435-2"><a href="phenoflex3.html#cb435-2" tabindex="-1"></a>          <span class="st">&quot;data/PhenoFlex_marginal_params.csv&quot;</span>,</span>
+<span id="cb435-3"><a href="phenoflex3.html#cb435-3" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb435-4"><a href="phenoflex3.html#cb435-4" tabindex="-1"></a></span>
+<span id="cb435-5"><a href="phenoflex3.html#cb435-5" tabindex="-1"></a><span class="fu">write.csv</span>(pheno_fit_normal<span class="sc">$</span>par,</span>
+<span id="cb435-6"><a href="phenoflex3.html#cb435-6" tabindex="-1"></a>          <span class="st">&quot;data/PhenoFlex_normal_params.csv&quot;</span>,</span>
+<span id="cb435-7"><a href="phenoflex3.html#cb435-7" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb435-8"><a href="phenoflex3.html#cb435-8" tabindex="-1"></a></span>
+<span id="cb435-9"><a href="phenoflex3.html#cb435-9" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(pheno_marginal[pheno_marginal<span class="sc">$</span>Year <span class="sc">%in%</span></span>
+<span id="cb435-10"><a href="phenoflex3.html#cb435-10" tabindex="-1"></a>                                      calibration_seasons_marginal, ],</span>
+<span id="cb435-11"><a href="phenoflex3.html#cb435-11" tabindex="-1"></a>                     <span class="st">&quot;Predicted&quot;</span> <span class="ot">=</span> pheno_fit_marginal<span class="sc">$</span>pbloomJDays),</span>
+<span id="cb435-12"><a href="phenoflex3.html#cb435-12" tabindex="-1"></a>          <span class="st">&quot;data/PhenoFlex_marginal_predicted_bloom.csv&quot;</span>,</span>
+<span id="cb435-13"><a href="phenoflex3.html#cb435-13" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb435-14"><a href="phenoflex3.html#cb435-14" tabindex="-1"></a></span>
+<span id="cb435-15"><a href="phenoflex3.html#cb435-15" tabindex="-1"></a><span class="fu">write.csv</span>(<span class="fu">data.frame</span>(pheno_normal[pheno_normal<span class="sc">$</span>Year <span class="sc">%in%</span></span>
+<span id="cb435-16"><a href="phenoflex3.html#cb435-16" tabindex="-1"></a>                                    calibration_seasons_normal, ],</span>
+<span id="cb435-17"><a href="phenoflex3.html#cb435-17" tabindex="-1"></a>                     <span class="st">&quot;Predicted&quot;</span> <span class="ot">=</span> pheno_fit_normal<span class="sc">$</span>pbloomJDays),</span>
+<span id="cb435-18"><a href="phenoflex3.html#cb435-18" tabindex="-1"></a>          <span class="st">&quot;data/PhenoFlex_normal_predicted_bloom.csv&quot;</span>,</span>
+<span id="cb435-19"><a href="phenoflex3.html#cb435-19" tabindex="-1"></a>          <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <p>Let’s take a look at some results from the fitting procedure. We can obtain the predictions by the model using the fitted parameters and then estimate the prediction error.</p>
-<div class="sourceCode" id="cb439"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb439-1"><a href="phenoflex3.html#cb439-1" tabindex="-1"></a><span class="co"># Read the parameters</span></span>
-<span id="cb439-2"><a href="phenoflex3.html#cb439-2" tabindex="-1"></a>params_marginal <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/PhenoFlex_marginal_params.csv&quot;</span>)[[<span class="dv">1</span>]]</span>
-<span id="cb439-3"><a href="phenoflex3.html#cb439-3" tabindex="-1"></a>params_normal <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/PhenoFlex_normal_params.csv&quot;</span>)[[<span class="dv">1</span>]]</span>
-<span id="cb439-4"><a href="phenoflex3.html#cb439-4" tabindex="-1"></a></span>
-<span id="cb439-5"><a href="phenoflex3.html#cb439-5" tabindex="-1"></a><span class="co"># Generate a data set to collect the outputs of the fitting for the calibration data </span></span>
-<span id="cb439-6"><a href="phenoflex3.html#cb439-6" tabindex="-1"></a>out_df_marginal <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/PhenoFlex_marginal_predicted_bloom.csv&quot;</span>)</span>
-<span id="cb439-7"><a href="phenoflex3.html#cb439-7" tabindex="-1"></a>out_df_normal <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/PhenoFlex_normal_predicted_bloom.csv&quot;</span>)</span>
-<span id="cb439-8"><a href="phenoflex3.html#cb439-8" tabindex="-1"></a></span>
-<span id="cb439-9"><a href="phenoflex3.html#cb439-9" tabindex="-1"></a><span class="co"># Compute the error (observed - predicted)</span></span>
-<span id="cb439-10"><a href="phenoflex3.html#cb439-10" tabindex="-1"></a>out_df_marginal[[<span class="st">&quot;Error&quot;</span>]] <span class="ot">&lt;-</span></span>
-<span id="cb439-11"><a href="phenoflex3.html#cb439-11" tabindex="-1"></a>  out_df_marginal<span class="sc">$</span>pheno <span class="sc">-</span> out_df_marginal<span class="sc">$</span>Predicted</span>
-<span id="cb439-12"><a href="phenoflex3.html#cb439-12" tabindex="-1"></a></span>
-<span id="cb439-13"><a href="phenoflex3.html#cb439-13" tabindex="-1"></a>out_df_normal[[<span class="st">&quot;Error&quot;</span>]] <span class="ot">&lt;-</span></span>
-<span id="cb439-14"><a href="phenoflex3.html#cb439-14" tabindex="-1"></a>  out_df_normal<span class="sc">$</span>pheno <span class="sc">-</span> out_df_normal<span class="sc">$</span>Predicted</span></code></pre></div>
+<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb436-1"><a href="phenoflex3.html#cb436-1" tabindex="-1"></a><span class="co"># Read the parameters</span></span>
+<span id="cb436-2"><a href="phenoflex3.html#cb436-2" tabindex="-1"></a>params_marginal <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/PhenoFlex_marginal_params.csv&quot;</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb436-3"><a href="phenoflex3.html#cb436-3" tabindex="-1"></a>params_normal <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/PhenoFlex_normal_params.csv&quot;</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb436-4"><a href="phenoflex3.html#cb436-4" tabindex="-1"></a></span>
+<span id="cb436-5"><a href="phenoflex3.html#cb436-5" tabindex="-1"></a><span class="co"># Generate a data set to collect the outputs of the fitting for the calibration data </span></span>
+<span id="cb436-6"><a href="phenoflex3.html#cb436-6" tabindex="-1"></a>out_df_marginal <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/PhenoFlex_marginal_predicted_bloom.csv&quot;</span>)</span>
+<span id="cb436-7"><a href="phenoflex3.html#cb436-7" tabindex="-1"></a>out_df_normal <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/PhenoFlex_normal_predicted_bloom.csv&quot;</span>)</span>
+<span id="cb436-8"><a href="phenoflex3.html#cb436-8" tabindex="-1"></a></span>
+<span id="cb436-9"><a href="phenoflex3.html#cb436-9" tabindex="-1"></a><span class="co"># Compute the error (observed - predicted)</span></span>
+<span id="cb436-10"><a href="phenoflex3.html#cb436-10" tabindex="-1"></a>out_df_marginal[[<span class="st">&quot;Error&quot;</span>]] <span class="ot">&lt;-</span></span>
+<span id="cb436-11"><a href="phenoflex3.html#cb436-11" tabindex="-1"></a>  out_df_marginal<span class="sc">$</span>pheno <span class="sc">-</span> out_df_marginal<span class="sc">$</span>Predicted</span>
+<span id="cb436-12"><a href="phenoflex3.html#cb436-12" tabindex="-1"></a></span>
+<span id="cb436-13"><a href="phenoflex3.html#cb436-13" tabindex="-1"></a>out_df_normal[[<span class="st">&quot;Error&quot;</span>]] <span class="ot">&lt;-</span></span>
+<span id="cb436-14"><a href="phenoflex3.html#cb436-14" tabindex="-1"></a>  out_df_normal<span class="sc">$</span>pheno <span class="sc">-</span> out_df_normal<span class="sc">$</span>Predicted</span></code></pre></div>
 <p>We can now compute some model performance metrics based on the prediction error estimated above. This is not very relevant during the calibration procedure, but it can give us an idea on how the two <code>PhenoFlex</code> versions compare.</p>
-<div class="sourceCode" id="cb440"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb440-1"><a href="phenoflex3.html#cb440-1" tabindex="-1"></a>calibration_metrics</span></code></pre></div>
+<div class="sourceCode" id="cb437"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb437-1"><a href="phenoflex3.html#cb437-1" tabindex="-1"></a>calibration_metrics</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -894,59 +894,59 @@ div.csl-indent {
 </table>
 <p>There is certainly room for improvement (especially considering that we only used 10 iterations), but the results give us a clear indication that calibrating the model with the marginal seasons reduced the performance of <code>PhenoFlex</code>.</p>
 <p>Let’s plot some results.</p>
-<div class="sourceCode" id="cb441"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb441-1"><a href="phenoflex3.html#cb441-1" tabindex="-1"></a>out_df_all <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="st">&quot;PhenoFlex marginal&quot;</span> <span class="ot">=</span> out_df_marginal,</span>
-<span id="cb441-2"><a href="phenoflex3.html#cb441-2" tabindex="-1"></a>                        <span class="st">&quot;PhenoFlex normal&quot;</span> <span class="ot">=</span> out_df_normal,</span>
-<span id="cb441-3"><a href="phenoflex3.html#cb441-3" tabindex="-1"></a>                        <span class="at">.id =</span> <span class="st">&quot;PhenoFlex version&quot;</span>)</span>
-<span id="cb441-4"><a href="phenoflex3.html#cb441-4" tabindex="-1"></a></span>
-<span id="cb441-5"><a href="phenoflex3.html#cb441-5" tabindex="-1"></a><span class="co"># Plot the observed versus predicted values</span></span>
-<span id="cb441-6"><a href="phenoflex3.html#cb441-6" tabindex="-1"></a><span class="fu">ggplot</span>(out_df_all,</span>
-<span id="cb441-7"><a href="phenoflex3.html#cb441-7" tabindex="-1"></a>       <span class="fu">aes</span>(pheno, </span>
-<span id="cb441-8"><a href="phenoflex3.html#cb441-8" tabindex="-1"></a>           Predicted)) <span class="sc">+</span></span>
-<span id="cb441-9"><a href="phenoflex3.html#cb441-9" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb441-10"><a href="phenoflex3.html#cb441-10" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb441-11"><a href="phenoflex3.html#cb441-11" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Observed&quot;</span>) <span class="sc">+</span></span>
-<span id="cb441-12"><a href="phenoflex3.html#cb441-12" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span> <span class="st">`</span><span class="at">PhenoFlex version</span><span class="st">`</span>) <span class="sc">+</span></span>
-<span id="cb441-13"><a href="phenoflex3.html#cb441-13" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb438"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb438-1"><a href="phenoflex3.html#cb438-1" tabindex="-1"></a>out_df_all <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="st">&quot;PhenoFlex marginal&quot;</span> <span class="ot">=</span> out_df_marginal,</span>
+<span id="cb438-2"><a href="phenoflex3.html#cb438-2" tabindex="-1"></a>                        <span class="st">&quot;PhenoFlex normal&quot;</span> <span class="ot">=</span> out_df_normal,</span>
+<span id="cb438-3"><a href="phenoflex3.html#cb438-3" tabindex="-1"></a>                        <span class="at">.id =</span> <span class="st">&quot;PhenoFlex version&quot;</span>)</span>
+<span id="cb438-4"><a href="phenoflex3.html#cb438-4" tabindex="-1"></a></span>
+<span id="cb438-5"><a href="phenoflex3.html#cb438-5" tabindex="-1"></a><span class="co"># Plot the observed versus predicted values</span></span>
+<span id="cb438-6"><a href="phenoflex3.html#cb438-6" tabindex="-1"></a><span class="fu">ggplot</span>(out_df_all,</span>
+<span id="cb438-7"><a href="phenoflex3.html#cb438-7" tabindex="-1"></a>       <span class="fu">aes</span>(pheno, </span>
+<span id="cb438-8"><a href="phenoflex3.html#cb438-8" tabindex="-1"></a>           Predicted)) <span class="sc">+</span></span>
+<span id="cb438-9"><a href="phenoflex3.html#cb438-9" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb438-10"><a href="phenoflex3.html#cb438-10" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb438-11"><a href="phenoflex3.html#cb438-11" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Observed&quot;</span>) <span class="sc">+</span></span>
+<span id="cb438-12"><a href="phenoflex3.html#cb438-12" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span> <span class="st">`</span><span class="at">PhenoFlex version</span><span class="st">`</span>) <span class="sc">+</span></span>
+<span id="cb438-13"><a href="phenoflex3.html#cb438-13" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="Book_files/figure-html/plotting-1.png" width="672" /></p>
 <p>We can see in the plot that the version including the marginal seasons shows a greater dispersion compared to the version excluding the marginal seasons in the calibration of the framework.</p>
 </div>
 <div id="validation" class="section level2 hasAnchor" number="32.3">
 <h2><span class="header-section-number">32.3</span> Validation<a href="phenoflex3.html#validation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We should probably now take a look at how well both versions can predict bloom dates for seasons that were not contained in the calibration data set. We need to extract the model parameters and use the function <code>PhenoFlex_GDHwrapper()</code> to complete this task. Remember, we are using a common set of seasons for validation of both the <code>PhenoFlex_marginal</code> and <code>PhenoFlex_normal</code> versions.</p>
-<div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb442-1"><a href="phenoflex3.html#cb442-1" tabindex="-1"></a><span class="co"># Generate a validation data set with phenology data</span></span>
-<span id="cb442-2"><a href="phenoflex3.html#cb442-2" tabindex="-1"></a>valid_df_marginal <span class="ot">&lt;-</span> pheno_marginal[pheno_marginal<span class="sc">$</span>Year <span class="sc">%in%</span> </span>
-<span id="cb442-3"><a href="phenoflex3.html#cb442-3" tabindex="-1"></a>                                      validation_seasons, ]</span>
-<span id="cb442-4"><a href="phenoflex3.html#cb442-4" tabindex="-1"></a></span>
-<span id="cb442-5"><a href="phenoflex3.html#cb442-5" tabindex="-1"></a>valid_df_normal <span class="ot">&lt;-</span> pheno_normal[pheno_normal<span class="sc">$</span>Year <span class="sc">%in%</span></span>
-<span id="cb442-6"><a href="phenoflex3.html#cb442-6" tabindex="-1"></a>                                  validation_seasons, ]</span>
-<span id="cb442-7"><a href="phenoflex3.html#cb442-7" tabindex="-1"></a></span>
-<span id="cb442-8"><a href="phenoflex3.html#cb442-8" tabindex="-1"></a><span class="co"># Generate a list of seasons with weather data for the validation procedure</span></span>
-<span id="cb442-9"><a href="phenoflex3.html#cb442-9" tabindex="-1"></a>valid_season_list <span class="ot">&lt;-</span> <span class="fu">genSeasonList</span>(data,</span>
-<span id="cb442-10"><a href="phenoflex3.html#cb442-10" tabindex="-1"></a>                                   <span class="at">mrange =</span> <span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">7</span>), </span>
-<span id="cb442-11"><a href="phenoflex3.html#cb442-11" tabindex="-1"></a>                                   <span class="at">years =</span> validation_seasons)</span>
-<span id="cb442-12"><a href="phenoflex3.html#cb442-12" tabindex="-1"></a></span>
-<span id="cb442-13"><a href="phenoflex3.html#cb442-13" tabindex="-1"></a><span class="co"># Estimate the bloom dates with PhenoFlexGDHwrapper</span></span>
-<span id="cb442-14"><a href="phenoflex3.html#cb442-14" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span> <span class="sc">:</span> <span class="fu">nrow</span>(valid_df_marginal)) {</span>
-<span id="cb442-15"><a href="phenoflex3.html#cb442-15" tabindex="-1"></a>  valid_df_marginal[i, <span class="st">&quot;Predicted&quot;</span>] <span class="ot">&lt;-</span></span>
-<span id="cb442-16"><a href="phenoflex3.html#cb442-16" tabindex="-1"></a>    <span class="fu">PhenoFlex_GDHwrapper</span>(valid_season_list[[i]],</span>
-<span id="cb442-17"><a href="phenoflex3.html#cb442-17" tabindex="-1"></a>                         params_marginal)</span>
-<span id="cb442-18"><a href="phenoflex3.html#cb442-18" tabindex="-1"></a>  }</span>
-<span id="cb442-19"><a href="phenoflex3.html#cb442-19" tabindex="-1"></a></span>
-<span id="cb442-20"><a href="phenoflex3.html#cb442-20" tabindex="-1"></a><span class="co"># The same for the second version</span></span>
-<span id="cb442-21"><a href="phenoflex3.html#cb442-21" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span> <span class="sc">:</span> <span class="fu">nrow</span>(valid_df_normal)) {</span>
-<span id="cb442-22"><a href="phenoflex3.html#cb442-22" tabindex="-1"></a>  valid_df_normal[i, <span class="st">&quot;Predicted&quot;</span>] <span class="ot">&lt;-</span></span>
-<span id="cb442-23"><a href="phenoflex3.html#cb442-23" tabindex="-1"></a>    <span class="fu">PhenoFlex_GDHwrapper</span>(valid_season_list[[i]],</span>
-<span id="cb442-24"><a href="phenoflex3.html#cb442-24" tabindex="-1"></a>                         params_normal)</span>
-<span id="cb442-25"><a href="phenoflex3.html#cb442-25" tabindex="-1"></a>  }</span>
-<span id="cb442-26"><a href="phenoflex3.html#cb442-26" tabindex="-1"></a></span>
-<span id="cb442-27"><a href="phenoflex3.html#cb442-27" tabindex="-1"></a><span class="co"># Compute the error (observed - predicted)</span></span>
-<span id="cb442-28"><a href="phenoflex3.html#cb442-28" tabindex="-1"></a>valid_df_marginal[[<span class="st">&quot;Error&quot;</span>]] <span class="ot">&lt;-</span></span>
-<span id="cb442-29"><a href="phenoflex3.html#cb442-29" tabindex="-1"></a>  valid_df_marginal<span class="sc">$</span>pheno <span class="sc">-</span> valid_df_marginal<span class="sc">$</span>Predicted</span>
-<span id="cb442-30"><a href="phenoflex3.html#cb442-30" tabindex="-1"></a></span>
-<span id="cb442-31"><a href="phenoflex3.html#cb442-31" tabindex="-1"></a>valid_df_normal[[<span class="st">&quot;Error&quot;</span>]] <span class="ot">&lt;-</span> </span>
-<span id="cb442-32"><a href="phenoflex3.html#cb442-32" tabindex="-1"></a>  valid_df_normal<span class="sc">$</span>pheno <span class="sc">-</span> valid_df_normal<span class="sc">$</span>Predicted</span></code></pre></div>
+<div class="sourceCode" id="cb439"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb439-1"><a href="phenoflex3.html#cb439-1" tabindex="-1"></a><span class="co"># Generate a validation data set with phenology data</span></span>
+<span id="cb439-2"><a href="phenoflex3.html#cb439-2" tabindex="-1"></a>valid_df_marginal <span class="ot">&lt;-</span> pheno_marginal[pheno_marginal<span class="sc">$</span>Year <span class="sc">%in%</span> </span>
+<span id="cb439-3"><a href="phenoflex3.html#cb439-3" tabindex="-1"></a>                                      validation_seasons, ]</span>
+<span id="cb439-4"><a href="phenoflex3.html#cb439-4" tabindex="-1"></a></span>
+<span id="cb439-5"><a href="phenoflex3.html#cb439-5" tabindex="-1"></a>valid_df_normal <span class="ot">&lt;-</span> pheno_normal[pheno_normal<span class="sc">$</span>Year <span class="sc">%in%</span></span>
+<span id="cb439-6"><a href="phenoflex3.html#cb439-6" tabindex="-1"></a>                                  validation_seasons, ]</span>
+<span id="cb439-7"><a href="phenoflex3.html#cb439-7" tabindex="-1"></a></span>
+<span id="cb439-8"><a href="phenoflex3.html#cb439-8" tabindex="-1"></a><span class="co"># Generate a list of seasons with weather data for the validation procedure</span></span>
+<span id="cb439-9"><a href="phenoflex3.html#cb439-9" tabindex="-1"></a>valid_season_list <span class="ot">&lt;-</span> <span class="fu">genSeasonList</span>(data,</span>
+<span id="cb439-10"><a href="phenoflex3.html#cb439-10" tabindex="-1"></a>                                   <span class="at">mrange =</span> <span class="fu">c</span>(<span class="dv">9</span>, <span class="dv">7</span>), </span>
+<span id="cb439-11"><a href="phenoflex3.html#cb439-11" tabindex="-1"></a>                                   <span class="at">years =</span> validation_seasons)</span>
+<span id="cb439-12"><a href="phenoflex3.html#cb439-12" tabindex="-1"></a></span>
+<span id="cb439-13"><a href="phenoflex3.html#cb439-13" tabindex="-1"></a><span class="co"># Estimate the bloom dates with PhenoFlexGDHwrapper</span></span>
+<span id="cb439-14"><a href="phenoflex3.html#cb439-14" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span> <span class="sc">:</span> <span class="fu">nrow</span>(valid_df_marginal)) {</span>
+<span id="cb439-15"><a href="phenoflex3.html#cb439-15" tabindex="-1"></a>  valid_df_marginal[i, <span class="st">&quot;Predicted&quot;</span>] <span class="ot">&lt;-</span></span>
+<span id="cb439-16"><a href="phenoflex3.html#cb439-16" tabindex="-1"></a>    <span class="fu">PhenoFlex_GDHwrapper</span>(valid_season_list[[i]],</span>
+<span id="cb439-17"><a href="phenoflex3.html#cb439-17" tabindex="-1"></a>                         params_marginal)</span>
+<span id="cb439-18"><a href="phenoflex3.html#cb439-18" tabindex="-1"></a>  }</span>
+<span id="cb439-19"><a href="phenoflex3.html#cb439-19" tabindex="-1"></a></span>
+<span id="cb439-20"><a href="phenoflex3.html#cb439-20" tabindex="-1"></a><span class="co"># The same for the second version</span></span>
+<span id="cb439-21"><a href="phenoflex3.html#cb439-21" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span> <span class="sc">:</span> <span class="fu">nrow</span>(valid_df_normal)) {</span>
+<span id="cb439-22"><a href="phenoflex3.html#cb439-22" tabindex="-1"></a>  valid_df_normal[i, <span class="st">&quot;Predicted&quot;</span>] <span class="ot">&lt;-</span></span>
+<span id="cb439-23"><a href="phenoflex3.html#cb439-23" tabindex="-1"></a>    <span class="fu">PhenoFlex_GDHwrapper</span>(valid_season_list[[i]],</span>
+<span id="cb439-24"><a href="phenoflex3.html#cb439-24" tabindex="-1"></a>                         params_normal)</span>
+<span id="cb439-25"><a href="phenoflex3.html#cb439-25" tabindex="-1"></a>  }</span>
+<span id="cb439-26"><a href="phenoflex3.html#cb439-26" tabindex="-1"></a></span>
+<span id="cb439-27"><a href="phenoflex3.html#cb439-27" tabindex="-1"></a><span class="co"># Compute the error (observed - predicted)</span></span>
+<span id="cb439-28"><a href="phenoflex3.html#cb439-28" tabindex="-1"></a>valid_df_marginal[[<span class="st">&quot;Error&quot;</span>]] <span class="ot">&lt;-</span></span>
+<span id="cb439-29"><a href="phenoflex3.html#cb439-29" tabindex="-1"></a>  valid_df_marginal<span class="sc">$</span>pheno <span class="sc">-</span> valid_df_marginal<span class="sc">$</span>Predicted</span>
+<span id="cb439-30"><a href="phenoflex3.html#cb439-30" tabindex="-1"></a></span>
+<span id="cb439-31"><a href="phenoflex3.html#cb439-31" tabindex="-1"></a>valid_df_normal[[<span class="st">&quot;Error&quot;</span>]] <span class="ot">&lt;-</span> </span>
+<span id="cb439-32"><a href="phenoflex3.html#cb439-32" tabindex="-1"></a>  valid_df_normal<span class="sc">$</span>pheno <span class="sc">-</span> valid_df_normal<span class="sc">$</span>Predicted</span></code></pre></div>
 <p>Since we already know the difference between the observed values and the values predicted by the model (i.e. the prediction error) in the validation data set, we can estimate some model performance metrics such as the RMSEP and the RPIQ. To this end, we can use the functions <code>RMSEP()</code> and <code>RPIQ()</code> from <code>chillR</code>.</p>
-<div class="sourceCode" id="cb443"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb443-1"><a href="phenoflex3.html#cb443-1" tabindex="-1"></a>validation_metrics</span></code></pre></div>
+<div class="sourceCode" id="cb440"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb440-1"><a href="phenoflex3.html#cb440-1" tabindex="-1"></a>validation_metrics</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -958,83 +958,83 @@ div.csl-indent {
 <tbody>
 <tr class="odd">
 <td align="left">RMSEP</td>
-<td align="right">13.787067</td>
-<td align="right">4.573488</td>
+<td align="right">10.464219</td>
+<td align="right">3.852646</td>
 </tr>
 <tr class="even">
 <td align="left">RPIQ</td>
-<td align="right">2.810605</td>
-<td align="right">8.472746</td>
+<td align="right">1.409565</td>
+<td align="right">3.828537</td>
 </tr>
 </tbody>
 </table>
 <p>The results shown in the table above confirm the pattern we observed in the calibration procedure. <strong>The inclusion of the marginal seasons lowered the performance of <code>PhenoFlex</code>.</strong> But it is always nice to see the results in a more graphically way, right? So, let’s plot them!</p>
-<div class="sourceCode" id="cb444"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb444-1"><a href="phenoflex3.html#cb444-1" tabindex="-1"></a><span class="co"># Create a unique data set</span></span>
-<span id="cb444-2"><a href="phenoflex3.html#cb444-2" tabindex="-1"></a>valid_df_all <span class="ot">&lt;-</span> </span>
-<span id="cb444-3"><a href="phenoflex3.html#cb444-3" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="st">&quot;PhenoFlex marginal&quot;</span> <span class="ot">=</span> valid_df_marginal,</span>
-<span id="cb444-4"><a href="phenoflex3.html#cb444-4" tabindex="-1"></a>            <span class="st">&quot;PhenoFlex normal&quot;</span> <span class="ot">=</span> valid_df_normal,</span>
-<span id="cb444-5"><a href="phenoflex3.html#cb444-5" tabindex="-1"></a>            <span class="at">.id =</span> <span class="st">&quot;PhenoFlex version&quot;</span>)</span>
-<span id="cb444-6"><a href="phenoflex3.html#cb444-6" tabindex="-1"></a></span>
-<span id="cb444-7"><a href="phenoflex3.html#cb444-7" tabindex="-1"></a><span class="co"># Plot the calibrated and validated </span></span>
-<span id="cb444-8"><a href="phenoflex3.html#cb444-8" tabindex="-1"></a><span class="fu">ggplot</span>(out_df_all,</span>
-<span id="cb444-9"><a href="phenoflex3.html#cb444-9" tabindex="-1"></a>       <span class="fu">aes</span>(pheno,</span>
-<span id="cb444-10"><a href="phenoflex3.html#cb444-10" tabindex="-1"></a>           Predicted,</span>
-<span id="cb444-11"><a href="phenoflex3.html#cb444-11" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">&quot;Calibration&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb444-12"><a href="phenoflex3.html#cb444-12" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb444-13"><a href="phenoflex3.html#cb444-13" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> valid_df_all,</span>
-<span id="cb444-14"><a href="phenoflex3.html#cb444-14" tabindex="-1"></a>             <span class="fu">aes</span>(pheno, </span>
-<span id="cb444-15"><a href="phenoflex3.html#cb444-15" tabindex="-1"></a>                 Predicted,</span>
-<span id="cb444-16"><a href="phenoflex3.html#cb444-16" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;Validation&quot;</span>)) <span class="sc">+</span> </span>
-<span id="cb444-17"><a href="phenoflex3.html#cb444-17" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;cadetblue&quot;</span>,</span>
-<span id="cb444-18"><a href="phenoflex3.html#cb444-18" tabindex="-1"></a>                                <span class="st">&quot;firebrick&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb444-19"><a href="phenoflex3.html#cb444-19" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, </span>
-<span id="cb444-20"><a href="phenoflex3.html#cb444-20" tabindex="-1"></a>              <span class="at">slope =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb444-21"><a href="phenoflex3.html#cb444-21" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Observed&quot;</span>,</span>
-<span id="cb444-22"><a href="phenoflex3.html#cb444-22" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Dataset&quot;</span>) <span class="sc">+</span></span>
-<span id="cb444-23"><a href="phenoflex3.html#cb444-23" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span> <span class="st">`</span><span class="at">PhenoFlex version</span><span class="st">`</span>) <span class="sc">+</span></span>
-<span id="cb444-24"><a href="phenoflex3.html#cb444-24" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb441"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb441-1"><a href="phenoflex3.html#cb441-1" tabindex="-1"></a><span class="co"># Create a unique data set</span></span>
+<span id="cb441-2"><a href="phenoflex3.html#cb441-2" tabindex="-1"></a>valid_df_all <span class="ot">&lt;-</span> </span>
+<span id="cb441-3"><a href="phenoflex3.html#cb441-3" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="st">&quot;PhenoFlex marginal&quot;</span> <span class="ot">=</span> valid_df_marginal,</span>
+<span id="cb441-4"><a href="phenoflex3.html#cb441-4" tabindex="-1"></a>            <span class="st">&quot;PhenoFlex normal&quot;</span> <span class="ot">=</span> valid_df_normal,</span>
+<span id="cb441-5"><a href="phenoflex3.html#cb441-5" tabindex="-1"></a>            <span class="at">.id =</span> <span class="st">&quot;PhenoFlex version&quot;</span>)</span>
+<span id="cb441-6"><a href="phenoflex3.html#cb441-6" tabindex="-1"></a></span>
+<span id="cb441-7"><a href="phenoflex3.html#cb441-7" tabindex="-1"></a><span class="co"># Plot the calibrated and validated </span></span>
+<span id="cb441-8"><a href="phenoflex3.html#cb441-8" tabindex="-1"></a><span class="fu">ggplot</span>(out_df_all,</span>
+<span id="cb441-9"><a href="phenoflex3.html#cb441-9" tabindex="-1"></a>       <span class="fu">aes</span>(pheno,</span>
+<span id="cb441-10"><a href="phenoflex3.html#cb441-10" tabindex="-1"></a>           Predicted,</span>
+<span id="cb441-11"><a href="phenoflex3.html#cb441-11" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">&quot;Calibration&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb441-12"><a href="phenoflex3.html#cb441-12" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb441-13"><a href="phenoflex3.html#cb441-13" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> valid_df_all,</span>
+<span id="cb441-14"><a href="phenoflex3.html#cb441-14" tabindex="-1"></a>             <span class="fu">aes</span>(pheno, </span>
+<span id="cb441-15"><a href="phenoflex3.html#cb441-15" tabindex="-1"></a>                 Predicted,</span>
+<span id="cb441-16"><a href="phenoflex3.html#cb441-16" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;Validation&quot;</span>)) <span class="sc">+</span> </span>
+<span id="cb441-17"><a href="phenoflex3.html#cb441-17" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;cadetblue&quot;</span>,</span>
+<span id="cb441-18"><a href="phenoflex3.html#cb441-18" tabindex="-1"></a>                                <span class="st">&quot;firebrick&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb441-19"><a href="phenoflex3.html#cb441-19" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, </span>
+<span id="cb441-20"><a href="phenoflex3.html#cb441-20" tabindex="-1"></a>              <span class="at">slope =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb441-21"><a href="phenoflex3.html#cb441-21" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Observed&quot;</span>,</span>
+<span id="cb441-22"><a href="phenoflex3.html#cb441-22" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Dataset&quot;</span>) <span class="sc">+</span></span>
+<span id="cb441-23"><a href="phenoflex3.html#cb441-23" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span> <span class="st">`</span><span class="at">PhenoFlex version</span><span class="st">`</span>) <span class="sc">+</span></span>
+<span id="cb441-24"><a href="phenoflex3.html#cb441-24" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="Book_files/figure-html/validation_plot-1.png" width="672" /></p>
 <p>Again, here we see that the red dots (representing the validation seasons) in <code>PhenoFlex_marginal</code> are more dispersed and placed at a greater distance from the line <code>x = y</code> compared to the red dots from the <code>PhenoFlex_normal</code> version.</p>
 <p>We will now take a look at the chill and heat response curves for both versions of the analysis. To this end, we will make use of the functions <code>apply_const_temp()</code>, <code>gen_bell()</code>, and <code>GDH_response()</code> that we created in the chapter <a href="phenoflex2.html#phenoflex2">The <code>PhenoFlex</code> model - a second look</a>. We will load the functions again and will hide this process with the chunk options.</p>
-<div class="sourceCode" id="cb445"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb445-1"><a href="phenoflex3.html#cb445-1" tabindex="-1"></a><span class="co"># Create a data set with theoretical temperatures and heat and chill responses</span></span>
-<span id="cb445-2"><a href="phenoflex3.html#cb445-2" tabindex="-1"></a>temp_response_marginal <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Temp =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">60</span>, <span class="fl">0.1</span>),</span>
-<span id="cb445-3"><a href="phenoflex3.html#cb445-3" tabindex="-1"></a>                                     <span class="at">Chill_res =</span> <span class="fu">gen_bell</span>(params_marginal,</span>
-<span id="cb445-4"><a href="phenoflex3.html#cb445-4" tabindex="-1"></a>                                                          <span class="at">temp_values =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">60</span>, <span class="fl">0.1</span>)),</span>
-<span id="cb445-5"><a href="phenoflex3.html#cb445-5" tabindex="-1"></a>                                     <span class="at">Heat_res =</span> <span class="fu">GDH_response</span>(params_marginal,</span>
-<span id="cb445-6"><a href="phenoflex3.html#cb445-6" tabindex="-1"></a>                                                             <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">60</span>, <span class="fl">0.1</span>)),</span>
-<span id="cb445-7"><a href="phenoflex3.html#cb445-7" tabindex="-1"></a>                                     <span class="at">Version =</span> <span class="st">&quot;PhenoFlex marginal&quot;</span>)</span>
-<span id="cb445-8"><a href="phenoflex3.html#cb445-8" tabindex="-1"></a></span>
-<span id="cb445-9"><a href="phenoflex3.html#cb445-9" tabindex="-1"></a>temp_response_normal <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Temp =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">60</span>, <span class="fl">0.1</span>),</span>
-<span id="cb445-10"><a href="phenoflex3.html#cb445-10" tabindex="-1"></a>                                   <span class="at">Chill_res =</span> <span class="fu">gen_bell</span>(params_normal,</span>
-<span id="cb445-11"><a href="phenoflex3.html#cb445-11" tabindex="-1"></a>                                                        <span class="at">temp_values =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">60</span>, <span class="fl">0.1</span>)),</span>
-<span id="cb445-12"><a href="phenoflex3.html#cb445-12" tabindex="-1"></a>                                   <span class="at">Heat_res =</span> <span class="fu">GDH_response</span>(params_normal,</span>
-<span id="cb445-13"><a href="phenoflex3.html#cb445-13" tabindex="-1"></a>                                                           <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">60</span>, <span class="fl">0.1</span>)),</span>
-<span id="cb445-14"><a href="phenoflex3.html#cb445-14" tabindex="-1"></a>                                   <span class="at">Version =</span> <span class="st">&quot;PhenoFlex normal&quot;</span>)</span>
-<span id="cb445-15"><a href="phenoflex3.html#cb445-15" tabindex="-1"></a></span>
-<span id="cb445-16"><a href="phenoflex3.html#cb445-16" tabindex="-1"></a></span>
-<span id="cb445-17"><a href="phenoflex3.html#cb445-17" tabindex="-1"></a><span class="co"># Generate a single data set</span></span>
-<span id="cb445-18"><a href="phenoflex3.html#cb445-18" tabindex="-1"></a>temp_response <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(temp_response_marginal, </span>
-<span id="cb445-19"><a href="phenoflex3.html#cb445-19" tabindex="-1"></a>                           temp_response_normal)</span>
-<span id="cb445-20"><a href="phenoflex3.html#cb445-20" tabindex="-1"></a></span>
-<span id="cb445-21"><a href="phenoflex3.html#cb445-21" tabindex="-1"></a><span class="co"># Plotting</span></span>
-<span id="cb445-22"><a href="phenoflex3.html#cb445-22" tabindex="-1"></a><span class="fu">ggplot</span>(temp_response, </span>
-<span id="cb445-23"><a href="phenoflex3.html#cb445-23" tabindex="-1"></a>       <span class="fu">aes</span>(Temp)) <span class="sc">+</span></span>
-<span id="cb445-24"><a href="phenoflex3.html#cb445-24" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> Chill_res,</span>
-<span id="cb445-25"><a href="phenoflex3.html#cb445-25" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">&quot;Chill&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb445-26"><a href="phenoflex3.html#cb445-26" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> Heat_res <span class="sc">*</span> <span class="dv">25</span>, </span>
-<span id="cb445-27"><a href="phenoflex3.html#cb445-27" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">&quot;Heat&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb445-28"><a href="phenoflex3.html#cb445-28" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="fl">0.001</span>, <span class="fl">0.01</span>)),</span>
-<span id="cb445-29"><a href="phenoflex3.html#cb445-29" tabindex="-1"></a>                     <span class="at">sec.axis =</span> <span class="fu">sec_axis</span>(<span class="sc">~</span> . <span class="sc">/</span> <span class="dv">25</span>, </span>
-<span id="cb445-30"><a href="phenoflex3.html#cb445-30" tabindex="-1"></a>                                         <span class="at">name =</span> <span class="st">&quot;Arbitrary heat units&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb445-31"><a href="phenoflex3.html#cb445-31" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb445-32"><a href="phenoflex3.html#cb445-32" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;blue4&quot;</span>, </span>
-<span id="cb445-33"><a href="phenoflex3.html#cb445-33" tabindex="-1"></a>                                <span class="st">&quot;firebrick&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb445-34"><a href="phenoflex3.html#cb445-34" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Temperature (°C)&quot;</span>,</span>
-<span id="cb445-35"><a href="phenoflex3.html#cb445-35" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Arbitrary chill units&quot;</span>,</span>
-<span id="cb445-36"><a href="phenoflex3.html#cb445-36" tabindex="-1"></a>       <span class="at">color =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb445-37"><a href="phenoflex3.html#cb445-37" tabindex="-1"></a>  <span class="fu">facet_grid</span>(Version <span class="sc">~</span> .) <span class="sc">+</span></span>
-<span id="cb445-38"><a href="phenoflex3.html#cb445-38" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb445-39"><a href="phenoflex3.html#cb445-39" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="fl">0.85</span>, <span class="fl">0.85</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb442-1"><a href="phenoflex3.html#cb442-1" tabindex="-1"></a><span class="co"># Create a data set with theoretical temperatures and heat and chill responses</span></span>
+<span id="cb442-2"><a href="phenoflex3.html#cb442-2" tabindex="-1"></a>temp_response_marginal <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Temp =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">60</span>, <span class="fl">0.1</span>),</span>
+<span id="cb442-3"><a href="phenoflex3.html#cb442-3" tabindex="-1"></a>                                     <span class="at">Chill_res =</span> <span class="fu">gen_bell</span>(params_marginal,</span>
+<span id="cb442-4"><a href="phenoflex3.html#cb442-4" tabindex="-1"></a>                                                          <span class="at">temp_values =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">60</span>, <span class="fl">0.1</span>)),</span>
+<span id="cb442-5"><a href="phenoflex3.html#cb442-5" tabindex="-1"></a>                                     <span class="at">Heat_res =</span> <span class="fu">GDH_response</span>(params_marginal,</span>
+<span id="cb442-6"><a href="phenoflex3.html#cb442-6" tabindex="-1"></a>                                                             <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">60</span>, <span class="fl">0.1</span>)),</span>
+<span id="cb442-7"><a href="phenoflex3.html#cb442-7" tabindex="-1"></a>                                     <span class="at">Version =</span> <span class="st">&quot;PhenoFlex marginal&quot;</span>)</span>
+<span id="cb442-8"><a href="phenoflex3.html#cb442-8" tabindex="-1"></a></span>
+<span id="cb442-9"><a href="phenoflex3.html#cb442-9" tabindex="-1"></a>temp_response_normal <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Temp =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">60</span>, <span class="fl">0.1</span>),</span>
+<span id="cb442-10"><a href="phenoflex3.html#cb442-10" tabindex="-1"></a>                                   <span class="at">Chill_res =</span> <span class="fu">gen_bell</span>(params_normal,</span>
+<span id="cb442-11"><a href="phenoflex3.html#cb442-11" tabindex="-1"></a>                                                        <span class="at">temp_values =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">60</span>, <span class="fl">0.1</span>)),</span>
+<span id="cb442-12"><a href="phenoflex3.html#cb442-12" tabindex="-1"></a>                                   <span class="at">Heat_res =</span> <span class="fu">GDH_response</span>(params_normal,</span>
+<span id="cb442-13"><a href="phenoflex3.html#cb442-13" tabindex="-1"></a>                                                           <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">60</span>, <span class="fl">0.1</span>)),</span>
+<span id="cb442-14"><a href="phenoflex3.html#cb442-14" tabindex="-1"></a>                                   <span class="at">Version =</span> <span class="st">&quot;PhenoFlex normal&quot;</span>)</span>
+<span id="cb442-15"><a href="phenoflex3.html#cb442-15" tabindex="-1"></a></span>
+<span id="cb442-16"><a href="phenoflex3.html#cb442-16" tabindex="-1"></a></span>
+<span id="cb442-17"><a href="phenoflex3.html#cb442-17" tabindex="-1"></a><span class="co"># Generate a single data set</span></span>
+<span id="cb442-18"><a href="phenoflex3.html#cb442-18" tabindex="-1"></a>temp_response <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(temp_response_marginal, </span>
+<span id="cb442-19"><a href="phenoflex3.html#cb442-19" tabindex="-1"></a>                           temp_response_normal)</span>
+<span id="cb442-20"><a href="phenoflex3.html#cb442-20" tabindex="-1"></a></span>
+<span id="cb442-21"><a href="phenoflex3.html#cb442-21" tabindex="-1"></a><span class="co"># Plotting</span></span>
+<span id="cb442-22"><a href="phenoflex3.html#cb442-22" tabindex="-1"></a><span class="fu">ggplot</span>(temp_response, </span>
+<span id="cb442-23"><a href="phenoflex3.html#cb442-23" tabindex="-1"></a>       <span class="fu">aes</span>(Temp)) <span class="sc">+</span></span>
+<span id="cb442-24"><a href="phenoflex3.html#cb442-24" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> Chill_res,</span>
+<span id="cb442-25"><a href="phenoflex3.html#cb442-25" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">&quot;Chill&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb442-26"><a href="phenoflex3.html#cb442-26" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> Heat_res <span class="sc">*</span> <span class="dv">25</span>, </span>
+<span id="cb442-27"><a href="phenoflex3.html#cb442-27" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">&quot;Heat&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb442-28"><a href="phenoflex3.html#cb442-28" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="fl">0.001</span>, <span class="fl">0.01</span>)),</span>
+<span id="cb442-29"><a href="phenoflex3.html#cb442-29" tabindex="-1"></a>                     <span class="at">sec.axis =</span> <span class="fu">sec_axis</span>(<span class="sc">~</span> . <span class="sc">/</span> <span class="dv">25</span>, </span>
+<span id="cb442-30"><a href="phenoflex3.html#cb442-30" tabindex="-1"></a>                                         <span class="at">name =</span> <span class="st">&quot;Arbitrary heat units&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb442-31"><a href="phenoflex3.html#cb442-31" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb442-32"><a href="phenoflex3.html#cb442-32" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;blue4&quot;</span>, </span>
+<span id="cb442-33"><a href="phenoflex3.html#cb442-33" tabindex="-1"></a>                                <span class="st">&quot;firebrick&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb442-34"><a href="phenoflex3.html#cb442-34" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Temperature (°C)&quot;</span>,</span>
+<span id="cb442-35"><a href="phenoflex3.html#cb442-35" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Arbitrary chill units&quot;</span>,</span>
+<span id="cb442-36"><a href="phenoflex3.html#cb442-36" tabindex="-1"></a>       <span class="at">color =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb442-37"><a href="phenoflex3.html#cb442-37" tabindex="-1"></a>  <span class="fu">facet_grid</span>(Version <span class="sc">~</span> .) <span class="sc">+</span></span>
+<span id="cb442-38"><a href="phenoflex3.html#cb442-38" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb442-39"><a href="phenoflex3.html#cb442-39" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="fl">0.85</span>, <span class="fl">0.85</span>))</span></code></pre></div>
 <p><img src="Book_files/figure-html/response_curves-1.png" width="672" /></p>
 <p>We see some differences in the chill response among versions, but similar heat curves. To some extent, <code>PhenoFlex_normal</code> emulates the chill response observed in the original chill model (i.e. the Dynamic model). Note that in <code>PhenoFlex_marginal</code> the accumulation of chill only starts at temperatures above 5 °C. Regarding the heat response, <code>PhenoFlex_normal</code> shows accumulation of heat with slightly higher temperatures than the curve shown for <code>PhenoFlex_marginal</code>. Since we used very few model iterations, however, these results are difficult to interpret.</p>
 </div>

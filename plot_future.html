@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 18 Plotting future scenarios | Tree phenology analysis with R</title>
   <meta name="description" content="This lecture introduces the chillR package for R." />
-  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 18 Plotting future scenarios | Tree phenology analysis with R" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Eike Luedeling" />
 
 
-<meta name="date" content="2024-11-26" />
+<meta name="date" content="2024-11-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -610,7 +610,7 @@ div.csl-indent {
 <span id="cb247-15"><a href="plot_future.html#cb247-15" tabindex="-1"></a>  <span class="at">historic_data =</span> actual_chill,</span>
 <span id="cb247-16"><a href="plot_future.html#cb247-16" tabindex="-1"></a>  <span class="at">time_series =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb247-17"><a href="plot_future.html#cb247-17" tabindex="-1"></a></span>
-<span id="cb247-18"><a href="plot_future.html#cb247-18" tabindex="-1"></a>SSPs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ssp126&quot;</span>, <span class="st">&quot;ssp245&quot;</span>, <span class="st">&quot;ssp585&quot;</span>)</span>
+<span id="cb247-18"><a href="plot_future.html#cb247-18" tabindex="-1"></a>SSPs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ssp126&quot;</span>, <span class="st">&quot;ssp245&quot;</span>, <span class="st">&quot;ssp370&quot;</span>, <span class="st">&quot;ssp585&quot;</span>)</span>
 <span id="cb247-19"><a href="plot_future.html#cb247-19" tabindex="-1"></a>Times <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2050</span>, <span class="dv">2085</span>)</span>
 <span id="cb247-20"><a href="plot_future.html#cb247-20" tabindex="-1"></a></span>
 <span id="cb247-21"><a href="plot_future.html#cb247-21" tabindex="-1"></a>list_ssp <span class="ot">&lt;-</span> </span>
@@ -674,8 +674,8 @@ div.csl-indent {
 <span id="cb248-23"><a href="plot_future.html#cb248-23" tabindex="-1"></a>                              ch)</span>
 <span id="cb248-24"><a href="plot_future.html#cb248-24" tabindex="-1"></a>  }</span>
 <span id="cb248-25"><a href="plot_future.html#cb248-25" tabindex="-1"></a></span>
-<span id="cb248-26"><a href="plot_future.html#cb248-26" tabindex="-1"></a><span class="co"># We add another column called &#39;Scenario&#39; and label all rows as &#39;Historic&#39; </span></span>
-<span id="cb248-27"><a href="plot_future.html#cb248-27" tabindex="-1"></a>past_simulated[<span class="st">&quot;Scenario&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;Historic&quot;</span></span>
+<span id="cb248-26"><a href="plot_future.html#cb248-26" tabindex="-1"></a><span class="co"># We add another column called &#39;Scenario&#39; and label all rows as &#39;Historical&#39; </span></span>
+<span id="cb248-27"><a href="plot_future.html#cb248-27" tabindex="-1"></a>past_simulated[<span class="st">&quot;Scenario&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;Historical&quot;</span></span>
 <span id="cb248-28"><a href="plot_future.html#cb248-28" tabindex="-1"></a></span>
 <span id="cb248-29"><a href="plot_future.html#cb248-29" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(past_simulated))  <span class="sc">%&gt;%</span></span>
 <span id="cb248-30"><a href="plot_future.html#cb248-30" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="st">&quot;striped&quot;</span>, <span class="at">position =</span> <span class="st">&quot;left&quot;</span>,<span class="at">font_size =</span> <span class="dv">8</span>)</span></code></pre></div>
@@ -756,7 +756,7 @@ none
 1980
 </td>
 <td style="text-align:left;">
-Historic
+Historical
 </td>
 </tr>
 <tr>
@@ -794,7 +794,7 @@ none
 1980
 </td>
 <td style="text-align:left;">
-Historic
+Historical
 </td>
 </tr>
 <tr>
@@ -832,7 +832,7 @@ none
 1980
 </td>
 <td style="text-align:left;">
-Historic
+Historical
 </td>
 </tr>
 <tr>
@@ -870,7 +870,7 @@ none
 1980
 </td>
 <td style="text-align:left;">
-Historic
+Historical
 </td>
 </tr>
 <tr>
@@ -908,7 +908,7 @@ none
 1980
 </td>
 <td style="text-align:left;">
-Historic
+Historical
 </td>
 </tr>
 <tr>
@@ -946,7 +946,7 @@ none
 1980
 </td>
 <td style="text-align:left;">
-Historic
+Historical
 </td>
 </tr>
 </tbody>
@@ -1234,13 +1234,13 @@ Year
 100
 </td>
 <td style="text-align:right;">
-81.17965
+80.97028
 </td>
 <td style="text-align:right;">
-8621.666
+8259.938
 </td>
 <td style="text-align:right;">
-244
+269
 </td>
 <td style="text-align:left;">
 ACCESS-CM2
@@ -1269,13 +1269,13 @@ SSP1
 100
 </td>
 <td style="text-align:right;">
-83.99946
+82.90012
 </td>
 <td style="text-align:right;">
-7445.087
+7212.620
 </td>
 <td style="text-align:right;">
-301
+326
 </td>
 <td style="text-align:left;">
 ACCESS-CM2
@@ -1304,13 +1304,13 @@ SSP1
 100
 </td>
 <td style="text-align:right;">
-87.47715
+85.66957
 </td>
 <td style="text-align:right;">
-4509.095
+4313.888
 </td>
 <td style="text-align:right;">
-417
+469
 </td>
 <td style="text-align:left;">
 ACCESS-CM2
@@ -1339,13 +1339,13 @@ SSP1
 100
 </td>
 <td style="text-align:right;">
-88.96616
+89.61488
 </td>
 <td style="text-align:right;">
-5731.699
+5410.175
 </td>
 <td style="text-align:right;">
-168
+200
 </td>
 <td style="text-align:left;">
 ACCESS-CM2
@@ -1374,13 +1374,13 @@ SSP1
 100
 </td>
 <td style="text-align:right;">
-86.26209
+87.91998
 </td>
 <td style="text-align:right;">
-8125.272
+7665.567
 </td>
 <td style="text-align:right;">
-67
+88
 </td>
 <td style="text-align:left;">
 ACCESS-CM2
@@ -1409,13 +1409,13 @@ SSP1
 100
 </td>
 <td style="text-align:right;">
-84.99106
+84.45896
 </td>
 <td style="text-align:right;">
-6662.973
+6356.550
 </td>
 <td style="text-align:right;">
-304
+319
 </td>
 <td style="text-align:left;">
 ACCESS-CM2
@@ -1440,7 +1440,7 @@ SSP1
 <span id="cb253-7"><a href="plot_future.html#cb253-7" tabindex="-1"></a>             past_simulated[[metric]],</span>
 <span id="cb253-8"><a href="plot_future.html#cb253-8" tabindex="-1"></a>             future_data[[metric]])  </span>
 <span id="cb253-9"><a href="plot_future.html#cb253-9" tabindex="-1"></a>rng</span></code></pre></div>
-<pre><code>## [1]   739.4306 26039.0479</code></pre>
+<pre><code>## [1]   739.4306 20977.6554</code></pre>
 <p>Now we’re ready for our first plot. We’ll start with the past scenarios:</p>
 <div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="plot_future.html#cb255-1" tabindex="-1"></a>past_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb255-2"><a href="plot_future.html#cb255-2" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">data =</span> past_simulated,</span>
@@ -1598,7 +1598,7 @@ So far, we have all SSPs mixed together here. We also can’t read anything on t
 <p>All the basics are there, but we need a few adjustments, mainly to the legend. For this, we use the <code>plot_layout</code> function of the <a href="https://cran.r-project.org/web/packages/patchwork/patchwork.pdf"><code>patchwork</code></a> package. This supports the production of such patchwork figures, e.g. by collecting all legends and removing duplicates. This is handy, because we only want one version of the legend drawn. We can also specify the width of the various plots. I’m making a vector <code>c(1,1.8,1.8)</code> (using a slightly more flexible formulation) to specify that the width of each set of future plots should be 1.8 times the width of the past scenario plot.</p>
 <div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="plot_future.html#cb270-1" tabindex="-1"></a>plot <span class="ot">&lt;-</span> both_plots <span class="sc">+</span></span>
 <span id="cb270-2"><a href="plot_future.html#cb270-2" tabindex="-1"></a>           <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&quot;collect&quot;</span>,</span>
-<span id="cb270-3"><a href="plot_future.html#cb270-3" tabindex="-1"></a>                       <span class="at">widths =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="fu">rep</span>(<span class="fl">1.8</span>,<span class="fu">length</span>(future_plot_list))))</span></code></pre></div>
+<span id="cb270-3"><a href="plot_future.html#cb270-3" tabindex="-1"></a>                       <span class="at">widths =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="fu">rep</span>(<span class="dv">2</span>,<span class="fu">length</span>(future_plot_list))))</span></code></pre></div>
 <p>Now we can’t really see the plot any more, so let’s place the legend at the bottom. For some reason that probably has to do with the <code>patchwork</code> package, we have to add the corresponding <code>theme</code> call after an <code>&amp;</code> symbol.</p>
 <div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="plot_future.html#cb271-1" tabindex="-1"></a>plot <span class="ot">&lt;-</span> plot <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
 <span id="cb271-2"><a href="plot_future.html#cb271-2" tabindex="-1"></a>                     <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">8</span>),</span>
@@ -1686,7 +1686,7 @@ So far, we have all SSPs mixed together here. We also can’t read anything on t
 <span id="cb273-69"><a href="plot_future.html#cb273-69" tabindex="-1"></a>  plot <span class="ot">&lt;-</span> (past_plot <span class="sc">+</span></span>
 <span id="cb273-70"><a href="plot_future.html#cb273-70" tabindex="-1"></a>             future_plot_list <span class="sc">+</span></span>
 <span id="cb273-71"><a href="plot_future.html#cb273-71" tabindex="-1"></a>             <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&quot;collect&quot;</span>,</span>
-<span id="cb273-72"><a href="plot_future.html#cb273-72" tabindex="-1"></a>                         <span class="at">widths =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="fu">rep</span>(<span class="fl">1.8</span>,<span class="fu">length</span>(future_plot_list))))</span>
+<span id="cb273-72"><a href="plot_future.html#cb273-72" tabindex="-1"></a>                         <span class="at">widths =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="fu">rep</span>(<span class="dv">2</span>,<span class="fu">length</span>(future_plot_list))))</span>
 <span id="cb273-73"><a href="plot_future.html#cb273-73" tabindex="-1"></a>           ) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
 <span id="cb273-74"><a href="plot_future.html#cb273-74" tabindex="-1"></a>                     <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
 <span id="cb273-75"><a href="plot_future.html#cb273-75" tabindex="-1"></a>                     <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
@@ -1695,25 +1695,25 @@ So far, we have all SSPs mixed together here. We also can’t read anything on t
 <span id="cb273-78"><a href="plot_future.html#cb273-78" tabindex="-1"></a>  </span>
 <span id="cb273-79"><a href="plot_future.html#cb273-79" tabindex="-1"></a>}</span></code></pre></div>
 <p>Now we can produce the same outputs a bit more quickly:</p>
-<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="plot_future.html#cb274-1" tabindex="-1"></a><span class="fu">plot_scenarios_gg</span>(<span class="at">past_observed=</span>past_observed,</span>
-<span id="cb274-2"><a href="plot_future.html#cb274-2" tabindex="-1"></a>                  <span class="at">past_simulated=</span>past_simulated,</span>
-<span id="cb274-3"><a href="plot_future.html#cb274-3" tabindex="-1"></a>                  <span class="at">future_data=</span>future_data,</span>
-<span id="cb274-4"><a href="plot_future.html#cb274-4" tabindex="-1"></a>                  <span class="at">metric=</span><span class="st">&quot;GDH&quot;</span>,</span>
-<span id="cb274-5"><a href="plot_future.html#cb274-5" tabindex="-1"></a>                  <span class="at">axis_label=</span><span class="st">&quot;Heat (in Growing Degree Hours)&quot;</span>,</span>
+<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="plot_future.html#cb274-1" tabindex="-1"></a><span class="fu">plot_scenarios_gg</span>(<span class="at">past_observed =</span> past_observed,</span>
+<span id="cb274-2"><a href="plot_future.html#cb274-2" tabindex="-1"></a>                  <span class="at">past_simulated =</span> past_simulated,</span>
+<span id="cb274-3"><a href="plot_future.html#cb274-3" tabindex="-1"></a>                  <span class="at">future_data =</span> future_data,</span>
+<span id="cb274-4"><a href="plot_future.html#cb274-4" tabindex="-1"></a>                  <span class="at">metric =</span> <span class="st">&quot;GDH&quot;</span>,</span>
+<span id="cb274-5"><a href="plot_future.html#cb274-5" tabindex="-1"></a>                  <span class="at">axis_label =</span> <span class="st">&quot;Heat (in Growing Degree Hours)&quot;</span>,</span>
 <span id="cb274-6"><a href="plot_future.html#cb274-6" tabindex="-1"></a>                  <span class="at">time_points =</span> <span class="fu">c</span>(<span class="dv">2050</span>, <span class="dv">2085</span>))</span></code></pre></div>
 <p><img src="Book_files/figure-html/unnamed-chunk-150-1.png" width="672" /></p>
-<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="plot_future.html#cb275-1" tabindex="-1"></a><span class="fu">plot_scenarios_gg</span>(<span class="at">past_observed=</span>past_observed,</span>
-<span id="cb275-2"><a href="plot_future.html#cb275-2" tabindex="-1"></a>                  <span class="at">past_simulated=</span>past_simulated,</span>
-<span id="cb275-3"><a href="plot_future.html#cb275-3" tabindex="-1"></a>                  <span class="at">future_data=</span>future_data,</span>
-<span id="cb275-4"><a href="plot_future.html#cb275-4" tabindex="-1"></a>                  <span class="at">metric=</span><span class="st">&quot;Chill_Portions&quot;</span>,</span>
-<span id="cb275-5"><a href="plot_future.html#cb275-5" tabindex="-1"></a>                  <span class="at">axis_label=</span><span class="st">&quot;Chill (in Chill Portions)&quot;</span>,</span>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="plot_future.html#cb275-1" tabindex="-1"></a><span class="fu">plot_scenarios_gg</span>(<span class="at">past_observed =</span> past_observed,</span>
+<span id="cb275-2"><a href="plot_future.html#cb275-2" tabindex="-1"></a>                  <span class="at">past_simulated =</span> past_simulated,</span>
+<span id="cb275-3"><a href="plot_future.html#cb275-3" tabindex="-1"></a>                  <span class="at">future_data =</span> future_data,</span>
+<span id="cb275-4"><a href="plot_future.html#cb275-4" tabindex="-1"></a>                  <span class="at">metric =</span> <span class="st">&quot;Chill_Portions&quot;</span>,</span>
+<span id="cb275-5"><a href="plot_future.html#cb275-5" tabindex="-1"></a>                  <span class="at">axis_label =</span> <span class="st">&quot;Chill (in Chill Portions)&quot;</span>,</span>
 <span id="cb275-6"><a href="plot_future.html#cb275-6" tabindex="-1"></a>                  <span class="at">time_points =</span> <span class="fu">c</span>(<span class="dv">2050</span>, <span class="dv">2085</span>))</span></code></pre></div>
 <p><img src="Book_files/figure-html/unnamed-chunk-150-2.png" width="672" /></p>
-<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="plot_future.html#cb276-1" tabindex="-1"></a><span class="fu">plot_scenarios_gg</span>(<span class="at">past_observed=</span>past_observed,</span>
-<span id="cb276-2"><a href="plot_future.html#cb276-2" tabindex="-1"></a>                  <span class="at">past_simulated=</span>past_simulated,</span>
-<span id="cb276-3"><a href="plot_future.html#cb276-3" tabindex="-1"></a>                  <span class="at">future_data=</span>future_data,</span>
-<span id="cb276-4"><a href="plot_future.html#cb276-4" tabindex="-1"></a>                  <span class="at">metric=</span><span class="st">&quot;Frost_H&quot;</span>,</span>
-<span id="cb276-5"><a href="plot_future.html#cb276-5" tabindex="-1"></a>                  <span class="at">axis_label=</span><span class="st">&quot;Frost duration (in hours)&quot;</span>,</span>
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="plot_future.html#cb276-1" tabindex="-1"></a><span class="fu">plot_scenarios_gg</span>(<span class="at">past_observed =</span> past_observed,</span>
+<span id="cb276-2"><a href="plot_future.html#cb276-2" tabindex="-1"></a>                  <span class="at">past_simulated =</span> past_simulated,</span>
+<span id="cb276-3"><a href="plot_future.html#cb276-3" tabindex="-1"></a>                  <span class="at">future_data =</span> future_data,</span>
+<span id="cb276-4"><a href="plot_future.html#cb276-4" tabindex="-1"></a>                  <span class="at">metric =</span> <span class="st">&quot;Frost_H&quot;</span>,</span>
+<span id="cb276-5"><a href="plot_future.html#cb276-5" tabindex="-1"></a>                  <span class="at">axis_label =</span> <span class="st">&quot;Frost duration (in hours)&quot;</span>,</span>
 <span id="cb276-6"><a href="plot_future.html#cb276-6" tabindex="-1"></a>                  <span class="at">time_points =</span> <span class="fu">c</span>(<span class="dv">2050</span>, <span class="dv">2085</span>))</span></code></pre></div>
 <p><img src="Book_files/figure-html/unnamed-chunk-150-3.png" width="672" /></p>
 </div>

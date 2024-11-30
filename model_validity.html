@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 29 Making valid tree phenology models | Tree phenology analysis with R</title>
   <meta name="description" content="This lecture introduces the chillR package for R." />
-  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 29 Making valid tree phenology models | Tree phenology analysis with R" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Eike Luedeling" />
 
 
-<meta name="date" content="2024-11-26" />
+<meta name="date" content="2024-11-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -620,21 +620,21 @@ div.csl-indent {
 <p><em>Process validation</em> is harder and it requires us to actually know something about the processes involved in the system of interest. I don’t know of any formal procedures for doing such a process validation, so we’re a bit on our own with this (unless <em>you</em> know of a method). What we need to achieve is a comparison of (our) knowledge about the biological processes that are at work with the set of processes that are included in the model. As in the chapter on <a href="simple_phenology.html#simple_phenology">Simple phenology analysis</a>, we could consider starting this process with an influence diagram (a drawing with boxes and arrows) or some other schematic representation of our understanding of system dynamics. Or we can start with the kind of lists I showed above, and see if we can convince ourselves that our model covers these issues.</p>
 <p>Note that we probably shouldn’t be too hard on the poor modelers, because it is awfully difficult to make good models. Sometimes not-so-perfect models are sufficient for the purposes of the people who use the models. But we should always remain critical and look for possible flaws in the products we might want to use.</p>
 <p>Another important consideration in model validation is the <em>purpose</em> of the model, i.e. what do we actually want to use the model for. A <strong><em>validation for purpose</em></strong> would start with a reflection on what the model should be able to achieve and carefully evaluate whether we can realistically expect it to prove useful in the context we have in mind. This is important, because each model has a certain <strong><em>validity domain</em></strong>, i.e. the range of conditions that the model is capable of making reliable predictions for. To illustrate this point, let’s look at a very simple example:</p>
-<div class="sourceCode" id="cb405"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb405-1"><a href="model_validity.html#cb405-1" tabindex="-1"></a><span class="fu">require</span>(ggplot2)</span>
-<span id="cb405-2"><a href="model_validity.html#cb405-2" tabindex="-1"></a>dat<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>),</span>
-<span id="cb405-3"><a href="model_validity.html#cb405-3" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">c</span>(<span class="fl">2.3</span>, <span class="fl">2.5</span>, <span class="fl">2.7</span>, <span class="fl">2.7</span>))</span>
-<span id="cb405-4"><a href="model_validity.html#cb405-4" tabindex="-1"></a></span>
-<span id="cb405-5"><a href="model_validity.html#cb405-5" tabindex="-1"></a><span class="fu">ggplot</span>(dat,<span class="fu">aes</span>(<span class="at">x =</span> x,</span>
-<span id="cb405-6"><a href="model_validity.html#cb405-6" tabindex="-1"></a>               <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb405-7"><a href="model_validity.html#cb405-7" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>,</span>
-<span id="cb405-8"><a href="model_validity.html#cb405-8" tabindex="-1"></a>              <span class="at">fullrange =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb405-9"><a href="model_validity.html#cb405-9" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>,</span>
-<span id="cb405-10"><a href="model_validity.html#cb405-10" tabindex="-1"></a>              <span class="at">fullrange =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb405-11"><a href="model_validity.html#cb405-11" tabindex="-1"></a>              <span class="at">col =</span> <span class="st">&quot;dark green&quot;</span>) <span class="sc">+</span></span>
-<span id="cb405-12"><a href="model_validity.html#cb405-12" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb405-13"><a href="model_validity.html#cb405-13" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">10</span>)) <span class="sc">+</span></span>
-<span id="cb405-14"><a href="model_validity.html#cb405-14" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">8</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
-<span id="cb405-15"><a href="model_validity.html#cb405-15" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb402"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb402-1"><a href="model_validity.html#cb402-1" tabindex="-1"></a><span class="fu">require</span>(ggplot2)</span>
+<span id="cb402-2"><a href="model_validity.html#cb402-2" tabindex="-1"></a>dat<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>),</span>
+<span id="cb402-3"><a href="model_validity.html#cb402-3" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">c</span>(<span class="fl">2.3</span>, <span class="fl">2.5</span>, <span class="fl">2.7</span>, <span class="fl">2.7</span>))</span>
+<span id="cb402-4"><a href="model_validity.html#cb402-4" tabindex="-1"></a></span>
+<span id="cb402-5"><a href="model_validity.html#cb402-5" tabindex="-1"></a><span class="fu">ggplot</span>(dat,<span class="fu">aes</span>(<span class="at">x =</span> x,</span>
+<span id="cb402-6"><a href="model_validity.html#cb402-6" tabindex="-1"></a>               <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb402-7"><a href="model_validity.html#cb402-7" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>,</span>
+<span id="cb402-8"><a href="model_validity.html#cb402-8" tabindex="-1"></a>              <span class="at">fullrange =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb402-9"><a href="model_validity.html#cb402-9" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>,</span>
+<span id="cb402-10"><a href="model_validity.html#cb402-10" tabindex="-1"></a>              <span class="at">fullrange =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb402-11"><a href="model_validity.html#cb402-11" tabindex="-1"></a>              <span class="at">col =</span> <span class="st">&quot;dark green&quot;</span>) <span class="sc">+</span></span>
+<span id="cb402-12"><a href="model_validity.html#cb402-12" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb402-13"><a href="model_validity.html#cb402-13" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb402-14"><a href="model_validity.html#cb402-14" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">8</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb402-15"><a href="model_validity.html#cb402-15" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code></pre></div>
 <p><img src="Book_files/figure-html/unnamed-chunk-268-1.png" width="672" /></p>
 <p>In this figure, I’ve produced a very simple regression model based on measurements of y for x-values between 1 and 4. Can we use this model to predict the value of y for x=8, which is indicated by the red line? My guess is that most readers will have a bad feeling about this task - and for good reasons. The model’s <em>validity domain</em> is quite tightly circumscribed by the set of values that were used to produce the model - the range shown by the green regression line and the dark shaded area. We really have no way of knowing how the system of interest behaves outside this range. The blue line and the lightly shaded area should normally not even be drawn (and it took setting the <code>fullrange</code> parameter in <code>geom_smooth</code> to <code>TRUE</code> to make this appear).</p>
 <p>Actually, what I just said isn’t always strictly true, unless you’re a true believer in the frequentist idea of science, where we assume that we know absolutely nothing except what the data tells us. If you’re not one of these people, you should have developed an expectation of how the system behaves even before running the regression analysis. If this expectation leaves you reasonably confident that the response variable you’re modeling behaves similarly for x=8 as for x=3, then you may be able to make such predictions. You should then clearly state that you’re making this assumption, however, and provide reasons for why you think this is justified.</p>
@@ -647,230 +647,230 @@ div.csl-indent {
 <h2><span class="header-section-number">29.3</span> Mapping validity domains<a href="model_validity.html#mapping-validity-domains" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Let’s assume we made a phenology model based on historic phenology observations at Klein-Altendorf, and we wanted to use this model to predict future phenology at the same location. We can map the validity domain of our model by plotting the range of conditions under which we’ve made observations.</p>
 <p>We can then compare this range with the range of conditions we want to make predictions for, in this case the various future climate scenarios we produced in the chapter on <a href="making-cmip6-scenarios.html#making-cmip6-scenarios">Making CMIP6 scenarios</a>. We saved all of these data earlier (I hope you did…), so we can just load them now. I’ll also convert the data into one long <code>data.frame</code>, with all the attributes (Time horizon, GCM, SSP) stored with each data point.</p>
-<div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb406-1"><a href="model_validity.html#cb406-1" tabindex="-1"></a><span class="fu">require</span>(chillR)</span>
-<span id="cb406-2"><a href="model_validity.html#cb406-2" tabindex="-1"></a>past_weather <span class="ot">&lt;-</span> <span class="fu">read_tab</span>(<span class="st">&quot;data/TMaxTMin1958-2019_patched.csv&quot;</span>)</span>
-<span id="cb406-3"><a href="model_validity.html#cb406-3" tabindex="-1"></a>past_weather<span class="sc">$</span>SSP_Time <span class="ot">&lt;-</span> <span class="st">&quot;Past&quot;</span></span>
-<span id="cb406-4"><a href="model_validity.html#cb406-4" tabindex="-1"></a></span>
-<span id="cb406-5"><a href="model_validity.html#cb406-5" tabindex="-1"></a>future_temps <span class="ot">&lt;-</span> <span class="fu">load_temperature_scenarios</span>(<span class="st">&quot;data/future_climate&quot;</span>,</span>
-<span id="cb406-6"><a href="model_validity.html#cb406-6" tabindex="-1"></a>                                           <span class="st">&quot;Bonn_futuretemps&quot;</span>)</span>
-<span id="cb406-7"><a href="model_validity.html#cb406-7" tabindex="-1"></a></span>
-<span id="cb406-8"><a href="model_validity.html#cb406-8" tabindex="-1"></a>SSPs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ssp126&quot;</span>, <span class="st">&quot;ssp245&quot;</span>, <span class="st">&quot;ssp585&quot;</span>)</span>
-<span id="cb406-9"><a href="model_validity.html#cb406-9" tabindex="-1"></a>Times <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2050</span>, <span class="dv">2085</span>)</span>
-<span id="cb406-10"><a href="model_validity.html#cb406-10" tabindex="-1"></a></span>
-<span id="cb406-11"><a href="model_validity.html#cb406-11" tabindex="-1"></a>list_ssp <span class="ot">&lt;-</span> </span>
-<span id="cb406-12"><a href="model_validity.html#cb406-12" tabindex="-1"></a>  <span class="fu">strsplit</span>(<span class="fu">names</span>(future_temps), <span class="st">&#39;</span><span class="sc">\\</span><span class="st">.&#39;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb406-13"><a href="model_validity.html#cb406-13" tabindex="-1"></a>  <span class="fu">map</span>(<span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb406-14"><a href="model_validity.html#cb406-14" tabindex="-1"></a>  <span class="fu">unlist</span>()</span>
-<span id="cb406-15"><a href="model_validity.html#cb406-15" tabindex="-1"></a></span>
-<span id="cb406-16"><a href="model_validity.html#cb406-16" tabindex="-1"></a>list_gcm <span class="ot">&lt;-</span></span>
-<span id="cb406-17"><a href="model_validity.html#cb406-17" tabindex="-1"></a>  <span class="fu">strsplit</span>(<span class="fu">names</span>(future_temps), <span class="st">&#39;</span><span class="sc">\\</span><span class="st">.&#39;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb406-18"><a href="model_validity.html#cb406-18" tabindex="-1"></a>  <span class="fu">map</span>(<span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb406-19"><a href="model_validity.html#cb406-19" tabindex="-1"></a>  <span class="fu">unlist</span>()</span>
-<span id="cb406-20"><a href="model_validity.html#cb406-20" tabindex="-1"></a></span>
-<span id="cb406-21"><a href="model_validity.html#cb406-21" tabindex="-1"></a>list_time <span class="ot">&lt;-</span></span>
-<span id="cb406-22"><a href="model_validity.html#cb406-22" tabindex="-1"></a>  <span class="fu">strsplit</span>(<span class="fu">names</span>(future_temps), <span class="st">&#39;</span><span class="sc">\\</span><span class="st">.&#39;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb406-23"><a href="model_validity.html#cb406-23" tabindex="-1"></a>  <span class="fu">map</span>(<span class="dv">4</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb406-24"><a href="model_validity.html#cb406-24" tabindex="-1"></a>  <span class="fu">unlist</span>()</span>
-<span id="cb406-25"><a href="model_validity.html#cb406-25" tabindex="-1"></a></span>
-<span id="cb406-26"><a href="model_validity.html#cb406-26" tabindex="-1"></a><span class="cf">for</span>(SSP <span class="cf">in</span> SSPs)</span>
-<span id="cb406-27"><a href="model_validity.html#cb406-27" tabindex="-1"></a>  <span class="cf">for</span>(Time <span class="cf">in</span> Times)</span>
-<span id="cb406-28"><a href="model_validity.html#cb406-28" tabindex="-1"></a>   {Temps <span class="ot">&lt;-</span> future_temps[list_ssp <span class="sc">==</span> SSP <span class="sc">&amp;</span> list_time <span class="sc">==</span> Time]</span>
-<span id="cb406-29"><a href="model_validity.html#cb406-29" tabindex="-1"></a>    <span class="fu">names</span>(Temps) <span class="ot">&lt;-</span> list_gcm[list_ssp <span class="sc">==</span> SSP <span class="sc">&amp;</span> list_time <span class="sc">==</span> Time]</span>
-<span id="cb406-30"><a href="model_validity.html#cb406-30" tabindex="-1"></a>    </span>
-<span id="cb406-31"><a href="model_validity.html#cb406-31" tabindex="-1"></a>    <span class="cf">for</span>(gcm <span class="cf">in</span> <span class="fu">names</span>(Temps))</span>
-<span id="cb406-32"><a href="model_validity.html#cb406-32" tabindex="-1"></a>      Temps[[gcm]] <span class="ot">&lt;-</span> Temps[[gcm]] <span class="sc">%&gt;%</span> </span>
-<span id="cb406-33"><a href="model_validity.html#cb406-33" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">GCM =</span> gcm,</span>
-<span id="cb406-34"><a href="model_validity.html#cb406-34" tabindex="-1"></a>               <span class="at">SSP =</span> SSP,</span>
-<span id="cb406-35"><a href="model_validity.html#cb406-35" tabindex="-1"></a>               <span class="at">Time =</span> Time)</span>
-<span id="cb406-36"><a href="model_validity.html#cb406-36" tabindex="-1"></a>    </span>
-<span id="cb406-37"><a href="model_validity.html#cb406-37" tabindex="-1"></a>    Temps <span class="ot">&lt;-</span> <span class="fu">do.call</span>(<span class="st">&quot;rbind&quot;</span>, Temps)</span>
-<span id="cb406-38"><a href="model_validity.html#cb406-38" tabindex="-1"></a>    <span class="cf">if</span>(SSP <span class="sc">==</span> SSPs[<span class="dv">1</span>] <span class="sc">&amp;</span> Time <span class="sc">==</span> Times[<span class="dv">1</span>])</span>
-<span id="cb406-39"><a href="model_validity.html#cb406-39" tabindex="-1"></a>      results <span class="ot">&lt;-</span> Temps <span class="cf">else</span></span>
-<span id="cb406-40"><a href="model_validity.html#cb406-40" tabindex="-1"></a>        results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(results,</span>
-<span id="cb406-41"><a href="model_validity.html#cb406-41" tabindex="-1"></a>                         Temps)</span>
-<span id="cb406-42"><a href="model_validity.html#cb406-42" tabindex="-1"></a>    }</span>
-<span id="cb406-43"><a href="model_validity.html#cb406-43" tabindex="-1"></a></span>
-<span id="cb406-44"><a href="model_validity.html#cb406-44" tabindex="-1"></a>results<span class="sc">$</span>SSP[results<span class="sc">$</span>SSP <span class="sc">==</span> <span class="st">&quot;ssp126&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;SSP1&quot;</span></span>
-<span id="cb406-45"><a href="model_validity.html#cb406-45" tabindex="-1"></a>results<span class="sc">$</span>SSP[results<span class="sc">$</span>SSP <span class="sc">==</span> <span class="st">&quot;ssp245&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;SSP2&quot;</span></span>
-<span id="cb406-46"><a href="model_validity.html#cb406-46" tabindex="-1"></a>results<span class="sc">$</span>SSP[results<span class="sc">$</span>SSP <span class="sc">==</span> <span class="st">&quot;ssp585&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;SSP5&quot;</span></span>
-<span id="cb406-47"><a href="model_validity.html#cb406-47" tabindex="-1"></a></span>
-<span id="cb406-48"><a href="model_validity.html#cb406-48" tabindex="-1"></a>results<span class="sc">$</span>SSP_Time <span class="ot">&lt;-</span> <span class="fu">paste0</span>(results<span class="sc">$</span>SSP,<span class="st">&quot; &quot;</span>,results<span class="sc">$</span>Time)</span>
-<span id="cb406-49"><a href="model_validity.html#cb406-49" tabindex="-1"></a></span>
-<span id="cb406-50"><a href="model_validity.html#cb406-50" tabindex="-1"></a>future_months <span class="ot">&lt;-</span></span>
-<span id="cb406-51"><a href="model_validity.html#cb406-51" tabindex="-1"></a>  <span class="fu">aggregate</span>(results[, <span class="fu">c</span>(<span class="st">&quot;Tmin&quot;</span>, <span class="st">&quot;Tmax&quot;</span>)],</span>
-<span id="cb406-52"><a href="model_validity.html#cb406-52" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">list</span>(results<span class="sc">$</span>SSP_Time,</span>
-<span id="cb406-53"><a href="model_validity.html#cb406-53" tabindex="-1"></a>                      results<span class="sc">$</span>Year,</span>
-<span id="cb406-54"><a href="model_validity.html#cb406-54" tabindex="-1"></a>                      results<span class="sc">$</span>Month),</span>
-<span id="cb406-55"><a href="model_validity.html#cb406-55" tabindex="-1"></a>            <span class="at">FUN =</span> mean)</span>
-<span id="cb406-56"><a href="model_validity.html#cb406-56" tabindex="-1"></a><span class="fu">colnames</span>(future_months)[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;SSP_Time&quot;</span>,</span>
-<span id="cb406-57"><a href="model_validity.html#cb406-57" tabindex="-1"></a>                                  <span class="st">&quot;Year&quot;</span>,</span>
-<span id="cb406-58"><a href="model_validity.html#cb406-58" tabindex="-1"></a>                                  <span class="st">&quot;Month&quot;</span>)</span>
-<span id="cb406-59"><a href="model_validity.html#cb406-59" tabindex="-1"></a></span>
-<span id="cb406-60"><a href="model_validity.html#cb406-60" tabindex="-1"></a>past_months <span class="ot">&lt;-</span></span>
-<span id="cb406-61"><a href="model_validity.html#cb406-61" tabindex="-1"></a>  <span class="fu">aggregate</span>(past_weather[, <span class="fu">c</span>(<span class="st">&quot;Tmin&quot;</span>,<span class="st">&quot;Tmax&quot;</span>)],</span>
-<span id="cb406-62"><a href="model_validity.html#cb406-62" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">list</span>(past_weather<span class="sc">$</span>SSP_Time,</span>
-<span id="cb406-63"><a href="model_validity.html#cb406-63" tabindex="-1"></a>                      past_weather<span class="sc">$</span>Year,</span>
-<span id="cb406-64"><a href="model_validity.html#cb406-64" tabindex="-1"></a>                      past_weather<span class="sc">$</span>Month),</span>
-<span id="cb406-65"><a href="model_validity.html#cb406-65" tabindex="-1"></a>            <span class="at">FUN=</span>mean)</span>
-<span id="cb406-66"><a href="model_validity.html#cb406-66" tabindex="-1"></a><span class="fu">colnames</span>(past_months)[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;SSP_Time&quot;</span>, <span class="st">&quot;Year&quot;</span>, <span class="st">&quot;Month&quot;</span>)</span>
-<span id="cb406-67"><a href="model_validity.html#cb406-67" tabindex="-1"></a></span>
-<span id="cb406-68"><a href="model_validity.html#cb406-68" tabindex="-1"></a>all_months <span class="ot">&lt;-</span> <span class="fu">rbind</span>(past_months,</span>
-<span id="cb406-69"><a href="model_validity.html#cb406-69" tabindex="-1"></a>                    future_months)</span>
-<span id="cb406-70"><a href="model_validity.html#cb406-70" tabindex="-1"></a></span>
-<span id="cb406-71"><a href="model_validity.html#cb406-71" tabindex="-1"></a>all_months<span class="sc">$</span>month_name <span class="ot">&lt;-</span> <span class="fu">factor</span>(all_months<span class="sc">$</span>Month,</span>
-<span id="cb406-72"><a href="model_validity.html#cb406-72" tabindex="-1"></a>                                <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>),</span>
-<span id="cb406-73"><a href="model_validity.html#cb406-73" tabindex="-1"></a>                                <span class="at">labels =</span> month.name[<span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)])</span></code></pre></div>
+<div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="model_validity.html#cb403-1" tabindex="-1"></a><span class="fu">require</span>(chillR)</span>
+<span id="cb403-2"><a href="model_validity.html#cb403-2" tabindex="-1"></a>past_weather <span class="ot">&lt;-</span> <span class="fu">read_tab</span>(<span class="st">&quot;data/TMaxTMin1958-2019_patched.csv&quot;</span>)</span>
+<span id="cb403-3"><a href="model_validity.html#cb403-3" tabindex="-1"></a>past_weather<span class="sc">$</span>SSP_Time <span class="ot">&lt;-</span> <span class="st">&quot;Past&quot;</span></span>
+<span id="cb403-4"><a href="model_validity.html#cb403-4" tabindex="-1"></a></span>
+<span id="cb403-5"><a href="model_validity.html#cb403-5" tabindex="-1"></a>future_temps <span class="ot">&lt;-</span> <span class="fu">load_temperature_scenarios</span>(<span class="st">&quot;data/future_climate&quot;</span>,</span>
+<span id="cb403-6"><a href="model_validity.html#cb403-6" tabindex="-1"></a>                                           <span class="st">&quot;Bonn_futuretemps&quot;</span>)</span>
+<span id="cb403-7"><a href="model_validity.html#cb403-7" tabindex="-1"></a></span>
+<span id="cb403-8"><a href="model_validity.html#cb403-8" tabindex="-1"></a>SSPs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ssp126&quot;</span>, <span class="st">&quot;ssp245&quot;</span>, <span class="st">&quot;ssp585&quot;</span>)</span>
+<span id="cb403-9"><a href="model_validity.html#cb403-9" tabindex="-1"></a>Times <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2050</span>, <span class="dv">2085</span>)</span>
+<span id="cb403-10"><a href="model_validity.html#cb403-10" tabindex="-1"></a></span>
+<span id="cb403-11"><a href="model_validity.html#cb403-11" tabindex="-1"></a>list_ssp <span class="ot">&lt;-</span> </span>
+<span id="cb403-12"><a href="model_validity.html#cb403-12" tabindex="-1"></a>  <span class="fu">strsplit</span>(<span class="fu">names</span>(future_temps), <span class="st">&#39;</span><span class="sc">\\</span><span class="st">.&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb403-13"><a href="model_validity.html#cb403-13" tabindex="-1"></a>  <span class="fu">map</span>(<span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb403-14"><a href="model_validity.html#cb403-14" tabindex="-1"></a>  <span class="fu">unlist</span>()</span>
+<span id="cb403-15"><a href="model_validity.html#cb403-15" tabindex="-1"></a></span>
+<span id="cb403-16"><a href="model_validity.html#cb403-16" tabindex="-1"></a>list_gcm <span class="ot">&lt;-</span></span>
+<span id="cb403-17"><a href="model_validity.html#cb403-17" tabindex="-1"></a>  <span class="fu">strsplit</span>(<span class="fu">names</span>(future_temps), <span class="st">&#39;</span><span class="sc">\\</span><span class="st">.&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb403-18"><a href="model_validity.html#cb403-18" tabindex="-1"></a>  <span class="fu">map</span>(<span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb403-19"><a href="model_validity.html#cb403-19" tabindex="-1"></a>  <span class="fu">unlist</span>()</span>
+<span id="cb403-20"><a href="model_validity.html#cb403-20" tabindex="-1"></a></span>
+<span id="cb403-21"><a href="model_validity.html#cb403-21" tabindex="-1"></a>list_time <span class="ot">&lt;-</span></span>
+<span id="cb403-22"><a href="model_validity.html#cb403-22" tabindex="-1"></a>  <span class="fu">strsplit</span>(<span class="fu">names</span>(future_temps), <span class="st">&#39;</span><span class="sc">\\</span><span class="st">.&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb403-23"><a href="model_validity.html#cb403-23" tabindex="-1"></a>  <span class="fu">map</span>(<span class="dv">4</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb403-24"><a href="model_validity.html#cb403-24" tabindex="-1"></a>  <span class="fu">unlist</span>()</span>
+<span id="cb403-25"><a href="model_validity.html#cb403-25" tabindex="-1"></a></span>
+<span id="cb403-26"><a href="model_validity.html#cb403-26" tabindex="-1"></a><span class="cf">for</span>(SSP <span class="cf">in</span> SSPs)</span>
+<span id="cb403-27"><a href="model_validity.html#cb403-27" tabindex="-1"></a>  <span class="cf">for</span>(Time <span class="cf">in</span> Times)</span>
+<span id="cb403-28"><a href="model_validity.html#cb403-28" tabindex="-1"></a>   {Temps <span class="ot">&lt;-</span> future_temps[list_ssp <span class="sc">==</span> SSP <span class="sc">&amp;</span> list_time <span class="sc">==</span> Time]</span>
+<span id="cb403-29"><a href="model_validity.html#cb403-29" tabindex="-1"></a>    <span class="fu">names</span>(Temps) <span class="ot">&lt;-</span> list_gcm[list_ssp <span class="sc">==</span> SSP <span class="sc">&amp;</span> list_time <span class="sc">==</span> Time]</span>
+<span id="cb403-30"><a href="model_validity.html#cb403-30" tabindex="-1"></a>    </span>
+<span id="cb403-31"><a href="model_validity.html#cb403-31" tabindex="-1"></a>    <span class="cf">for</span>(gcm <span class="cf">in</span> <span class="fu">names</span>(Temps))</span>
+<span id="cb403-32"><a href="model_validity.html#cb403-32" tabindex="-1"></a>      Temps[[gcm]] <span class="ot">&lt;-</span> Temps[[gcm]] <span class="sc">%&gt;%</span> </span>
+<span id="cb403-33"><a href="model_validity.html#cb403-33" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">GCM =</span> gcm,</span>
+<span id="cb403-34"><a href="model_validity.html#cb403-34" tabindex="-1"></a>               <span class="at">SSP =</span> SSP,</span>
+<span id="cb403-35"><a href="model_validity.html#cb403-35" tabindex="-1"></a>               <span class="at">Time =</span> Time)</span>
+<span id="cb403-36"><a href="model_validity.html#cb403-36" tabindex="-1"></a>    </span>
+<span id="cb403-37"><a href="model_validity.html#cb403-37" tabindex="-1"></a>    Temps <span class="ot">&lt;-</span> <span class="fu">do.call</span>(<span class="st">&quot;rbind&quot;</span>, Temps)</span>
+<span id="cb403-38"><a href="model_validity.html#cb403-38" tabindex="-1"></a>    <span class="cf">if</span>(SSP <span class="sc">==</span> SSPs[<span class="dv">1</span>] <span class="sc">&amp;</span> Time <span class="sc">==</span> Times[<span class="dv">1</span>])</span>
+<span id="cb403-39"><a href="model_validity.html#cb403-39" tabindex="-1"></a>      results <span class="ot">&lt;-</span> Temps <span class="cf">else</span></span>
+<span id="cb403-40"><a href="model_validity.html#cb403-40" tabindex="-1"></a>        results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(results,</span>
+<span id="cb403-41"><a href="model_validity.html#cb403-41" tabindex="-1"></a>                         Temps)</span>
+<span id="cb403-42"><a href="model_validity.html#cb403-42" tabindex="-1"></a>    }</span>
+<span id="cb403-43"><a href="model_validity.html#cb403-43" tabindex="-1"></a></span>
+<span id="cb403-44"><a href="model_validity.html#cb403-44" tabindex="-1"></a>results<span class="sc">$</span>SSP[results<span class="sc">$</span>SSP <span class="sc">==</span> <span class="st">&quot;ssp126&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;SSP1&quot;</span></span>
+<span id="cb403-45"><a href="model_validity.html#cb403-45" tabindex="-1"></a>results<span class="sc">$</span>SSP[results<span class="sc">$</span>SSP <span class="sc">==</span> <span class="st">&quot;ssp245&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;SSP2&quot;</span></span>
+<span id="cb403-46"><a href="model_validity.html#cb403-46" tabindex="-1"></a>results<span class="sc">$</span>SSP[results<span class="sc">$</span>SSP <span class="sc">==</span> <span class="st">&quot;ssp585&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;SSP5&quot;</span></span>
+<span id="cb403-47"><a href="model_validity.html#cb403-47" tabindex="-1"></a></span>
+<span id="cb403-48"><a href="model_validity.html#cb403-48" tabindex="-1"></a>results<span class="sc">$</span>SSP_Time <span class="ot">&lt;-</span> <span class="fu">paste0</span>(results<span class="sc">$</span>SSP,<span class="st">&quot; &quot;</span>,results<span class="sc">$</span>Time)</span>
+<span id="cb403-49"><a href="model_validity.html#cb403-49" tabindex="-1"></a></span>
+<span id="cb403-50"><a href="model_validity.html#cb403-50" tabindex="-1"></a>future_months <span class="ot">&lt;-</span></span>
+<span id="cb403-51"><a href="model_validity.html#cb403-51" tabindex="-1"></a>  <span class="fu">aggregate</span>(results[, <span class="fu">c</span>(<span class="st">&quot;Tmin&quot;</span>, <span class="st">&quot;Tmax&quot;</span>)],</span>
+<span id="cb403-52"><a href="model_validity.html#cb403-52" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">list</span>(results<span class="sc">$</span>SSP_Time,</span>
+<span id="cb403-53"><a href="model_validity.html#cb403-53" tabindex="-1"></a>                      results<span class="sc">$</span>Year,</span>
+<span id="cb403-54"><a href="model_validity.html#cb403-54" tabindex="-1"></a>                      results<span class="sc">$</span>Month),</span>
+<span id="cb403-55"><a href="model_validity.html#cb403-55" tabindex="-1"></a>            <span class="at">FUN =</span> mean)</span>
+<span id="cb403-56"><a href="model_validity.html#cb403-56" tabindex="-1"></a><span class="fu">colnames</span>(future_months)[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;SSP_Time&quot;</span>,</span>
+<span id="cb403-57"><a href="model_validity.html#cb403-57" tabindex="-1"></a>                                  <span class="st">&quot;Year&quot;</span>,</span>
+<span id="cb403-58"><a href="model_validity.html#cb403-58" tabindex="-1"></a>                                  <span class="st">&quot;Month&quot;</span>)</span>
+<span id="cb403-59"><a href="model_validity.html#cb403-59" tabindex="-1"></a></span>
+<span id="cb403-60"><a href="model_validity.html#cb403-60" tabindex="-1"></a>past_months <span class="ot">&lt;-</span></span>
+<span id="cb403-61"><a href="model_validity.html#cb403-61" tabindex="-1"></a>  <span class="fu">aggregate</span>(past_weather[, <span class="fu">c</span>(<span class="st">&quot;Tmin&quot;</span>,<span class="st">&quot;Tmax&quot;</span>)],</span>
+<span id="cb403-62"><a href="model_validity.html#cb403-62" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">list</span>(past_weather<span class="sc">$</span>SSP_Time,</span>
+<span id="cb403-63"><a href="model_validity.html#cb403-63" tabindex="-1"></a>                      past_weather<span class="sc">$</span>Year,</span>
+<span id="cb403-64"><a href="model_validity.html#cb403-64" tabindex="-1"></a>                      past_weather<span class="sc">$</span>Month),</span>
+<span id="cb403-65"><a href="model_validity.html#cb403-65" tabindex="-1"></a>            <span class="at">FUN=</span>mean)</span>
+<span id="cb403-66"><a href="model_validity.html#cb403-66" tabindex="-1"></a><span class="fu">colnames</span>(past_months)[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;SSP_Time&quot;</span>, <span class="st">&quot;Year&quot;</span>, <span class="st">&quot;Month&quot;</span>)</span>
+<span id="cb403-67"><a href="model_validity.html#cb403-67" tabindex="-1"></a></span>
+<span id="cb403-68"><a href="model_validity.html#cb403-68" tabindex="-1"></a>all_months <span class="ot">&lt;-</span> <span class="fu">rbind</span>(past_months,</span>
+<span id="cb403-69"><a href="model_validity.html#cb403-69" tabindex="-1"></a>                    future_months)</span>
+<span id="cb403-70"><a href="model_validity.html#cb403-70" tabindex="-1"></a></span>
+<span id="cb403-71"><a href="model_validity.html#cb403-71" tabindex="-1"></a>all_months<span class="sc">$</span>month_name <span class="ot">&lt;-</span> <span class="fu">factor</span>(all_months<span class="sc">$</span>Month,</span>
+<span id="cb403-72"><a href="model_validity.html#cb403-72" tabindex="-1"></a>                                <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>),</span>
+<span id="cb403-73"><a href="model_validity.html#cb403-73" tabindex="-1"></a>                                <span class="at">labels =</span> month.name[<span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)])</span></code></pre></div>
 <p>The total range of point values can be described with a so-called <em>convex hull</em>. This is a polygon that includes all observed values. It is constructed from the smallest possible set of actual observations that still allows enclosing all observations by a polygon connecting all the data points.</p>
 <p>Here’s how we can plot this with <code>ggplot</code>:</p>
-<div class="sourceCode" id="cb407"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb407-1"><a href="model_validity.html#cb407-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb407-2"><a href="model_validity.html#cb407-2" tabindex="-1"></a></span>
-<span id="cb407-3"><a href="model_validity.html#cb407-3" tabindex="-1"></a><span class="co"># Calculate the hulls for each group</span></span>
-<span id="cb407-4"><a href="model_validity.html#cb407-4" tabindex="-1"></a>hull_temps <span class="ot">&lt;-</span> all_months <span class="sc">%&gt;%</span></span>
-<span id="cb407-5"><a href="model_validity.html#cb407-5" tabindex="-1"></a>  <span class="fu">group_by</span>(SSP_Time,</span>
-<span id="cb407-6"><a href="model_validity.html#cb407-6" tabindex="-1"></a>           month_name) <span class="sc">%&gt;%</span></span>
-<span id="cb407-7"><a href="model_validity.html#cb407-7" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">chull</span>(Tmin,</span>
-<span id="cb407-8"><a href="model_validity.html#cb407-8" tabindex="-1"></a>              Tmax))</span>
-<span id="cb407-9"><a href="model_validity.html#cb407-9" tabindex="-1"></a></span>
-<span id="cb407-10"><a href="model_validity.html#cb407-10" tabindex="-1"></a><span class="fu">ggplot</span>(hull_temps,</span>
-<span id="cb407-11"><a href="model_validity.html#cb407-11" tabindex="-1"></a>       <span class="fu">aes</span>(Tmin, Tmax, </span>
-<span id="cb407-12"><a href="model_validity.html#cb407-12" tabindex="-1"></a>           <span class="at">fill =</span> <span class="fu">factor</span>(SSP_Time))) <span class="sc">+</span></span>
-<span id="cb407-13"><a href="model_validity.html#cb407-13" tabindex="-1"></a>  <span class="fu">geom_polygon</span>() <span class="sc">+</span></span>
-<span id="cb407-14"><a href="model_validity.html#cb407-14" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(month_name)) <span class="sc">+</span></span>
-<span id="cb407-15"><a href="model_validity.html#cb407-15" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;Scenario&quot;</span>,</span>
-<span id="cb407-16"><a href="model_validity.html#cb407-16" tabindex="-1"></a>                    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">&quot;Past&quot;</span>,</span>
-<span id="cb407-17"><a href="model_validity.html#cb407-17" tabindex="-1"></a>                               <span class="st">&quot;SSP1 2050&quot;</span>,</span>
-<span id="cb407-18"><a href="model_validity.html#cb407-18" tabindex="-1"></a>                               <span class="st">&quot;SSP1 2085&quot;</span>,</span>
-<span id="cb407-19"><a href="model_validity.html#cb407-19" tabindex="-1"></a>                               <span class="st">&quot;SSP2 2050&quot;</span>,</span>
-<span id="cb407-20"><a href="model_validity.html#cb407-20" tabindex="-1"></a>                               <span class="st">&quot;SSP2 2085&quot;</span>,</span>
-<span id="cb407-21"><a href="model_validity.html#cb407-21" tabindex="-1"></a>                               <span class="st">&quot;SSP5 2050&quot;</span>,</span>
-<span id="cb407-22"><a href="model_validity.html#cb407-22" tabindex="-1"></a>                               <span class="st">&quot;SSP5 2085&quot;</span>),</span>
-<span id="cb407-23"><a href="model_validity.html#cb407-23" tabindex="-1"></a>                    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;black&quot;</span>,</span>
-<span id="cb407-24"><a href="model_validity.html#cb407-24" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;light green&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb407-25"><a href="model_validity.html#cb407-25" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark green&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb407-26"><a href="model_validity.html#cb407-26" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;coral&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb407-27"><a href="model_validity.html#cb407-27" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark red&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb407-28"><a href="model_validity.html#cb407-28" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;light blue&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb407-29"><a href="model_validity.html#cb407-29" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark blue&quot;</span>, <span class="fl">0.3</span>))) <span class="sc">+</span></span>
-<span id="cb407-30"><a href="model_validity.html#cb407-30" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb404-1"><a href="model_validity.html#cb404-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb404-2"><a href="model_validity.html#cb404-2" tabindex="-1"></a></span>
+<span id="cb404-3"><a href="model_validity.html#cb404-3" tabindex="-1"></a><span class="co"># Calculate the hulls for each group</span></span>
+<span id="cb404-4"><a href="model_validity.html#cb404-4" tabindex="-1"></a>hull_temps <span class="ot">&lt;-</span> all_months <span class="sc">%&gt;%</span></span>
+<span id="cb404-5"><a href="model_validity.html#cb404-5" tabindex="-1"></a>  <span class="fu">group_by</span>(SSP_Time,</span>
+<span id="cb404-6"><a href="model_validity.html#cb404-6" tabindex="-1"></a>           month_name) <span class="sc">%&gt;%</span></span>
+<span id="cb404-7"><a href="model_validity.html#cb404-7" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">chull</span>(Tmin,</span>
+<span id="cb404-8"><a href="model_validity.html#cb404-8" tabindex="-1"></a>              Tmax))</span>
+<span id="cb404-9"><a href="model_validity.html#cb404-9" tabindex="-1"></a></span>
+<span id="cb404-10"><a href="model_validity.html#cb404-10" tabindex="-1"></a><span class="fu">ggplot</span>(hull_temps,</span>
+<span id="cb404-11"><a href="model_validity.html#cb404-11" tabindex="-1"></a>       <span class="fu">aes</span>(Tmin, Tmax, </span>
+<span id="cb404-12"><a href="model_validity.html#cb404-12" tabindex="-1"></a>           <span class="at">fill =</span> <span class="fu">factor</span>(SSP_Time))) <span class="sc">+</span></span>
+<span id="cb404-13"><a href="model_validity.html#cb404-13" tabindex="-1"></a>  <span class="fu">geom_polygon</span>() <span class="sc">+</span></span>
+<span id="cb404-14"><a href="model_validity.html#cb404-14" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(month_name)) <span class="sc">+</span></span>
+<span id="cb404-15"><a href="model_validity.html#cb404-15" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;Scenario&quot;</span>,</span>
+<span id="cb404-16"><a href="model_validity.html#cb404-16" tabindex="-1"></a>                    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">&quot;Past&quot;</span>,</span>
+<span id="cb404-17"><a href="model_validity.html#cb404-17" tabindex="-1"></a>                               <span class="st">&quot;SSP1 2050&quot;</span>,</span>
+<span id="cb404-18"><a href="model_validity.html#cb404-18" tabindex="-1"></a>                               <span class="st">&quot;SSP1 2085&quot;</span>,</span>
+<span id="cb404-19"><a href="model_validity.html#cb404-19" tabindex="-1"></a>                               <span class="st">&quot;SSP2 2050&quot;</span>,</span>
+<span id="cb404-20"><a href="model_validity.html#cb404-20" tabindex="-1"></a>                               <span class="st">&quot;SSP2 2085&quot;</span>,</span>
+<span id="cb404-21"><a href="model_validity.html#cb404-21" tabindex="-1"></a>                               <span class="st">&quot;SSP5 2050&quot;</span>,</span>
+<span id="cb404-22"><a href="model_validity.html#cb404-22" tabindex="-1"></a>                               <span class="st">&quot;SSP5 2085&quot;</span>),</span>
+<span id="cb404-23"><a href="model_validity.html#cb404-23" tabindex="-1"></a>                    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;black&quot;</span>,</span>
+<span id="cb404-24"><a href="model_validity.html#cb404-24" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;light green&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb404-25"><a href="model_validity.html#cb404-25" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark green&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb404-26"><a href="model_validity.html#cb404-26" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;coral&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb404-27"><a href="model_validity.html#cb404-27" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark red&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb404-28"><a href="model_validity.html#cb404-28" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;light blue&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb404-29"><a href="model_validity.html#cb404-29" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark blue&quot;</span>, <span class="fl">0.3</span>))) <span class="sc">+</span></span>
+<span id="cb404-30"><a href="model_validity.html#cb404-30" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code></pre></div>
 <p><img src="Book_files/figure-html/unnamed-chunk-270-1.png" width="672" /></p>
 <p>It’s hard to see what’s going on here, so let’s only focus on the dormancy months.</p>
-<div class="sourceCode" id="cb408"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb408-1"><a href="model_validity.html#cb408-1" tabindex="-1"></a><span class="fu">ggplot</span>(hull_temps[<span class="fu">which</span>(hull_temps<span class="sc">$</span>Month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">12</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)),],</span>
-<span id="cb408-2"><a href="model_validity.html#cb408-2" tabindex="-1"></a>       <span class="fu">aes</span>(Tmin,</span>
-<span id="cb408-3"><a href="model_validity.html#cb408-3" tabindex="-1"></a>           Tmax,</span>
-<span id="cb408-4"><a href="model_validity.html#cb408-4" tabindex="-1"></a>           <span class="at">fill =</span> <span class="fu">factor</span>(SSP_Time))) <span class="sc">+</span></span>
-<span id="cb408-5"><a href="model_validity.html#cb408-5" tabindex="-1"></a>  <span class="fu">geom_polygon</span>() <span class="sc">+</span></span>
-<span id="cb408-6"><a href="model_validity.html#cb408-6" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(month_name)) <span class="sc">+</span></span>
-<span id="cb408-7"><a href="model_validity.html#cb408-7" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;Scenario&quot;</span>,</span>
-<span id="cb408-8"><a href="model_validity.html#cb408-8" tabindex="-1"></a>                    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">&quot;Past&quot;</span>,</span>
-<span id="cb408-9"><a href="model_validity.html#cb408-9" tabindex="-1"></a>                               <span class="st">&quot;SSP1 2050&quot;</span>,</span>
-<span id="cb408-10"><a href="model_validity.html#cb408-10" tabindex="-1"></a>                               <span class="st">&quot;SSP1 2085&quot;</span>,</span>
-<span id="cb408-11"><a href="model_validity.html#cb408-11" tabindex="-1"></a>                               <span class="st">&quot;SSP2 2050&quot;</span>,</span>
-<span id="cb408-12"><a href="model_validity.html#cb408-12" tabindex="-1"></a>                               <span class="st">&quot;SSP2 2085&quot;</span>,</span>
-<span id="cb408-13"><a href="model_validity.html#cb408-13" tabindex="-1"></a>                               <span class="st">&quot;SSP5 2050&quot;</span>,</span>
-<span id="cb408-14"><a href="model_validity.html#cb408-14" tabindex="-1"></a>                               <span class="st">&quot;SSP5 2085&quot;</span>),</span>
-<span id="cb408-15"><a href="model_validity.html#cb408-15" tabindex="-1"></a>                    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;black&quot;</span>,</span>
-<span id="cb408-16"><a href="model_validity.html#cb408-16" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;light green&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb408-17"><a href="model_validity.html#cb408-17" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark green&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb408-18"><a href="model_validity.html#cb408-18" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;coral&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb408-19"><a href="model_validity.html#cb408-19" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark red&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb408-20"><a href="model_validity.html#cb408-20" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;light blue&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb408-21"><a href="model_validity.html#cb408-21" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark blue&quot;</span>, <span class="fl">0.3</span>))) <span class="sc">+</span></span>
-<span id="cb408-22"><a href="model_validity.html#cb408-22" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb405"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb405-1"><a href="model_validity.html#cb405-1" tabindex="-1"></a><span class="fu">ggplot</span>(hull_temps[<span class="fu">which</span>(hull_temps<span class="sc">$</span>Month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">12</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)),],</span>
+<span id="cb405-2"><a href="model_validity.html#cb405-2" tabindex="-1"></a>       <span class="fu">aes</span>(Tmin,</span>
+<span id="cb405-3"><a href="model_validity.html#cb405-3" tabindex="-1"></a>           Tmax,</span>
+<span id="cb405-4"><a href="model_validity.html#cb405-4" tabindex="-1"></a>           <span class="at">fill =</span> <span class="fu">factor</span>(SSP_Time))) <span class="sc">+</span></span>
+<span id="cb405-5"><a href="model_validity.html#cb405-5" tabindex="-1"></a>  <span class="fu">geom_polygon</span>() <span class="sc">+</span></span>
+<span id="cb405-6"><a href="model_validity.html#cb405-6" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(month_name)) <span class="sc">+</span></span>
+<span id="cb405-7"><a href="model_validity.html#cb405-7" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;Scenario&quot;</span>,</span>
+<span id="cb405-8"><a href="model_validity.html#cb405-8" tabindex="-1"></a>                    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">&quot;Past&quot;</span>,</span>
+<span id="cb405-9"><a href="model_validity.html#cb405-9" tabindex="-1"></a>                               <span class="st">&quot;SSP1 2050&quot;</span>,</span>
+<span id="cb405-10"><a href="model_validity.html#cb405-10" tabindex="-1"></a>                               <span class="st">&quot;SSP1 2085&quot;</span>,</span>
+<span id="cb405-11"><a href="model_validity.html#cb405-11" tabindex="-1"></a>                               <span class="st">&quot;SSP2 2050&quot;</span>,</span>
+<span id="cb405-12"><a href="model_validity.html#cb405-12" tabindex="-1"></a>                               <span class="st">&quot;SSP2 2085&quot;</span>,</span>
+<span id="cb405-13"><a href="model_validity.html#cb405-13" tabindex="-1"></a>                               <span class="st">&quot;SSP5 2050&quot;</span>,</span>
+<span id="cb405-14"><a href="model_validity.html#cb405-14" tabindex="-1"></a>                               <span class="st">&quot;SSP5 2085&quot;</span>),</span>
+<span id="cb405-15"><a href="model_validity.html#cb405-15" tabindex="-1"></a>                    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;black&quot;</span>,</span>
+<span id="cb405-16"><a href="model_validity.html#cb405-16" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;light green&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb405-17"><a href="model_validity.html#cb405-17" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark green&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb405-18"><a href="model_validity.html#cb405-18" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;coral&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb405-19"><a href="model_validity.html#cb405-19" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark red&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb405-20"><a href="model_validity.html#cb405-20" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;light blue&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb405-21"><a href="model_validity.html#cb405-21" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark blue&quot;</span>, <span class="fl">0.3</span>))) <span class="sc">+</span></span>
+<span id="cb405-22"><a href="model_validity.html#cb405-22" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code></pre></div>
 <p><img src="Book_files/figure-html/unnamed-chunk-271-1.png" width="672" /></p>
 <p>We see clearly that the data we collected in the past - the data we would presumably use to calibrate a phenology model - only cover a relatively small part of the temperature regime that we should expect in the future. Especially for SSP5, we’d be missing a substantial part of the range of expected conditions, if we relied on a model built with data collected in the past. This means that we should <strong><em>not</em></strong> use such a model to predict conditions for these future scenarios!</p>
 <p>What if we based our model development on our <em>experimentally enhanced</em> observations?</p>
-<div class="sourceCode" id="cb409"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb409-1"><a href="model_validity.html#cb409-1" tabindex="-1"></a>enhanced <span class="ot">&lt;-</span> <span class="fu">read_tab</span>(<span class="st">&quot;data/final_weather_data_S1_S2.csv&quot;</span>)</span>
-<span id="cb409-2"><a href="model_validity.html#cb409-2" tabindex="-1"></a>enhanced<span class="sc">$</span>Year <span class="ot">&lt;-</span> enhanced<span class="sc">$</span>Treatment</span>
-<span id="cb409-3"><a href="model_validity.html#cb409-3" tabindex="-1"></a>enhanced<span class="sc">$</span>SSP_Time <span class="ot">&lt;-</span> <span class="st">&quot;Past enhanced&quot;</span></span>
-<span id="cb409-4"><a href="model_validity.html#cb409-4" tabindex="-1"></a></span>
-<span id="cb409-5"><a href="model_validity.html#cb409-5" tabindex="-1"></a></span>
-<span id="cb409-6"><a href="model_validity.html#cb409-6" tabindex="-1"></a>enhanced_months <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(enhanced[, <span class="fu">c</span>(<span class="st">&quot;Tmin&quot;</span>, <span class="st">&quot;Tmax&quot;</span>)],</span>
-<span id="cb409-7"><a href="model_validity.html#cb409-7" tabindex="-1"></a>                             <span class="at">by =</span> <span class="fu">list</span>(enhanced<span class="sc">$</span>SSP_Time,</span>
-<span id="cb409-8"><a href="model_validity.html#cb409-8" tabindex="-1"></a>                                       enhanced<span class="sc">$</span>Year,</span>
-<span id="cb409-9"><a href="model_validity.html#cb409-9" tabindex="-1"></a>                                       enhanced<span class="sc">$</span>Month),</span>
-<span id="cb409-10"><a href="model_validity.html#cb409-10" tabindex="-1"></a>                             <span class="at">FUN =</span> mean)</span>
-<span id="cb409-11"><a href="model_validity.html#cb409-11" tabindex="-1"></a><span class="fu">colnames</span>(enhanced_months)[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;SSP_Time&quot;</span>, <span class="st">&quot;Year&quot;</span>, <span class="st">&quot;Month&quot;</span>)</span>
-<span id="cb409-12"><a href="model_validity.html#cb409-12" tabindex="-1"></a></span>
-<span id="cb409-13"><a href="model_validity.html#cb409-13" tabindex="-1"></a>all_months_enhanced <span class="ot">&lt;-</span> <span class="fu">rbind</span>(enhanced_months,</span>
-<span id="cb409-14"><a href="model_validity.html#cb409-14" tabindex="-1"></a>                             future_months)</span>
-<span id="cb409-15"><a href="model_validity.html#cb409-15" tabindex="-1"></a></span>
-<span id="cb409-16"><a href="model_validity.html#cb409-16" tabindex="-1"></a>all_months_enhanced<span class="sc">$</span>month_name <span class="ot">&lt;-</span> <span class="fu">factor</span>(all_months_enhanced<span class="sc">$</span>Month,</span>
-<span id="cb409-17"><a href="model_validity.html#cb409-17" tabindex="-1"></a>                                         <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>),</span>
-<span id="cb409-18"><a href="model_validity.html#cb409-18" tabindex="-1"></a>                                         <span class="at">labels =</span> month.name[<span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)])</span>
-<span id="cb409-19"><a href="model_validity.html#cb409-19" tabindex="-1"></a></span>
-<span id="cb409-20"><a href="model_validity.html#cb409-20" tabindex="-1"></a><span class="co"># Calculate the hulls for each group</span></span>
-<span id="cb409-21"><a href="model_validity.html#cb409-21" tabindex="-1"></a>hull_temps_enhanced <span class="ot">&lt;-</span> all_months_enhanced <span class="sc">%&gt;%</span></span>
-<span id="cb409-22"><a href="model_validity.html#cb409-22" tabindex="-1"></a>  <span class="fu">group_by</span>(SSP_Time,</span>
-<span id="cb409-23"><a href="model_validity.html#cb409-23" tabindex="-1"></a>           month_name) <span class="sc">%&gt;%</span></span>
-<span id="cb409-24"><a href="model_validity.html#cb409-24" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">chull</span>(Tmin, </span>
-<span id="cb409-25"><a href="model_validity.html#cb409-25" tabindex="-1"></a>              Tmax))</span>
-<span id="cb409-26"><a href="model_validity.html#cb409-26" tabindex="-1"></a></span>
-<span id="cb409-27"><a href="model_validity.html#cb409-27" tabindex="-1"></a><span class="fu">ggplot</span>(hull_temps_enhanced[</span>
-<span id="cb409-28"><a href="model_validity.html#cb409-28" tabindex="-1"></a>  <span class="fu">which</span>(hull_temps_enhanced<span class="sc">$</span>Month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)),],</span>
-<span id="cb409-29"><a href="model_validity.html#cb409-29" tabindex="-1"></a>       <span class="fu">aes</span>(Tmin,</span>
-<span id="cb409-30"><a href="model_validity.html#cb409-30" tabindex="-1"></a>           Tmax,</span>
-<span id="cb409-31"><a href="model_validity.html#cb409-31" tabindex="-1"></a>           <span class="at">fill =</span> <span class="fu">factor</span>(SSP_Time))) <span class="sc">+</span></span>
-<span id="cb409-32"><a href="model_validity.html#cb409-32" tabindex="-1"></a>  <span class="fu">geom_polygon</span>() <span class="sc">+</span></span>
-<span id="cb409-33"><a href="model_validity.html#cb409-33" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(month_name)) <span class="sc">+</span></span>
-<span id="cb409-34"><a href="model_validity.html#cb409-34" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;Scenario&quot;</span>,</span>
-<span id="cb409-35"><a href="model_validity.html#cb409-35" tabindex="-1"></a>                    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">&quot;Past enhanced&quot;</span>,</span>
-<span id="cb409-36"><a href="model_validity.html#cb409-36" tabindex="-1"></a>                               <span class="st">&quot;SSP1 2050&quot;</span>,</span>
-<span id="cb409-37"><a href="model_validity.html#cb409-37" tabindex="-1"></a>                               <span class="st">&quot;SSP1 2085&quot;</span>,</span>
-<span id="cb409-38"><a href="model_validity.html#cb409-38" tabindex="-1"></a>                               <span class="st">&quot;SSP2 2050&quot;</span>,</span>
-<span id="cb409-39"><a href="model_validity.html#cb409-39" tabindex="-1"></a>                               <span class="st">&quot;SSP2 2085&quot;</span>,</span>
-<span id="cb409-40"><a href="model_validity.html#cb409-40" tabindex="-1"></a>                               <span class="st">&quot;SSP5 2050&quot;</span>,</span>
-<span id="cb409-41"><a href="model_validity.html#cb409-41" tabindex="-1"></a>                               <span class="st">&quot;SSP5 2085&quot;</span>),</span>
-<span id="cb409-42"><a href="model_validity.html#cb409-42" tabindex="-1"></a>                    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;black&quot;</span>,</span>
-<span id="cb409-43"><a href="model_validity.html#cb409-43" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;light green&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb409-44"><a href="model_validity.html#cb409-44" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark green&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb409-45"><a href="model_validity.html#cb409-45" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;coral&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb409-46"><a href="model_validity.html#cb409-46" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark red&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb409-47"><a href="model_validity.html#cb409-47" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;light blue&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb409-48"><a href="model_validity.html#cb409-48" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark blue&quot;</span>, <span class="fl">0.3</span>))) <span class="sc">+</span></span>
-<span id="cb409-49"><a href="model_validity.html#cb409-49" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb406-1"><a href="model_validity.html#cb406-1" tabindex="-1"></a>enhanced <span class="ot">&lt;-</span> <span class="fu">read_tab</span>(<span class="st">&quot;data/final_weather_data_S1_S2.csv&quot;</span>)</span>
+<span id="cb406-2"><a href="model_validity.html#cb406-2" tabindex="-1"></a>enhanced<span class="sc">$</span>Year <span class="ot">&lt;-</span> enhanced<span class="sc">$</span>Treatment</span>
+<span id="cb406-3"><a href="model_validity.html#cb406-3" tabindex="-1"></a>enhanced<span class="sc">$</span>SSP_Time <span class="ot">&lt;-</span> <span class="st">&quot;Past enhanced&quot;</span></span>
+<span id="cb406-4"><a href="model_validity.html#cb406-4" tabindex="-1"></a></span>
+<span id="cb406-5"><a href="model_validity.html#cb406-5" tabindex="-1"></a></span>
+<span id="cb406-6"><a href="model_validity.html#cb406-6" tabindex="-1"></a>enhanced_months <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(enhanced[, <span class="fu">c</span>(<span class="st">&quot;Tmin&quot;</span>, <span class="st">&quot;Tmax&quot;</span>)],</span>
+<span id="cb406-7"><a href="model_validity.html#cb406-7" tabindex="-1"></a>                             <span class="at">by =</span> <span class="fu">list</span>(enhanced<span class="sc">$</span>SSP_Time,</span>
+<span id="cb406-8"><a href="model_validity.html#cb406-8" tabindex="-1"></a>                                       enhanced<span class="sc">$</span>Year,</span>
+<span id="cb406-9"><a href="model_validity.html#cb406-9" tabindex="-1"></a>                                       enhanced<span class="sc">$</span>Month),</span>
+<span id="cb406-10"><a href="model_validity.html#cb406-10" tabindex="-1"></a>                             <span class="at">FUN =</span> mean)</span>
+<span id="cb406-11"><a href="model_validity.html#cb406-11" tabindex="-1"></a><span class="fu">colnames</span>(enhanced_months)[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;SSP_Time&quot;</span>, <span class="st">&quot;Year&quot;</span>, <span class="st">&quot;Month&quot;</span>)</span>
+<span id="cb406-12"><a href="model_validity.html#cb406-12" tabindex="-1"></a></span>
+<span id="cb406-13"><a href="model_validity.html#cb406-13" tabindex="-1"></a>all_months_enhanced <span class="ot">&lt;-</span> <span class="fu">rbind</span>(enhanced_months,</span>
+<span id="cb406-14"><a href="model_validity.html#cb406-14" tabindex="-1"></a>                             future_months)</span>
+<span id="cb406-15"><a href="model_validity.html#cb406-15" tabindex="-1"></a></span>
+<span id="cb406-16"><a href="model_validity.html#cb406-16" tabindex="-1"></a>all_months_enhanced<span class="sc">$</span>month_name <span class="ot">&lt;-</span> <span class="fu">factor</span>(all_months_enhanced<span class="sc">$</span>Month,</span>
+<span id="cb406-17"><a href="model_validity.html#cb406-17" tabindex="-1"></a>                                         <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>),</span>
+<span id="cb406-18"><a href="model_validity.html#cb406-18" tabindex="-1"></a>                                         <span class="at">labels =</span> month.name[<span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)])</span>
+<span id="cb406-19"><a href="model_validity.html#cb406-19" tabindex="-1"></a></span>
+<span id="cb406-20"><a href="model_validity.html#cb406-20" tabindex="-1"></a><span class="co"># Calculate the hulls for each group</span></span>
+<span id="cb406-21"><a href="model_validity.html#cb406-21" tabindex="-1"></a>hull_temps_enhanced <span class="ot">&lt;-</span> all_months_enhanced <span class="sc">%&gt;%</span></span>
+<span id="cb406-22"><a href="model_validity.html#cb406-22" tabindex="-1"></a>  <span class="fu">group_by</span>(SSP_Time,</span>
+<span id="cb406-23"><a href="model_validity.html#cb406-23" tabindex="-1"></a>           month_name) <span class="sc">%&gt;%</span></span>
+<span id="cb406-24"><a href="model_validity.html#cb406-24" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">chull</span>(Tmin, </span>
+<span id="cb406-25"><a href="model_validity.html#cb406-25" tabindex="-1"></a>              Tmax))</span>
+<span id="cb406-26"><a href="model_validity.html#cb406-26" tabindex="-1"></a></span>
+<span id="cb406-27"><a href="model_validity.html#cb406-27" tabindex="-1"></a><span class="fu">ggplot</span>(hull_temps_enhanced[</span>
+<span id="cb406-28"><a href="model_validity.html#cb406-28" tabindex="-1"></a>  <span class="fu">which</span>(hull_temps_enhanced<span class="sc">$</span>Month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)),],</span>
+<span id="cb406-29"><a href="model_validity.html#cb406-29" tabindex="-1"></a>       <span class="fu">aes</span>(Tmin,</span>
+<span id="cb406-30"><a href="model_validity.html#cb406-30" tabindex="-1"></a>           Tmax,</span>
+<span id="cb406-31"><a href="model_validity.html#cb406-31" tabindex="-1"></a>           <span class="at">fill =</span> <span class="fu">factor</span>(SSP_Time))) <span class="sc">+</span></span>
+<span id="cb406-32"><a href="model_validity.html#cb406-32" tabindex="-1"></a>  <span class="fu">geom_polygon</span>() <span class="sc">+</span></span>
+<span id="cb406-33"><a href="model_validity.html#cb406-33" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(month_name)) <span class="sc">+</span></span>
+<span id="cb406-34"><a href="model_validity.html#cb406-34" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;Scenario&quot;</span>,</span>
+<span id="cb406-35"><a href="model_validity.html#cb406-35" tabindex="-1"></a>                    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">&quot;Past enhanced&quot;</span>,</span>
+<span id="cb406-36"><a href="model_validity.html#cb406-36" tabindex="-1"></a>                               <span class="st">&quot;SSP1 2050&quot;</span>,</span>
+<span id="cb406-37"><a href="model_validity.html#cb406-37" tabindex="-1"></a>                               <span class="st">&quot;SSP1 2085&quot;</span>,</span>
+<span id="cb406-38"><a href="model_validity.html#cb406-38" tabindex="-1"></a>                               <span class="st">&quot;SSP2 2050&quot;</span>,</span>
+<span id="cb406-39"><a href="model_validity.html#cb406-39" tabindex="-1"></a>                               <span class="st">&quot;SSP2 2085&quot;</span>,</span>
+<span id="cb406-40"><a href="model_validity.html#cb406-40" tabindex="-1"></a>                               <span class="st">&quot;SSP5 2050&quot;</span>,</span>
+<span id="cb406-41"><a href="model_validity.html#cb406-41" tabindex="-1"></a>                               <span class="st">&quot;SSP5 2085&quot;</span>),</span>
+<span id="cb406-42"><a href="model_validity.html#cb406-42" tabindex="-1"></a>                    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;black&quot;</span>,</span>
+<span id="cb406-43"><a href="model_validity.html#cb406-43" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;light green&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb406-44"><a href="model_validity.html#cb406-44" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark green&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb406-45"><a href="model_validity.html#cb406-45" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;coral&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb406-46"><a href="model_validity.html#cb406-46" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark red&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb406-47"><a href="model_validity.html#cb406-47" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;light blue&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb406-48"><a href="model_validity.html#cb406-48" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark blue&quot;</span>, <span class="fl">0.3</span>))) <span class="sc">+</span></span>
+<span id="cb406-49"><a href="model_validity.html#cb406-49" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code></pre></div>
 <p><img src="Book_files/figure-html/unnamed-chunk-272-1.png" width="672" /></p>
 <p>This is also not such a great coverage of the scenarios we’re expecting, but mainly we’ve overshot our goal a bit, with much warmer scenarios in the experimental setting than are predicted for the future.</p>
 <p>Maybe we need to combine historic conditions with our enhanced treatment.</p>
-<div class="sourceCode" id="cb410"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb410-1"><a href="model_validity.html#cb410-1" tabindex="-1"></a>past_months<span class="sc">$</span>SSP_Time <span class="ot">&lt;-</span> <span class="st">&quot;Past combined&quot;</span></span>
-<span id="cb410-2"><a href="model_validity.html#cb410-2" tabindex="-1"></a>enhanced_months<span class="sc">$</span>SSP_Time <span class="ot">&lt;-</span> <span class="st">&quot;Past combined&quot;</span></span>
-<span id="cb410-3"><a href="model_validity.html#cb410-3" tabindex="-1"></a></span>
-<span id="cb410-4"><a href="model_validity.html#cb410-4" tabindex="-1"></a>all_months_both <span class="ot">&lt;-</span> <span class="fu">rbind</span>(enhanced_months,</span>
-<span id="cb410-5"><a href="model_validity.html#cb410-5" tabindex="-1"></a>                         past_months,</span>
-<span id="cb410-6"><a href="model_validity.html#cb410-6" tabindex="-1"></a>                         future_months)</span>
-<span id="cb410-7"><a href="model_validity.html#cb410-7" tabindex="-1"></a></span>
-<span id="cb410-8"><a href="model_validity.html#cb410-8" tabindex="-1"></a>all_months_both<span class="sc">$</span>month_name <span class="ot">&lt;-</span> <span class="fu">factor</span>(all_months_both<span class="sc">$</span>Month,</span>
-<span id="cb410-9"><a href="model_validity.html#cb410-9" tabindex="-1"></a>                                     <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>),</span>
-<span id="cb410-10"><a href="model_validity.html#cb410-10" tabindex="-1"></a>                                     <span class="at">labels =</span> month.name[<span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)])</span>
-<span id="cb410-11"><a href="model_validity.html#cb410-11" tabindex="-1"></a></span>
-<span id="cb410-12"><a href="model_validity.html#cb410-12" tabindex="-1"></a>hull_temps_both <span class="ot">&lt;-</span> all_months_both <span class="sc">%&gt;%</span></span>
-<span id="cb410-13"><a href="model_validity.html#cb410-13" tabindex="-1"></a>  <span class="fu">group_by</span>(SSP_Time,</span>
-<span id="cb410-14"><a href="model_validity.html#cb410-14" tabindex="-1"></a>           month_name) <span class="sc">%&gt;%</span></span>
-<span id="cb410-15"><a href="model_validity.html#cb410-15" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">chull</span>(Tmin,</span>
-<span id="cb410-16"><a href="model_validity.html#cb410-16" tabindex="-1"></a>              Tmax))</span>
-<span id="cb410-17"><a href="model_validity.html#cb410-17" tabindex="-1"></a></span>
-<span id="cb410-18"><a href="model_validity.html#cb410-18" tabindex="-1"></a><span class="fu">ggplot</span>(hull_temps_both[</span>
-<span id="cb410-19"><a href="model_validity.html#cb410-19" tabindex="-1"></a>  <span class="fu">which</span>(hull_temps_both<span class="sc">$</span>Month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)),],</span>
-<span id="cb410-20"><a href="model_validity.html#cb410-20" tabindex="-1"></a>       <span class="fu">aes</span>(Tmin,</span>
-<span id="cb410-21"><a href="model_validity.html#cb410-21" tabindex="-1"></a>           Tmax,</span>
-<span id="cb410-22"><a href="model_validity.html#cb410-22" tabindex="-1"></a>           <span class="at">fill =</span> <span class="fu">factor</span>(SSP_Time))) <span class="sc">+</span></span>
-<span id="cb410-23"><a href="model_validity.html#cb410-23" tabindex="-1"></a>  <span class="fu">geom_polygon</span>() <span class="sc">+</span></span>
-<span id="cb410-24"><a href="model_validity.html#cb410-24" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(month_name)) <span class="sc">+</span></span>
-<span id="cb410-25"><a href="model_validity.html#cb410-25" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;Scenario&quot;</span>,</span>
-<span id="cb410-26"><a href="model_validity.html#cb410-26" tabindex="-1"></a>                    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">&quot;Past combined&quot;</span>,</span>
-<span id="cb410-27"><a href="model_validity.html#cb410-27" tabindex="-1"></a>                               <span class="st">&quot;SSP1 2050&quot;</span>,</span>
-<span id="cb410-28"><a href="model_validity.html#cb410-28" tabindex="-1"></a>                               <span class="st">&quot;SSP1 2085&quot;</span>,</span>
-<span id="cb410-29"><a href="model_validity.html#cb410-29" tabindex="-1"></a>                               <span class="st">&quot;SSP2 2050&quot;</span>,</span>
-<span id="cb410-30"><a href="model_validity.html#cb410-30" tabindex="-1"></a>                               <span class="st">&quot;SSP2 2085&quot;</span>,</span>
-<span id="cb410-31"><a href="model_validity.html#cb410-31" tabindex="-1"></a>                               <span class="st">&quot;SSP5 2050&quot;</span>,</span>
-<span id="cb410-32"><a href="model_validity.html#cb410-32" tabindex="-1"></a>                               <span class="st">&quot;SSP5 2085&quot;</span>),</span>
-<span id="cb410-33"><a href="model_validity.html#cb410-33" tabindex="-1"></a>                    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;black&quot;</span>,</span>
-<span id="cb410-34"><a href="model_validity.html#cb410-34" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;light green&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb410-35"><a href="model_validity.html#cb410-35" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark green&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb410-36"><a href="model_validity.html#cb410-36" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;coral&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb410-37"><a href="model_validity.html#cb410-37" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark red&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb410-38"><a href="model_validity.html#cb410-38" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;light blue&quot;</span>, <span class="fl">0.3</span>),</span>
-<span id="cb410-39"><a href="model_validity.html#cb410-39" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark blue&quot;</span>, <span class="fl">0.3</span>))) <span class="sc">+</span></span>
-<span id="cb410-40"><a href="model_validity.html#cb410-40" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb407"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb407-1"><a href="model_validity.html#cb407-1" tabindex="-1"></a>past_months<span class="sc">$</span>SSP_Time <span class="ot">&lt;-</span> <span class="st">&quot;Past combined&quot;</span></span>
+<span id="cb407-2"><a href="model_validity.html#cb407-2" tabindex="-1"></a>enhanced_months<span class="sc">$</span>SSP_Time <span class="ot">&lt;-</span> <span class="st">&quot;Past combined&quot;</span></span>
+<span id="cb407-3"><a href="model_validity.html#cb407-3" tabindex="-1"></a></span>
+<span id="cb407-4"><a href="model_validity.html#cb407-4" tabindex="-1"></a>all_months_both <span class="ot">&lt;-</span> <span class="fu">rbind</span>(enhanced_months,</span>
+<span id="cb407-5"><a href="model_validity.html#cb407-5" tabindex="-1"></a>                         past_months,</span>
+<span id="cb407-6"><a href="model_validity.html#cb407-6" tabindex="-1"></a>                         future_months)</span>
+<span id="cb407-7"><a href="model_validity.html#cb407-7" tabindex="-1"></a></span>
+<span id="cb407-8"><a href="model_validity.html#cb407-8" tabindex="-1"></a>all_months_both<span class="sc">$</span>month_name <span class="ot">&lt;-</span> <span class="fu">factor</span>(all_months_both<span class="sc">$</span>Month,</span>
+<span id="cb407-9"><a href="model_validity.html#cb407-9" tabindex="-1"></a>                                     <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>),</span>
+<span id="cb407-10"><a href="model_validity.html#cb407-10" tabindex="-1"></a>                                     <span class="at">labels =</span> month.name[<span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)])</span>
+<span id="cb407-11"><a href="model_validity.html#cb407-11" tabindex="-1"></a></span>
+<span id="cb407-12"><a href="model_validity.html#cb407-12" tabindex="-1"></a>hull_temps_both <span class="ot">&lt;-</span> all_months_both <span class="sc">%&gt;%</span></span>
+<span id="cb407-13"><a href="model_validity.html#cb407-13" tabindex="-1"></a>  <span class="fu">group_by</span>(SSP_Time,</span>
+<span id="cb407-14"><a href="model_validity.html#cb407-14" tabindex="-1"></a>           month_name) <span class="sc">%&gt;%</span></span>
+<span id="cb407-15"><a href="model_validity.html#cb407-15" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">chull</span>(Tmin,</span>
+<span id="cb407-16"><a href="model_validity.html#cb407-16" tabindex="-1"></a>              Tmax))</span>
+<span id="cb407-17"><a href="model_validity.html#cb407-17" tabindex="-1"></a></span>
+<span id="cb407-18"><a href="model_validity.html#cb407-18" tabindex="-1"></a><span class="fu">ggplot</span>(hull_temps_both[</span>
+<span id="cb407-19"><a href="model_validity.html#cb407-19" tabindex="-1"></a>  <span class="fu">which</span>(hull_temps_both<span class="sc">$</span>Month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)),],</span>
+<span id="cb407-20"><a href="model_validity.html#cb407-20" tabindex="-1"></a>       <span class="fu">aes</span>(Tmin,</span>
+<span id="cb407-21"><a href="model_validity.html#cb407-21" tabindex="-1"></a>           Tmax,</span>
+<span id="cb407-22"><a href="model_validity.html#cb407-22" tabindex="-1"></a>           <span class="at">fill =</span> <span class="fu">factor</span>(SSP_Time))) <span class="sc">+</span></span>
+<span id="cb407-23"><a href="model_validity.html#cb407-23" tabindex="-1"></a>  <span class="fu">geom_polygon</span>() <span class="sc">+</span></span>
+<span id="cb407-24"><a href="model_validity.html#cb407-24" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(month_name)) <span class="sc">+</span></span>
+<span id="cb407-25"><a href="model_validity.html#cb407-25" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;Scenario&quot;</span>,</span>
+<span id="cb407-26"><a href="model_validity.html#cb407-26" tabindex="-1"></a>                    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="st">&quot;Past combined&quot;</span>,</span>
+<span id="cb407-27"><a href="model_validity.html#cb407-27" tabindex="-1"></a>                               <span class="st">&quot;SSP1 2050&quot;</span>,</span>
+<span id="cb407-28"><a href="model_validity.html#cb407-28" tabindex="-1"></a>                               <span class="st">&quot;SSP1 2085&quot;</span>,</span>
+<span id="cb407-29"><a href="model_validity.html#cb407-29" tabindex="-1"></a>                               <span class="st">&quot;SSP2 2050&quot;</span>,</span>
+<span id="cb407-30"><a href="model_validity.html#cb407-30" tabindex="-1"></a>                               <span class="st">&quot;SSP2 2085&quot;</span>,</span>
+<span id="cb407-31"><a href="model_validity.html#cb407-31" tabindex="-1"></a>                               <span class="st">&quot;SSP5 2050&quot;</span>,</span>
+<span id="cb407-32"><a href="model_validity.html#cb407-32" tabindex="-1"></a>                               <span class="st">&quot;SSP5 2085&quot;</span>),</span>
+<span id="cb407-33"><a href="model_validity.html#cb407-33" tabindex="-1"></a>                    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;black&quot;</span>,</span>
+<span id="cb407-34"><a href="model_validity.html#cb407-34" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;light green&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb407-35"><a href="model_validity.html#cb407-35" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark green&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb407-36"><a href="model_validity.html#cb407-36" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;coral&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb407-37"><a href="model_validity.html#cb407-37" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark red&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb407-38"><a href="model_validity.html#cb407-38" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;light blue&quot;</span>, <span class="fl">0.3</span>),</span>
+<span id="cb407-39"><a href="model_validity.html#cb407-39" tabindex="-1"></a>                               <span class="fu">alpha</span>(<span class="st">&quot;dark blue&quot;</span>, <span class="fl">0.3</span>))) <span class="sc">+</span></span>
+<span id="cb407-40"><a href="model_validity.html#cb407-40" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code></pre></div>
 <p><img src="Book_files/figure-html/unnamed-chunk-273-1.png" width="672" /></p>
 <p>This is now a pretty good coverage for all months, with the possible exception of October, which wasn’t covered by our experiments. If we succeed in producing a model that performs satisfactorily under all conditions covered by the <code>Past_combined</code> scenarios here, we could confidently expect it to produce accurate forecasts of future phenology. This would then open the door to follow-on studies, e.g. on future frost risk.</p>
 <p>But how do we develop a phenology model and parameterize it with observed phenology? Let’s see if we can find the answer in the next chapter on <a href="phenoflex.html#phenoflex">The <code>PhenoFlex</code> model</a>.</p>

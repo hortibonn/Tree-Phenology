@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 16 Making CMIP6 scenarios | Tree phenology analysis with R</title>
   <meta name="description" content="This lecture introduces the chillR package for R." />
-  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 16 Making CMIP6 scenarios | Tree phenology analysis with R" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Eike Luedeling" />
 
 
-<meta name="date" content="2024-11-26" />
+<meta name="date" content="2024-11-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -958,13 +958,13 @@ Bonn
 1
 </td>
 <td style="text-align:right;">
-3.534321
+1.826612
 </td>
 <td style="text-align:right;">
-3.748287
+1.803455
 </td>
 <td style="text-align:left;">
-ssp245
+ssp126
 </td>
 <td style="text-align:right;">
 2035
@@ -993,13 +993,13 @@ Bonn
 2
 </td>
 <td style="text-align:right;">
-3.787837
+2.765976
 </td>
 <td style="text-align:right;">
-3.601785
+2.179606
 </td>
 <td style="text-align:left;">
-ssp245
+ssp126
 </td>
 <td style="text-align:right;">
 2035
@@ -1028,13 +1028,13 @@ Bonn
 3
 </td>
 <td style="text-align:right;">
-3.844115
+1.485612
 </td>
 <td style="text-align:right;">
-3.134110
+1.170670
 </td>
 <td style="text-align:left;">
-ssp245
+ssp126
 </td>
 <td style="text-align:right;">
 2035
@@ -1063,13 +1063,13 @@ Bonn
 4
 </td>
 <td style="text-align:right;">
-2.050318
+1.501575
 </td>
 <td style="text-align:right;">
-1.988949
+1.264827
 </td>
 <td style="text-align:left;">
-ssp245
+ssp126
 </td>
 <td style="text-align:right;">
 2035
@@ -1098,13 +1098,13 @@ Bonn
 5
 </td>
 <td style="text-align:right;">
-2.497610
+1.733385
 </td>
 <td style="text-align:right;">
-2.212458
+1.485717
 </td>
 <td style="text-align:left;">
-ssp245
+ssp126
 </td>
 <td style="text-align:right;">
 2035
@@ -1133,13 +1133,13 @@ Bonn
 6
 </td>
 <td style="text-align:right;">
-2.063588
+1.808780
 </td>
 <td style="text-align:right;">
-2.049261
+1.506125
 </td>
 <td style="text-align:left;">
-ssp245
+ssp126
 </td>
 <td style="text-align:right;">
 2035
@@ -1172,18 +1172,18 @@ ACCESS-CM2
 <div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="making-cmip6-scenarios.html#cb209-1" tabindex="-1"></a>scen_list<span class="sc">$</span>Bonn<span class="sc">$</span>ssp126<span class="sc">$</span><span class="st">`</span><span class="at">ACCESS-CM2</span><span class="st">`</span><span class="sc">$</span><span class="st">&#39;2050&#39;</span></span></code></pre></div>
 <pre><code>## $data
 ##        Tmin     Tmax
-## 49 2.216574 2.021331
-## 50 2.759022 2.860477
-## 51 1.303613 1.306472
-## 52 1.414468 1.573004
-## 53 1.329832 1.649632
-## 54 1.694997 1.700287
-## 55 1.992212 2.369283
-## 56 1.815343 2.611570
-## 57 2.881619 3.668100
-## 58 2.316560 2.867744
-## 59 2.293756 2.517477
-## 60 3.071128 2.851256
+## 1  1.803455 1.826612
+## 2  2.179606 2.765976
+## 3  1.170670 1.485612
+## 4  1.264827 1.501575
+## 5  1.485717 1.733385
+## 6  1.506125 1.808780
+## 7  2.047910 2.668619
+## 8  1.654944 2.754484
+## 9  2.388600 3.323390
+## 10 2.540916 2.722248
+## 11 2.322483 2.434944
+## 12 2.737679 2.713174
 ## 
 ## $scenario
 ## [1] &quot;ssp126&quot;
@@ -1323,17 +1323,39 @@ ACCESS-CM2
 <span id="cb218-8"><a href="making-cmip6-scenarios.html#cb218-8" tabindex="-1"></a>    <span class="at">temperature_check_args =</span></span>
 <span id="cb218-9"><a href="making-cmip6-scenarios.html#cb218-9" tabindex="-1"></a>      <span class="fu">list</span>( <span class="at">scenario_check_thresholds =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">15</span>)))</span></code></pre></div>
 <p>Now we can start the temperature generation process. Note that, since we have many scenarios, this can take hours. Maybe this seems long, but keep in mind that we’re doing a lot of operations here and imagine you’d have to do them all manually. Since the computer is doing this for us, you can do something else (get a good night’s sleep?) in the meantime.</p>
-<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="making-cmip6-scenarios.html#cb219-1" tabindex="-1"></a>temps <span class="ot">&lt;-</span> <span class="fu">temperature_generation</span>(</span>
-<span id="cb219-2"><a href="making-cmip6-scenarios.html#cb219-2" tabindex="-1"></a>  Bonn_temps, </span>
-<span id="cb219-3"><a href="making-cmip6-scenarios.html#cb219-3" tabindex="-1"></a>  <span class="at">years =</span> <span class="fu">c</span>(<span class="dv">1973</span>, <span class="dv">2019</span>), </span>
-<span id="cb219-4"><a href="making-cmip6-scenarios.html#cb219-4" tabindex="-1"></a>  <span class="at">sim_years =</span> <span class="fu">c</span>(<span class="dv">2001</span>, <span class="dv">2100</span>), </span>
-<span id="cb219-5"><a href="making-cmip6-scenarios.html#cb219-5" tabindex="-1"></a>  adjusted_list,    </span>
-<span id="cb219-6"><a href="making-cmip6-scenarios.html#cb219-6" tabindex="-1"></a>  <span class="at">temperature_check_args =</span></span>
-<span id="cb219-7"><a href="making-cmip6-scenarios.html#cb219-7" tabindex="-1"></a>    <span class="fu">list</span>( <span class="at">scenario_check_thresholds =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">15</span>)))</span>
+<p>It’s worth noting that there are different ways of running such big jobs. In the case of the <code>temperature_generation</code> function, we can enter the whole list of scenarios into the function and execute the process as one command. This can take a very long time though, and it’s sometimes hard to know if your computer is really still running or if it got stuck somehow. More importantly, you won’t get any results until the function has finished running, and if you abandon the process half-way through (or your computer crashes), you’re left with nothing.</p>
+<p>This is why sometimes it’s a better idea to program things in a less compact way. For instance, you can code this as a loop that processes one scenario at a time, saving the result after each run. You can even check if certain scenarios have already been processed and only work on the remaining ones. And you can output status messages that allow you to track the progress.</p>
+<p>I’m showing you both options here, but I’m commenting out the one that processes the whole list at once.</p>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="making-cmip6-scenarios.html#cb219-1" tabindex="-1"></a><span class="co"># temps &lt;- temperature_generation(</span></span>
+<span id="cb219-2"><a href="making-cmip6-scenarios.html#cb219-2" tabindex="-1"></a><span class="co">#   Bonn_temps, </span></span>
+<span id="cb219-3"><a href="making-cmip6-scenarios.html#cb219-3" tabindex="-1"></a><span class="co">#   years = c(1973, 2019), </span></span>
+<span id="cb219-4"><a href="making-cmip6-scenarios.html#cb219-4" tabindex="-1"></a><span class="co">#   sim_years = c(2001, 2100), </span></span>
+<span id="cb219-5"><a href="making-cmip6-scenarios.html#cb219-5" tabindex="-1"></a><span class="co">#   adjusted_list,    </span></span>
+<span id="cb219-6"><a href="making-cmip6-scenarios.html#cb219-6" tabindex="-1"></a><span class="co">#   temperature_check_args =</span></span>
+<span id="cb219-7"><a href="making-cmip6-scenarios.html#cb219-7" tabindex="-1"></a><span class="co">#     list( scenario_check_thresholds = c(-5, 15)))</span></span>
 <span id="cb219-8"><a href="making-cmip6-scenarios.html#cb219-8" tabindex="-1"></a></span>
-<span id="cb219-9"><a href="making-cmip6-scenarios.html#cb219-9" tabindex="-1"></a><span class="fu">save_temperature_scenarios</span>(temps,</span>
-<span id="cb219-10"><a href="making-cmip6-scenarios.html#cb219-10" tabindex="-1"></a>                           <span class="st">&quot;data/future_climate&quot;</span>,</span>
-<span id="cb219-11"><a href="making-cmip6-scenarios.html#cb219-11" tabindex="-1"></a>                           <span class="st">&quot;Bonn_futuretemps&quot;</span>)</span></code></pre></div>
+<span id="cb219-9"><a href="making-cmip6-scenarios.html#cb219-9" tabindex="-1"></a><span class="co"># save_temperature_scenarios(temps,</span></span>
+<span id="cb219-10"><a href="making-cmip6-scenarios.html#cb219-10" tabindex="-1"></a><span class="co">#                            &quot;data/future_climate&quot;,</span></span>
+<span id="cb219-11"><a href="making-cmip6-scenarios.html#cb219-11" tabindex="-1"></a><span class="co">#                            &quot;Bonn_futuretemps&quot;)</span></span>
+<span id="cb219-12"><a href="making-cmip6-scenarios.html#cb219-12" tabindex="-1"></a></span>
+<span id="cb219-13"><a href="making-cmip6-scenarios.html#cb219-13" tabindex="-1"></a></span>
+<span id="cb219-14"><a href="making-cmip6-scenarios.html#cb219-14" tabindex="-1"></a><span class="cf">for</span>(scen <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(adjusted_list))</span>
+<span id="cb219-15"><a href="making-cmip6-scenarios.html#cb219-15" tabindex="-1"></a>{</span>
+<span id="cb219-16"><a href="making-cmip6-scenarios.html#cb219-16" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">file.exists</span>(<span class="fu">paste0</span>(<span class="st">&quot;data/future_climate/Bonn_futuretemps_&quot;</span>,</span>
+<span id="cb219-17"><a href="making-cmip6-scenarios.html#cb219-17" tabindex="-1"></a>                       scen,<span class="st">&quot;_&quot;</span>,</span>
+<span id="cb219-18"><a href="making-cmip6-scenarios.html#cb219-18" tabindex="-1"></a>                       <span class="fu">names</span>(adjusted_list)[scen],<span class="st">&quot;.csv&quot;</span>)) )</span>
+<span id="cb219-19"><a href="making-cmip6-scenarios.html#cb219-19" tabindex="-1"></a>  {temp_temp <span class="ot">&lt;-</span> <span class="fu">temperature_generation</span>(Bonn_temps,</span>
+<span id="cb219-20"><a href="making-cmip6-scenarios.html#cb219-20" tabindex="-1"></a>                                   <span class="at">years =</span> <span class="fu">c</span>(<span class="dv">1973</span>, <span class="dv">2019</span>),</span>
+<span id="cb219-21"><a href="making-cmip6-scenarios.html#cb219-21" tabindex="-1"></a>                                   <span class="at">sim_years =</span> <span class="fu">c</span>(<span class="dv">2001</span>, <span class="dv">2100</span>),</span>
+<span id="cb219-22"><a href="making-cmip6-scenarios.html#cb219-22" tabindex="-1"></a>                                   adjusted_list[scen],  </span>
+<span id="cb219-23"><a href="making-cmip6-scenarios.html#cb219-23" tabindex="-1"></a>                                   <span class="at">temperature_check_args =</span> </span>
+<span id="cb219-24"><a href="making-cmip6-scenarios.html#cb219-24" tabindex="-1"></a>                                     <span class="fu">list</span>( <span class="at">scenario_check_thresholds =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">15</span>)))</span>
+<span id="cb219-25"><a href="making-cmip6-scenarios.html#cb219-25" tabindex="-1"></a>  <span class="fu">write.csv</span>(temp_temp[[<span class="dv">1</span>]],<span class="fu">paste0</span>(<span class="st">&quot;data/future_climate2/Bonn_futuretemps_&quot;</span>,scen,<span class="st">&quot;_&quot;</span>,<span class="fu">names</span>(adjusted_list)[scen],<span class="st">&quot;.csv&quot;</span>),</span>
+<span id="cb219-26"><a href="making-cmip6-scenarios.html#cb219-26" tabindex="-1"></a>                             <span class="at">row.names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb219-27"><a href="making-cmip6-scenarios.html#cb219-27" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;Processed object&quot;</span>,scen,<span class="st">&quot;of&quot;</span>, <span class="fu">length</span>(adjusted_list)))</span>
+<span id="cb219-28"><a href="making-cmip6-scenarios.html#cb219-28" tabindex="-1"></a>  </span>
+<span id="cb219-29"><a href="making-cmip6-scenarios.html#cb219-29" tabindex="-1"></a>  }</span>
+<span id="cb219-30"><a href="making-cmip6-scenarios.html#cb219-30" tabindex="-1"></a>}</span></code></pre></div>
 <p>Definitely make sure to save the data now! We don’t want to have to wait for this again.</p>
 <p>Now we can calculate temperature responses based on these records. We can do this efficiently with the <code>tempResponse_daily_list</code> function. The models I’ll select for the calculation are the Dynamic Model for chill accumulation, the GDH model for heat accumulation and a simple model to compute frost hours.</p>
 <div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="making-cmip6-scenarios.html#cb220-1" tabindex="-1"></a>frost_model <span class="ot">&lt;-</span> <span class="cf">function</span>(x)</span>
@@ -1382,7 +1404,7 @@ ACCESS-CM2
 ## [1] &quot;time series labels&quot;</code></pre>
 <p>As you can see, this function had two effects. It produced a plot and it returned a short list containing the message “time series labels”. This message isn’t too interesting now, but it will later contain more content. If we want to just store this information rather than immediately displaying it in our output, we can assign the plotting command to a new object (as in <code>info &lt;- plot_climate_scenarios(...)</code>). The function will then just produce its <strong>side effect</strong>, which is the plot itself.</p>
 <p>Now we run through the same process for all the future climate scenarios. For each one, we add the climate scenario to the <code>chills</code> object (<code>make_climate_scenario</code> has an argument <code>add_to</code>, where we can specify that). As a preparatory step, we’ll have to identify the data that belong to specific combinations of SSP and Time.</p>
-<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="making-cmip6-scenarios.html#cb224-1" tabindex="-1"></a>SSPs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ssp126&quot;</span>, <span class="st">&quot;ssp245&quot;</span>, <span class="st">&quot;ssp585&quot;</span>)</span>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="making-cmip6-scenarios.html#cb224-1" tabindex="-1"></a>SSPs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ssp126&quot;</span>, <span class="st">&quot;ssp245&quot;</span>, <span class="st">&quot;ssp370&quot;</span>, <span class="st">&quot;ssp585&quot;</span>)</span>
 <span id="cb224-2"><a href="making-cmip6-scenarios.html#cb224-2" tabindex="-1"></a>Times <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2050</span>, <span class="dv">2085</span>)</span>
 <span id="cb224-3"><a href="making-cmip6-scenarios.html#cb224-3" tabindex="-1"></a></span>
 <span id="cb224-4"><a href="making-cmip6-scenarios.html#cb224-4" tabindex="-1"></a>list_ssp <span class="ot">&lt;-</span> </span>
@@ -1410,15 +1432,16 @@ ACCESS-CM2
 <span id="cb224-26"><a href="making-cmip6-scenarios.html#cb224-26" tabindex="-1"></a>    <span class="fu">names</span>(chill) <span class="ot">&lt;-</span> list_gcm[list_ssp <span class="sc">==</span> SSP <span class="sc">&amp;</span> list_time <span class="sc">==</span> Time]</span>
 <span id="cb224-27"><a href="making-cmip6-scenarios.html#cb224-27" tabindex="-1"></a>    <span class="cf">if</span>(SSP <span class="sc">==</span> <span class="st">&quot;ssp126&quot;</span>) SSPcaption <span class="ot">&lt;-</span> <span class="st">&quot;SSP1&quot;</span></span>
 <span id="cb224-28"><a href="making-cmip6-scenarios.html#cb224-28" tabindex="-1"></a>    <span class="cf">if</span>(SSP <span class="sc">==</span> <span class="st">&quot;ssp245&quot;</span>) SSPcaption <span class="ot">&lt;-</span> <span class="st">&quot;SSP2&quot;</span></span>
-<span id="cb224-29"><a href="making-cmip6-scenarios.html#cb224-29" tabindex="-1"></a>    <span class="cf">if</span>(SSP <span class="sc">==</span> <span class="st">&quot;ssp585&quot;</span>) SSPcaption <span class="ot">&lt;-</span> <span class="st">&quot;SSP5&quot;</span>    </span>
-<span id="cb224-30"><a href="making-cmip6-scenarios.html#cb224-30" tabindex="-1"></a>    <span class="cf">if</span>(Time <span class="sc">==</span> <span class="st">&quot;2050&quot;</span>) Time_caption <span class="ot">&lt;-</span> <span class="st">&quot;2050&quot;</span></span>
-<span id="cb224-31"><a href="making-cmip6-scenarios.html#cb224-31" tabindex="-1"></a>    <span class="cf">if</span>(Time <span class="sc">==</span> <span class="st">&quot;2085&quot;</span>) Time_caption <span class="ot">&lt;-</span> <span class="st">&quot;2085&quot;</span></span>
-<span id="cb224-32"><a href="making-cmip6-scenarios.html#cb224-32" tabindex="-1"></a>    chills <span class="ot">&lt;-</span> chill <span class="sc">%&gt;%</span> </span>
-<span id="cb224-33"><a href="making-cmip6-scenarios.html#cb224-33" tabindex="-1"></a>      <span class="fu">make_climate_scenario</span>(</span>
-<span id="cb224-34"><a href="making-cmip6-scenarios.html#cb224-34" tabindex="-1"></a>        <span class="at">caption =</span> <span class="fu">c</span>(SSPcaption,</span>
-<span id="cb224-35"><a href="making-cmip6-scenarios.html#cb224-35" tabindex="-1"></a>                    Time_caption),</span>
-<span id="cb224-36"><a href="making-cmip6-scenarios.html#cb224-36" tabindex="-1"></a>        <span class="at">add_to =</span> chills)</span>
-<span id="cb224-37"><a href="making-cmip6-scenarios.html#cb224-37" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb224-29"><a href="making-cmip6-scenarios.html#cb224-29" tabindex="-1"></a>    <span class="cf">if</span>(SSP <span class="sc">==</span> <span class="st">&quot;ssp370&quot;</span>) SSPcaption <span class="ot">&lt;-</span> <span class="st">&quot;SSP3&quot;</span></span>
+<span id="cb224-30"><a href="making-cmip6-scenarios.html#cb224-30" tabindex="-1"></a>    <span class="cf">if</span>(SSP <span class="sc">==</span> <span class="st">&quot;ssp585&quot;</span>) SSPcaption <span class="ot">&lt;-</span> <span class="st">&quot;SSP5&quot;</span>    </span>
+<span id="cb224-31"><a href="making-cmip6-scenarios.html#cb224-31" tabindex="-1"></a>    <span class="cf">if</span>(Time <span class="sc">==</span> <span class="st">&quot;2050&quot;</span>) Time_caption <span class="ot">&lt;-</span> <span class="st">&quot;2050&quot;</span></span>
+<span id="cb224-32"><a href="making-cmip6-scenarios.html#cb224-32" tabindex="-1"></a>    <span class="cf">if</span>(Time <span class="sc">==</span> <span class="st">&quot;2085&quot;</span>) Time_caption <span class="ot">&lt;-</span> <span class="st">&quot;2085&quot;</span></span>
+<span id="cb224-33"><a href="making-cmip6-scenarios.html#cb224-33" tabindex="-1"></a>    chills <span class="ot">&lt;-</span> chill <span class="sc">%&gt;%</span> </span>
+<span id="cb224-34"><a href="making-cmip6-scenarios.html#cb224-34" tabindex="-1"></a>      <span class="fu">make_climate_scenario</span>(</span>
+<span id="cb224-35"><a href="making-cmip6-scenarios.html#cb224-35" tabindex="-1"></a>        <span class="at">caption =</span> <span class="fu">c</span>(SSPcaption,</span>
+<span id="cb224-36"><a href="making-cmip6-scenarios.html#cb224-36" tabindex="-1"></a>                    Time_caption),</span>
+<span id="cb224-37"><a href="making-cmip6-scenarios.html#cb224-37" tabindex="-1"></a>        <span class="at">add_to =</span> chills)</span>
+<span id="cb224-38"><a href="making-cmip6-scenarios.html#cb224-38" tabindex="-1"></a>}</span></code></pre></div>
 <p>Now we have everything we need to plot the results of our climate change analysis:</p>
 <div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="making-cmip6-scenarios.html#cb225-1" tabindex="-1"></a>info_chill <span class="ot">&lt;-</span></span>
 <span id="cb225-2"><a href="making-cmip6-scenarios.html#cb225-2" tabindex="-1"></a>  <span class="fu">plot_climate_scenarios</span>(</span>
@@ -1468,7 +1491,7 @@ ACCESS-CM2
 2
 </td>
 <td style="text-align:left;">
-CNRM-CM6-1-HR
+CMCC-ESM2
 </td>
 </tr>
 <tr>
@@ -1476,7 +1499,7 @@ CNRM-CM6-1-HR
 3
 </td>
 <td style="text-align:left;">
-CNRM-ESM2-1
+CNRM-CM6-1-HR
 </td>
 </tr>
 <tr>
@@ -1484,7 +1507,7 @@ CNRM-ESM2-1
 4
 </td>
 <td style="text-align:left;">
-EC-Earth3-Veg-LR
+CNRM-ESM2-1
 </td>
 </tr>
 <tr>
@@ -1492,7 +1515,7 @@ EC-Earth3-Veg-LR
 5
 </td>
 <td style="text-align:left;">
-FGOALS-g3
+EC-Earth3-Veg-LR
 </td>
 </tr>
 <tr>
@@ -1500,7 +1523,7 @@ FGOALS-g3
 6
 </td>
 <td style="text-align:left;">
-FIO-ESM-2-0
+FGOALS-g3
 </td>
 </tr>
 <tr>
@@ -1508,7 +1531,7 @@ FIO-ESM-2-0
 7
 </td>
 <td style="text-align:left;">
-GFDL-ESM4
+FIO-ESM-2-0
 </td>
 </tr>
 <tr>
@@ -1516,7 +1539,7 @@ GFDL-ESM4
 8
 </td>
 <td style="text-align:left;">
-INM-CM4-8
+GFDL-ESM4
 </td>
 </tr>
 <tr>
@@ -1524,7 +1547,7 @@ INM-CM4-8
 9
 </td>
 <td style="text-align:left;">
-INM-CM5-0
+INM-CM4-8
 </td>
 </tr>
 <tr>
@@ -1532,7 +1555,7 @@ INM-CM5-0
 10
 </td>
 <td style="text-align:left;">
-IPSL-CM6A-LR
+INM-CM5-0
 </td>
 </tr>
 <tr>
@@ -1540,7 +1563,7 @@ IPSL-CM6A-LR
 11
 </td>
 <td style="text-align:left;">
-AWI-CM-1-1-MR
+IPSL-CM6A-LR
 </td>
 </tr>
 <tr>
@@ -1548,7 +1571,7 @@ AWI-CM-1-1-MR
 12
 </td>
 <td style="text-align:left;">
-MIROC-ES2L
+AWI-CM-1-1-MR
 </td>
 </tr>
 <tr>
@@ -1581,22 +1604,6 @@ MRI-ESM2-0
 </td>
 <td style="text-align:left;">
 NESM3
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-17
-</td>
-<td style="text-align:left;">
-CanESM5
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-18
-</td>
-<td style="text-align:left;">
-CMCC-ESM2
 </td>
 </tr>
 </tbody>
