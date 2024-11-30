@@ -107,8 +107,8 @@ for(nam in names(chills[[1]]$data))
                               ch)
   }
 
-# We add another column called 'Scenario' and label all rows as 'Historic' 
-past_simulated["Scenario"] <- "Historic"
+# We add another column called 'Scenario' and label all rows as 'Historical' 
+past_simulated["Scenario"] <- "Historical"
 
 kable(head(past_simulated))  %>%
   kable_styling("striped", position = "left",font_size = 8)
@@ -383,7 +383,7 @@ All the basics are there, but we need a few adjustments, mainly to the legend. F
 
 plot <- both_plots +
            plot_layout(guides = "collect",
-                       widths = c(1,rep(1.8,length(future_plot_list))))
+                       widths = c(1,rep(2,length(future_plot_list))))
          
 ```
 
@@ -481,7 +481,7 @@ for(y in time_points)
 plot <- (past_plot +
            future_plot_list +
            plot_layout(guides = "collect",
-                       widths = c(1,rep(1.8,length(future_plot_list))))
+                       widths = c(1,rep(2,length(future_plot_list))))
          ) & theme(legend.position = "bottom",
                    legend.text = element_text(size = 8),
                    legend.title = element_text(size = 10),
@@ -559,7 +559,7 @@ for(y in time_points)
 plot <- (past_plot +
            future_plot_list +
            plot_layout(guides = "collect",
-                       widths = c(1,rep(1.8,length(future_plot_list))))
+                       widths = c(1,rep(2,length(future_plot_list))))
          ) & theme(legend.position = "bottom",
                    legend.text = element_text(size = 8),
                    legend.title = element_text(size = 10),
@@ -642,7 +642,7 @@ plot_scenarios_gg <- function(past_observed,
   plot <- (past_plot +
              future_plot_list +
              plot_layout(guides = "collect",
-                         widths = c(1,rep(1.8,length(future_plot_list))))
+                         widths = c(1,rep(2,length(future_plot_list))))
            ) & theme(legend.position = "bottom",
                      legend.text = element_text(size = 8),
                      legend.title = element_text(size = 10),
@@ -660,23 +660,23 @@ Now we can produce the same outputs a bit more quickly:
 
 
 
-plot_scenarios_gg(past_observed=past_observed,
-                  past_simulated=past_simulated,
-                  future_data=future_data,
-                  metric="GDH",
-                  axis_label="Heat (in Growing Degree Hours)",
+plot_scenarios_gg(past_observed = past_observed,
+                  past_simulated = past_simulated,
+                  future_data = future_data,
+                  metric = "GDH",
+                  axis_label = "Heat (in Growing Degree Hours)",
                   time_points = c(2050, 2085))
-plot_scenarios_gg(past_observed=past_observed,
-                  past_simulated=past_simulated,
-                  future_data=future_data,
-                  metric="Chill_Portions",
-                  axis_label="Chill (in Chill Portions)",
+plot_scenarios_gg(past_observed = past_observed,
+                  past_simulated = past_simulated,
+                  future_data = future_data,
+                  metric = "Chill_Portions",
+                  axis_label = "Chill (in Chill Portions)",
                   time_points = c(2050, 2085))
-plot_scenarios_gg(past_observed=past_observed,
-                  past_simulated=past_simulated,
-                  future_data=future_data,
-                  metric="Frost_H",
-                  axis_label="Frost duration (in hours)",
+plot_scenarios_gg(past_observed = past_observed,
+                  past_simulated = past_simulated,
+                  future_data = future_data,
+                  metric = "Frost_H",
+                  axis_label = "Frost duration (in hours)",
                   time_points = c(2050, 2085))
 
 

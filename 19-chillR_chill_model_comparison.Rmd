@@ -19,7 +19,7 @@ Besides practical usefulness, Safe Winter Chill also offers an opportunity for r
 A list of 13 chill metrics has recently been compiled and published by [Eduardo Fernandez](https://scholar.google.de/citations?hl=de&user=ibSma_AAAAAJ), whose [recent paper [@fernandez2020importance]](https://www.sciencedirect.com/science/article/abs/pii/S1161030120301106) provides the blueprint for the present analysis. Eduardo has compiled these models in the `dormancyR` package, which he has made [available via GitHub](https://github.com/EduardoFernandezC/dormancyR). Using the `devtools` package, we can install this directly from github. We also need `chillR`, because Eduardo did not include in this package the chill models that are already contained in `chillR`.
 Let's install the `dormancyR` package, load `dormancyR` and `chillR` and check what models are available there. We'll also design nicer names for them that we'll use for the plots later.
 
-```{r,echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 
 library(chillR)
 library(dormancyR)
@@ -29,7 +29,7 @@ library(kableExtra)
 library(patchwork)
 library(gganimate)
 
-SSPs <- c("ssp126", "ssp245", "ssp585")
+SSPs <- c("ssp126", "ssp245", "ssp370", "ssp585")
 Times <- c(2050, 2085)
 ```
 
@@ -77,12 +77,12 @@ model_labels = c("Rate of Chill",
 ```
 
 ```{r, eval=FALSE}
-data.frame(Metric=model_labels,'Function name'=metrics)
+data.frame(Metric = model_labels, 'Function name' = metrics)
 ```
 
 ```{r, echo=FALSE}
 
-kable(data.frame(Metric=model_labels,'Function name'=metrics))  %>%
+kable(data.frame(Metric = model_labels,'Function name' = metrics))  %>%
   kable_styling("striped", position = "left",font_size = 10)
 ```
 
@@ -162,11 +162,11 @@ write.csv(past_observed,
 
 ```
 
-Now we apply similar procedures to the future data. Since we have four scenarios again here, it makes sense to design this as a loop:
+Now we apply similar procedures to the future data. Since we have eight scenarios again here, it makes sense to design this as a loop:
 
 ```{r, eval=FALSE}
 
-SSPs <- c("ssp126", "ssp245", "ssp585")
+SSPs <- c("ssp126", "ssp245","ssp370", "ssp585")
 Times <- c(2050, 2085)
 
 
@@ -243,7 +243,7 @@ chill_observed <- read_tab("data/future_climate/Bonn_multichill_305_59_observed.
 
 
 chills <- make_climate_scenario(chill_past_scenarios,
-                                caption = "Historic",
+                                caption = "Historical",
                                 historic_data = chill_observed,
                                 time_series = TRUE)
 
@@ -255,6 +255,7 @@ for(SSP in SSPs)
       paste0("Bonn_multichill_305_59_",Time,"_",SSP))
     if(SSP == "ssp126") SSPcaption <- "SSP1"
     if(SSP == "ssp245") SSPcaption <- "SSP2"
+    if(SSP == "ssp370") SSPcaption <- "SSP3"
     if(SSP == "ssp585") SSPcaption <- "SSP5"    
     if(Time == "2050") Time_caption <- "2050"
     if(Time == "2085") Time_caption <- "2085"
@@ -272,11 +273,11 @@ Now we want to make a heat map of Safe Winter Chill, using the `ggplot2` functio
 
 for(i in 1:length(chills))
    {ch <- chills[[i]]
-   if(ch$caption[1] == "Historic")
+   if(ch$caption[1] == "Historical")
      {GCMs <- rep("none",length(names(ch$data)))
       SSPs <- rep("none",length(names(ch$data)))
       Years <- as.numeric(ch$labels)
-      Scenario <- rep("Historic",
+      Scenario <- rep("Historical",
                       length(names(ch$data)))} else
                         {GCMs <- names(ch$data)
                         SSPs <- rep(ch$caption[1],
@@ -343,7 +344,7 @@ Now can start working on the design. Let's choose the black and white scheme and
 p_future <-
   p_future +
   theme_bw(base_size = 15) +
-  theme(axis.text = element_text(size=8))
+  theme(axis.text = element_text(size=6))
 
 p_future
 ```
@@ -370,7 +371,7 @@ p_future <-
   theme(axis.text.x = element_text(angle = 75, 
                                    hjust = 1,
                                    vjust = 1)) +
-  labs(fill = "Change in\nSafe Winter Chill\nsince 1975") +
+  labs(fill = "Change in\nSafe Winter Chill\nsince 1980") +
   scale_y_discrete(labels = model_labels) +
   ylab("Chill metric")
 
@@ -394,7 +395,7 @@ p_past<-
 p_past<-
   p_past +
   theme_bw(base_size = 15) +
-  theme(axis.text = element_text(size = 8))
+  theme(axis.text = element_text(size = 6))
 
 p_past<-
   p_past +
@@ -408,7 +409,7 @@ p_past<-
 
 p_past<-
   p_past +
-  labs(fill = "Change in\nSafe Winter Chill\nsince 1975") +
+  labs(fill = "Change in\nSafe Winter Chill\nsince 1980") +
   scale_y_discrete(labels = model_labels) +
   ylab("Chill metric")
 
@@ -447,10 +448,13 @@ hist_results$SSP <- "SSP1"
 hist_results_2 <- hist_results
 hist_results_2$SSP <- "SSP2"
 hist_results_3 <- hist_results
-hist_results_3$SSP <- "SSP5"
+hist_results_3$SSP <- "SSP3"
+hist_results_4 <- hist_results
+hist_results_4$SSP <- "SSP5"
 hist_results <- rbind(hist_results,
                       hist_results_2,
-                      hist_results_3)
+                      hist_results_3,
+                      hist_results_4)
 
 future_results <- results[which(!results$GCM == "none"),]
 
@@ -488,9 +492,9 @@ chill_change_plot<-
                           levels = metrics))) +
   geom_line(lwd = 1.3) +
   facet_wrap(~SSP,
-             nrow = 3) +
-  theme_bw(base_size = 15) +
-  labs(col = "Change in\nSafe Winter Chill\nsince 1975") +
+             nrow = 4) +
+  theme_bw(base_size = 10) +
+  labs(col = "Change in\nSafe Winter Chill\nsince 1980") +
   scale_color_discrete(labels = model_labels) +
   scale_y_continuous(labels = scales::percent) +
   theme(strip.background = element_blank(),
@@ -512,13 +516,13 @@ library(transformr)
 ccp<-chill_change_plot +
   transition_reveal(Year)
 
-animate(ccp)
+animate(ccp, fps = 10)
 
 anim_save("data/chill_comparison_animation.gif",
           animation = last_animation())
 ```
 
-![Animation of chill development over time, relative to 1975 and evaluated with 13 chill models (note that this was loaded from the image we just produced - real-time generation did not work in the knitting procedure that produced this book)](data/chill_comparison_animation.gif)
+![Animation of chill development over time, relative to 1980 and evaluated with 13 chill models (note that this was loaded from the image we just produced - real-time generation did not work in the knitting procedure that produced this book)](data/chill_comparison_animation.gif)
 
 
 ## `Exercises` on chill model comparison {-#exercises_chill_model_comparison}
