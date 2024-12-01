@@ -153,7 +153,7 @@ $$Temperature \to Phenology$$
 As you can see, this theory doesn't involve time. The reason why we were able to find statistical relationships earlier is not that time (as in the calendar year) actually affects phenology - it is that temperatures have been rising over the years, mainly in response to anthropogenic global warming.
 
 $$Time \to Temperature$$
-Well, actually this is $$Time \to GreenhouseGasEmissions \to ClimateForcing \to Temperature$$
+Well, actually this is $$Time \to GreenhouseGasConcentrations \to ClimateForcing \to Temperature$$
 Since temperature, especially at the local scale, is subject to considerable random variation, this relationship may not be particularly strong. The noise in this relationship can easily keep us from detecting the actual response of tree phenology during our time series.
 
 The full causal diagram of these three variables (without the greenhouse effect part) is $$Time \to Temperature \to Phenology$$
@@ -162,7 +162,7 @@ Sometimes we have no data on the intermediate steps in such a diagram. In such c
 
 ## Temperature correlations
 
-Now that we clarified that it would make more sense to narrow in on the temperature-phenology relationship, we gained some conceptual clarity, but we are faced with a much greater statistical challenge. In correlating years with bloom dates, we had just two series of numbers to look at, since we had exactly one bloom date per year. Temperature, in contrast, is a variable we can measure at different temporal scales. If we just look at the average annual temperature, the statistical challenge is similar to using just the year number. Let's see if we can find a correlation for this. You may have to click the button to download weather data first. I'd suggest you save it then under `data/TMaxTMin1958-2019_patched.csv`. 
+Now that we have clarified that it would make more sense to narrow in on the temperature-phenology relationship, we gained some conceptual clarity, but we are faced with a much greater statistical challenge. In correlating years with bloom dates, we had just two series of numbers to look at, since we had exactly one bloom date per year. Temperature, in contrast, is a variable we can measure at different temporal scales. If we just look at the average annual temperature, the statistical challenge is similar to using just the year number. Let's see if we can find a correlation for this. You may have to click the button to download weather data first. I'd suggest you save it then under `data/TMaxTMin1958-2019_patched.csv`. 
 
 ```{r, echo=FALSE}
 temperature <- read_tab("data/TMaxTMin1958-2019_patched.csv")
