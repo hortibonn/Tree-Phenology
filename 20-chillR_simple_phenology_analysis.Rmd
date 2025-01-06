@@ -24,7 +24,7 @@ If you want to work with this example on your own computer, you can download the
 
 ```{r, echo=FALSE}
 
-Alex <- read.csv("data/Alexander_Lucas_bloom_1958_2019.csv")
+Alex <- read_tab("data/Alexander_Lucas_bloom_1958_2019.csv")
 
 Alex %>% download_this(
     output_name = "Alexander_Lucas_bloom_1958_2019",

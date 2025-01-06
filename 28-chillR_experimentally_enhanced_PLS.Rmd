@@ -13,6 +13,7 @@ Yes, we can! And that is what we did in a two-winter experiment in Campus Klein-
 
 ```{r echo = FALSE, message = FALSE}
 library(cowplot)
+library(magick)
 ggdraw() + draw_image("pictures/PLS_exp_outside.jpg", -0.36, 0, 1, 1, 0.35) +
   draw_image("pictures/PLS_exp_unheated.jpg", 0.09, 0, 0.8, 1, 0.415) +
   draw_image("pictures/PLS_exp_heated.jpg", 0.34, 0, 1, 1, 0.35) +
