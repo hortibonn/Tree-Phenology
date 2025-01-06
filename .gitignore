@@ -19,6 +19,9 @@ _bookdown_files/
 Book_files/
 docs/
 
+# Folders
+cmip6_downloaded/
+
 # Cache files
 .Rapp.history
 .Rbuildignore
