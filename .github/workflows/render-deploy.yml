@@ -52,7 +52,8 @@ jobs:
           libfribidi-dev \
           libharfbuzz-dev \
           rustc \
-          cargo
+          cargo \
+          libmagick++-dev
       
       # Step 3: Set up Pandoc
       - name: Install Pandoc
