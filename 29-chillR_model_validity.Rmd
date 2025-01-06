@@ -91,7 +91,7 @@ past_weather$SSP_Time <- "Past"
 future_temps <- load_temperature_scenarios("data/future_climate",
                                            "Bonn_futuretemps")
 
-SSPs <- c("ssp126", "ssp245", "ssp585")
+SSPs <- c("ssp126", "ssp245", "ssp370", "ssp585")
 Times <- c(2050, 2085)
 
 list_ssp <- 
@@ -129,6 +129,7 @@ for(SSP in SSPs)
 
 results$SSP[results$SSP == "ssp126"] <- "SSP1"
 results$SSP[results$SSP == "ssp245"] <- "SSP2"
+results$SSP[results$SSP == "ssp370"] <- "SSP3"
 results$SSP[results$SSP == "ssp585"] <- "SSP5"
 
 results$SSP_Time <- paste0(results$SSP," ",results$Time)
@@ -178,21 +179,25 @@ ggplot(hull_temps,
            fill = factor(SSP_Time))) +
   geom_polygon() +
   facet_wrap(vars(month_name)) +
-  scale_fill_manual(name = "Scenario",
-                    breaks = c("Past",
-                               "SSP1 2050",
-                               "SSP1 2085",
-                               "SSP2 2050",
-                               "SSP2 2085",
-                               "SSP5 2050",
-                               "SSP5 2085"),
-                    values = c("black",
-                               alpha("light green", 0.3),
-                               alpha("dark green", 0.3),
-                               alpha("coral", 0.3),
-                               alpha("dark red", 0.3),
-                               alpha("light blue", 0.3),
-                               alpha("dark blue", 0.3))) +
+  scale_fill_manual(name="Scenario",
+                    breaks=c("Past",
+                             "SSP1 2050",
+                             "SSP1 2085",
+                             "SSP2 2050",
+                             "SSP2 2085",                            
+                             "SSP3 2050",
+                             "SSP3 2085",
+                             "SSP5 2050",
+                             "SSP5 2085"),
+                    values=c("black",
+                             alpha("light green",0.4),
+                             alpha("dark green",0.4),
+                             alpha("coral",0.4),
+                             alpha("dark red",0.4),
+                             alpha("yellow",0.4),
+                             alpha("orange",0.4),                            
+                             alpha("light blue",0.4),
+                             alpha("dark blue",0.4))) +
   theme_bw(base_size = 15)
 
 ```
@@ -207,21 +212,25 @@ ggplot(hull_temps[which(hull_temps$Month %in% c(10,11,12,1,2,3)),],
            fill = factor(SSP_Time))) +
   geom_polygon() +
   facet_wrap(vars(month_name)) +
-  scale_fill_manual(name = "Scenario",
-                    breaks = c("Past",
-                               "SSP1 2050",
-                               "SSP1 2085",
-                               "SSP2 2050",
-                               "SSP2 2085",
-                               "SSP5 2050",
-                               "SSP5 2085"),
-                    values = c("black",
-                               alpha("light green", 0.3),
-                               alpha("dark green", 0.3),
-                               alpha("coral", 0.3),
-                               alpha("dark red", 0.3),
-                               alpha("light blue", 0.3),
-                               alpha("dark blue", 0.3))) +
+  scale_fill_manual(name="Scenario",
+                    breaks=c("Past",
+                             "SSP1 2050",
+                             "SSP1 2085",
+                             "SSP2 2050",
+                             "SSP2 2085",                            
+                             "SSP3 2050",
+                             "SSP3 2085",
+                             "SSP5 2050",
+                             "SSP5 2085"),
+                    values=c("black",
+                             alpha("light green",0.4),
+                             alpha("dark green",0.4),
+                             alpha("coral",0.4),
+                             alpha("dark red",0.4),
+                             alpha("yellow",0.4),
+                             alpha("orange",0.4),                            
+                             alpha("light blue",0.4),
+                             alpha("dark blue",0.4))) +
   theme_bw(base_size = 15)
 
 
@@ -266,21 +275,25 @@ ggplot(hull_temps_enhanced[
            fill = factor(SSP_Time))) +
   geom_polygon() +
   facet_wrap(vars(month_name)) +
-  scale_fill_manual(name = "Scenario",
-                    breaks = c("Past enhanced",
-                               "SSP1 2050",
-                               "SSP1 2085",
-                               "SSP2 2050",
-                               "SSP2 2085",
-                               "SSP5 2050",
-                               "SSP5 2085"),
-                    values = c("black",
-                               alpha("light green", 0.3),
-                               alpha("dark green", 0.3),
-                               alpha("coral", 0.3),
-                               alpha("dark red", 0.3),
-                               alpha("light blue", 0.3),
-                               alpha("dark blue", 0.3))) +
+  scale_fill_manual(name="Scenario",
+                    breaks=c("Past enhanced",
+                             "SSP1 2050",
+                             "SSP1 2085",
+                             "SSP2 2050",
+                             "SSP2 2085",                            
+                             "SSP3 2050",
+                             "SSP3 2085",
+                             "SSP5 2050",
+                             "SSP5 2085"),
+                    values=c("black",
+                             alpha("light green",0.4),
+                             alpha("dark green",0.4),
+                             alpha("coral",0.4),
+                             alpha("dark red",0.4),
+                             alpha("yellow",0.4),
+                             alpha("orange",0.4),                            
+                             alpha("light blue",0.4),
+                             alpha("dark blue",0.4))) +
   theme_bw(base_size = 15)
 
 ```
@@ -315,21 +328,25 @@ ggplot(hull_temps_both[
            fill = factor(SSP_Time))) +
   geom_polygon() +
   facet_wrap(vars(month_name)) +
-  scale_fill_manual(name = "Scenario",
-                    breaks = c("Past combined",
-                               "SSP1 2050",
-                               "SSP1 2085",
-                               "SSP2 2050",
-                               "SSP2 2085",
-                               "SSP5 2050",
-                               "SSP5 2085"),
-                    values = c("black",
-                               alpha("light green", 0.3),
-                               alpha("dark green", 0.3),
-                               alpha("coral", 0.3),
-                               alpha("dark red", 0.3),
-                               alpha("light blue", 0.3),
-                               alpha("dark blue", 0.3))) +
+  scale_fill_manual(name="Scenario",
+                    breaks=c("Past combined",
+                             "SSP1 2050",
+                             "SSP1 2085",
+                             "SSP2 2050",
+                             "SSP2 2085",                            
+                             "SSP3 2050",
+                             "SSP3 2085",
+                             "SSP5 2050",
+                             "SSP5 2085"),
+                    values=c("black",
+                             alpha("light green",0.4),
+                             alpha("dark green",0.4),
+                             alpha("coral",0.4),
+                             alpha("dark red",0.4),
+                             alpha("yellow",0.4),
+                             alpha("orange",0.4),                            
+                             alpha("light blue",0.4),
+                             alpha("dark blue",0.4))) +
   theme_bw(base_size = 15)
 
 
