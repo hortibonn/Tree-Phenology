@@ -599,9 +599,8 @@ div.csl-indent {
 </blockquote>
 <p>This is not only true for statisticians, but for any kind of modelers. It may actually be a bigger problem for modelers without proper statistics training, who may lack sensitivity for all the things that can go wrong.</p>
 <p>So let’s examine the <code>PhenoFlex</code> framework a bit, specifically focusing on the parameter set we determined. With a few quick helper functions, we can examine the temperature response curves during chilling and forcing that are described by the fitted parameters.</p>
-<div class="sourceCode" id="cb422"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb422-1"><a href="phenoflex2.html#cb422-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb422-2"><a href="phenoflex2.html#cb422-2" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb422-3"><a href="phenoflex2.html#cb422-3" tabindex="-1"></a><span class="fu">library</span>(chillR)</span></code></pre></div>
+<div class="sourceCode" id="cb422"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb422-1"><a href="phenoflex2.html#cb422-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb422-2"><a href="phenoflex2.html#cb422-2" tabindex="-1"></a><span class="fu">library</span>(chillR)</span></code></pre></div>
 <div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb423-1"><a href="phenoflex2.html#cb423-1" tabindex="-1"></a>apply_const_temp <span class="ot">&lt;-</span></span>
 <span id="cb423-2"><a href="phenoflex2.html#cb423-2" tabindex="-1"></a>  <span class="cf">function</span>(temp, A0, A1, E0, E1, Tf, slope, <span class="at">portions =</span> <span class="dv">1200</span>, <span class="at">deg_celsius =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb423-3"><a href="phenoflex2.html#cb423-3" tabindex="-1"></a>    {</span>

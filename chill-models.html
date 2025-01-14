@@ -601,7 +601,7 @@ div.csl-indent {
 ##   if(summ==TRUE) return(cumsum(CH_weights)) else
 ##     return(CH_weights)
 ## }
-## &lt;bytecode: 0x555c736b38d0&gt;
+## &lt;bytecode: 0x55c25e0d7d40&gt;
 ## &lt;environment: namespace:chillR&gt;</code></pre>
 <p>This is a pretty basic function that takes an hourly temperature dataset (<code>HourTemp</code>) as input and determines for each hour if temperatures are below 7.2°C and above 0°C. If the argument <code>summ</code> is <code>TRUE</code>, the function returns the cumulative Chilling Hours that have accumulated by every hour of the record. If this argument is <code>FALSE</code>, we just get a list of 1s and 0s to indicate which hours are Chilling Hours and which ones aren’t. The default version of the function is to run it with <code>summ==TRUE</code>, as you can see in the first line of the function. So if you don’t specify anything for the <code>summ</code> argument, it will return the cumulative sum of Chilling Hours.</p>
 <p>We can easily apply this now to our <code>Winters_hours_gap</code> dataset:</p>
@@ -616,7 +616,7 @@ div.csl-indent {
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="chill-models.html#cb41-1" tabindex="-1"></a>Utah_Model</span></code></pre></div>
 <pre><code>## function(HourTemp,summ=TRUE)
 ##   return(step_model(HourTemp,df=data.frame(lower=c(-1000,1.4,2.4,9.1,12.4,15.9,18),upper=c(1.4,2.4,9.1,12.4,15.9,18,1000),weight=c(0,0.5,1,0.5,0,-0.5,-1)),summ=summ))
-## &lt;bytecode: 0x555c73cc2828&gt;
+## &lt;bytecode: 0x55c25eabef48&gt;
 ## &lt;environment: namespace:chillR&gt;</code></pre>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="chill-models.html#cb43-1" tabindex="-1"></a><span class="fu">Utah_Model</span>(Winters_hours_gaps<span class="sc">$</span>Temp)[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>]</span></code></pre></div>
 <pre><code>##   [1]  0.0 -0.5 -1.5 -2.5 -3.5 -4.5 -5.5 -6.0 -6.0 -6.0 -5.5 -5.0 -4.0 -3.0 -2.0
