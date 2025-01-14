@@ -30,17 +30,15 @@ So let's see how we can address this. We'll be focusing on the experimental stat
 ```{r packages_for_map, echo=FALSE, message=FALSE}
 library(chillR)
 library(leaflet)
-library(dplyr)
-library(reshape2)
+library(tidyverse)
 library(kableExtra)
-library(ggplot2)
 library(Kendall)
 library(downloadthis)
 ```
 
 ```{r packages_for_map_fake, eval=FALSE}
 library(leaflet)
-library(dplyr)
+library(tidyverse)
 ```
 
 ```{r, fig.cap="Location of Campus Klein-Altendorf, an experimental station of the University of Bonn"}

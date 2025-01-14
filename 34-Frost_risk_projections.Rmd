@@ -65,6 +65,9 @@ future_temps[future_temps$SSP == "ssp126","SSP_Time"] <-
 future_temps[future_temps$SSP == "ssp245","SSP_Time"] <-
   paste("SSP2", future_temps[future_temps$SSP == "ssp245","Time"])
 
+future_temps[future_temps$SSP == "ssp370","SSP_Time"] <-
+  paste("SSP3", future_temps[future_temps$SSP == "ssp370","Time"])
+
 future_temps[future_temps$SSP == "ssp585","SSP_Time"] <-
   paste("SSP5", future_temps[future_temps$SSP == "ssp585","Time"])
 
@@ -147,15 +150,19 @@ ggplot(hull_temps_both[which(hull_temps_both$Month %in% c(10,11,12,1,2,3)),],
                              "SSP1 2085",
                              "SSP2 2050",
                              "SSP2 2085",
+                             "SSP3 2050",
+                             "SSP3 2085",
                              "SSP5 2050",
                              "SSP5 2085"),
-                    values=c(alpha("black",0.3),
-                             alpha("light green",0.5),
-                             alpha("dark green",0.5),
-                             alpha("coral",0.5),
-                             alpha("dark red",0.5),
-                             alpha("light blue",0.5),
-                             alpha("dark blue",0.5))) +
+                    values=c("black",
+                             alpha("light green",0.4),
+                             alpha("dark green",0.4),
+                             alpha("coral",0.4),
+                             alpha("dark red",0.4),
+                             alpha("yellow",0.4),
+                             alpha("orange",0.4),                 
+                             alpha("light blue",0.4),
+                             alpha("dark blue",0.4))) +
   xlab("Mean daily minimum temperature (°C)") +
   ylab("Mean daily maximum temperature (°C)") +
   theme_bw(base_size = 15)
@@ -181,15 +188,19 @@ ggplot(hull_temps_both_conference[which(hull_temps_both_conference$Month %in% c(
                              "SSP1 2085",
                              "SSP2 2050",
                              "SSP2 2085",
+                             "SSP3 2050",
+                             "SSP3 2085",
                              "SSP5 2050",
                              "SSP5 2085"),
-                    values=c(alpha("black",0.3),
-                             alpha("light green",0.5),
-                             alpha("dark green",0.5),
-                             alpha("coral",0.5),
-                             alpha("dark red",0.5),
-                             alpha("light blue",0.5),
-                             alpha("dark blue",0.5))) +
+                    values=c("black",
+                             alpha("light green",0.4),
+                             alpha("dark green",0.4),
+                             alpha("coral",0.4),
+                             alpha("dark red",0.4),
+                             alpha("yellow",0.4),
+                             alpha("orange",0.4),                 
+                             alpha("light blue",0.4),
+                             alpha("dark blue",0.4))) +
   xlab("Mean daily minimum temperature (°C)") +
   ylab("Mean daily maximum temperature (°C)") +
   theme_bw(base_size = 15)
