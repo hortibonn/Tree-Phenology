@@ -25,8 +25,7 @@ So let's examine the `PhenoFlex` framework a bit, specifically focusing on the p
 
 
 ```{r, message=FALSE,warning=FALSE}
-library(ggplot2)
-library(tidyr)
+library(tidyverse)
 library(chillR)
 
 ```

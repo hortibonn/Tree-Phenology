@@ -81,7 +81,7 @@ The source code of the `PhenoFlex` model is now written in C++, because that app
 
 ```{r}
 library(chillR)
-library(ggplot2)
+library(tidyverse)
 CKA_weather <- read_tab("data/TMaxTMin1958-2019_patched.csv")
 hourtemps <- stack_hourly_temps(CKA_weather, 
                                 latitude = 50.6)
