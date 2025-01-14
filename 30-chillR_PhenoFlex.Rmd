@@ -379,7 +379,7 @@ The `PhenoFlex` framework performed quite convincingly in predicting bloom dates
 These characteristics bode well for use of this modeling framework to predict phenology even under future temperature conditions. All the considerations about *validity domains* etc. still hold, but I'd be a lot more confident in this model than in most previous prediction attempts, where models often did not perform as well, and also fell short of incorporating the state of knowledge on temperature responses during dormancy.
 
 
-## `Exercises` on making valid tree phenology models {-#ex_model_phenoflex}
+## `Exercises` on the `PhenoFlex` model {-#ex_model_phenoflex}
 
 Please document all results of the following assignments in your `learning logbook`.
 
