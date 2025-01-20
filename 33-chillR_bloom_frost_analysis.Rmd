@@ -546,7 +546,8 @@ DuringBloom<-
 ggplot(data = DuringBloom,
        aes(Year,
            Frost_hours)) +
-  geom_col() 
+  geom_col() +
+  ylab("Frost hours")
 
 ```
 
