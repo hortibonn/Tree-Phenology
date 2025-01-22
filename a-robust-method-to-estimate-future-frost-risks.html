@@ -23,7 +23,7 @@
 <meta name="author" content="Eike Luedeling" />
 
 
-<meta name="date" content="2025-01-20" />
+<meta name="date" content="2025-01-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -709,33 +709,38 @@ div.csl-indent {
 <span id="cb483-107"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb483-107" tabindex="-1"></a><span class="fu">write.csv</span>(hull_temps_both_conference, <span class="st">&quot;data/hull_temps_both_conference.csv&quot;</span>,<span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb484"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb484-1"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-1" tabindex="-1"></a>hull_temps_both <span class="ot">&lt;-</span> <span class="fu">read_tab</span>(<span class="st">&quot;data/hull_temps_both.csv&quot;</span>)</span>
 <span id="cb484-2"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-2" tabindex="-1"></a></span>
-<span id="cb484-3"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-3" tabindex="-1"></a><span class="co"># Implement the plot showing the overlap among conditions</span></span>
-<span id="cb484-4"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-4" tabindex="-1"></a><span class="fu">ggplot</span>(hull_temps_both[<span class="fu">which</span>(hull_temps_both<span class="sc">$</span>Month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">12</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)),],</span>
-<span id="cb484-5"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-5" tabindex="-1"></a>       <span class="fu">aes</span>(Tmin, Tmax, <span class="at">fill =</span> <span class="fu">factor</span>(SSP_Time))) <span class="sc">+</span></span>
-<span id="cb484-6"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-6" tabindex="-1"></a>  <span class="fu">geom_polygon</span>() <span class="sc">+</span></span>
-<span id="cb484-7"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-7" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(month_name)) <span class="sc">+</span></span>
-<span id="cb484-8"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-8" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">name=</span><span class="st">&quot;Scenario&quot;</span>,</span>
-<span id="cb484-9"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-9" tabindex="-1"></a>                    <span class="at">breaks=</span><span class="fu">c</span>(<span class="st">&quot;Past combined&quot;</span>,</span>
-<span id="cb484-10"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-10" tabindex="-1"></a>                             <span class="st">&quot;SSP1 2050&quot;</span>,</span>
-<span id="cb484-11"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-11" tabindex="-1"></a>                             <span class="st">&quot;SSP1 2085&quot;</span>,</span>
-<span id="cb484-12"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-12" tabindex="-1"></a>                             <span class="st">&quot;SSP2 2050&quot;</span>,</span>
-<span id="cb484-13"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-13" tabindex="-1"></a>                             <span class="st">&quot;SSP2 2085&quot;</span>,</span>
-<span id="cb484-14"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-14" tabindex="-1"></a>                             <span class="st">&quot;SSP3 2050&quot;</span>,</span>
-<span id="cb484-15"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-15" tabindex="-1"></a>                             <span class="st">&quot;SSP3 2085&quot;</span>,</span>
-<span id="cb484-16"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-16" tabindex="-1"></a>                             <span class="st">&quot;SSP5 2050&quot;</span>,</span>
-<span id="cb484-17"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-17" tabindex="-1"></a>                             <span class="st">&quot;SSP5 2085&quot;</span>),</span>
-<span id="cb484-18"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-18" tabindex="-1"></a>                    <span class="at">values=</span><span class="fu">c</span>(<span class="st">&quot;black&quot;</span>,</span>
-<span id="cb484-19"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-19" tabindex="-1"></a>                             <span class="fu">alpha</span>(<span class="st">&quot;light green&quot;</span>,<span class="fl">0.4</span>),</span>
-<span id="cb484-20"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-20" tabindex="-1"></a>                             <span class="fu">alpha</span>(<span class="st">&quot;dark green&quot;</span>,<span class="fl">0.4</span>),</span>
-<span id="cb484-21"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-21" tabindex="-1"></a>                             <span class="fu">alpha</span>(<span class="st">&quot;coral&quot;</span>,<span class="fl">0.4</span>),</span>
-<span id="cb484-22"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-22" tabindex="-1"></a>                             <span class="fu">alpha</span>(<span class="st">&quot;dark red&quot;</span>,<span class="fl">0.4</span>),</span>
-<span id="cb484-23"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-23" tabindex="-1"></a>                             <span class="fu">alpha</span>(<span class="st">&quot;yellow&quot;</span>,<span class="fl">0.4</span>),</span>
-<span id="cb484-24"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-24" tabindex="-1"></a>                             <span class="fu">alpha</span>(<span class="st">&quot;orange&quot;</span>,<span class="fl">0.4</span>),                 </span>
-<span id="cb484-25"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-25" tabindex="-1"></a>                             <span class="fu">alpha</span>(<span class="st">&quot;light blue&quot;</span>,<span class="fl">0.4</span>),</span>
-<span id="cb484-26"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-26" tabindex="-1"></a>                             <span class="fu">alpha</span>(<span class="st">&quot;dark blue&quot;</span>,<span class="fl">0.4</span>))) <span class="sc">+</span></span>
-<span id="cb484-27"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-27" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Mean daily minimum temperature (°C)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb484-28"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-28" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Mean daily maximum temperature (°C)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb484-29"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-29" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code></pre></div>
+<span id="cb484-3"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-3" tabindex="-1"></a>hull_temps_both<span class="sc">$</span>month_name <span class="ot">&lt;-</span></span>
+<span id="cb484-4"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-4" tabindex="-1"></a>  <span class="fu">factor</span>(hull_temps_both<span class="sc">$</span>Month,</span>
+<span id="cb484-5"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-5" tabindex="-1"></a>         <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>),</span>
+<span id="cb484-6"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-6" tabindex="-1"></a>         <span class="at">labels =</span> month.name[<span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">12</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)])</span>
+<span id="cb484-7"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-7" tabindex="-1"></a></span>
+<span id="cb484-8"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-8" tabindex="-1"></a><span class="co"># Implement the plot showing the overlap among conditions</span></span>
+<span id="cb484-9"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-9" tabindex="-1"></a><span class="fu">ggplot</span>(hull_temps_both[<span class="fu">which</span>(hull_temps_both<span class="sc">$</span>Month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">11</span>,<span class="dv">12</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)),],</span>
+<span id="cb484-10"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-10" tabindex="-1"></a>       <span class="fu">aes</span>(Tmin, Tmax, <span class="at">fill =</span> <span class="fu">factor</span>(SSP_Time))) <span class="sc">+</span></span>
+<span id="cb484-11"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-11" tabindex="-1"></a>  <span class="fu">geom_polygon</span>() <span class="sc">+</span></span>
+<span id="cb484-12"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-12" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(month_name)) <span class="sc">+</span></span>
+<span id="cb484-13"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-13" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">name=</span><span class="st">&quot;Scenario&quot;</span>,</span>
+<span id="cb484-14"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-14" tabindex="-1"></a>                    <span class="at">breaks=</span><span class="fu">c</span>(<span class="st">&quot;Past combined&quot;</span>,</span>
+<span id="cb484-15"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-15" tabindex="-1"></a>                             <span class="st">&quot;SSP1 2050&quot;</span>,</span>
+<span id="cb484-16"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-16" tabindex="-1"></a>                             <span class="st">&quot;SSP1 2085&quot;</span>,</span>
+<span id="cb484-17"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-17" tabindex="-1"></a>                             <span class="st">&quot;SSP2 2050&quot;</span>,</span>
+<span id="cb484-18"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-18" tabindex="-1"></a>                             <span class="st">&quot;SSP2 2085&quot;</span>,</span>
+<span id="cb484-19"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-19" tabindex="-1"></a>                             <span class="st">&quot;SSP3 2050&quot;</span>,</span>
+<span id="cb484-20"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-20" tabindex="-1"></a>                             <span class="st">&quot;SSP3 2085&quot;</span>,</span>
+<span id="cb484-21"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-21" tabindex="-1"></a>                             <span class="st">&quot;SSP5 2050&quot;</span>,</span>
+<span id="cb484-22"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-22" tabindex="-1"></a>                             <span class="st">&quot;SSP5 2085&quot;</span>),</span>
+<span id="cb484-23"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-23" tabindex="-1"></a>                    <span class="at">values=</span><span class="fu">c</span>(<span class="st">&quot;black&quot;</span>,</span>
+<span id="cb484-24"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-24" tabindex="-1"></a>                             <span class="fu">alpha</span>(<span class="st">&quot;light green&quot;</span>,<span class="fl">0.4</span>),</span>
+<span id="cb484-25"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-25" tabindex="-1"></a>                             <span class="fu">alpha</span>(<span class="st">&quot;dark green&quot;</span>,<span class="fl">0.4</span>),</span>
+<span id="cb484-26"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-26" tabindex="-1"></a>                             <span class="fu">alpha</span>(<span class="st">&quot;coral&quot;</span>,<span class="fl">0.4</span>),</span>
+<span id="cb484-27"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-27" tabindex="-1"></a>                             <span class="fu">alpha</span>(<span class="st">&quot;dark red&quot;</span>,<span class="fl">0.4</span>),</span>
+<span id="cb484-28"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-28" tabindex="-1"></a>                             <span class="fu">alpha</span>(<span class="st">&quot;yellow&quot;</span>,<span class="fl">0.4</span>),</span>
+<span id="cb484-29"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-29" tabindex="-1"></a>                             <span class="fu">alpha</span>(<span class="st">&quot;orange&quot;</span>,<span class="fl">0.4</span>),                 </span>
+<span id="cb484-30"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-30" tabindex="-1"></a>                             <span class="fu">alpha</span>(<span class="st">&quot;light blue&quot;</span>,<span class="fl">0.4</span>),</span>
+<span id="cb484-31"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-31" tabindex="-1"></a>                             <span class="fu">alpha</span>(<span class="st">&quot;dark blue&quot;</span>,<span class="fl">0.4</span>))) <span class="sc">+</span></span>
+<span id="cb484-32"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-32" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Mean daily minimum temperature (°C)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb484-33"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-33" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Mean daily maximum temperature (°C)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb484-34"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-34" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code></pre></div>
 <p><img src="Book_files/figure-html/plot_model_validity-1.png" width="672" /></p>
 <p>This <em>convex-hull</em> plot is showing the coverage considering temperatures in CKA between 1958 and 2019 as well as all experimental seasons analyzed in chapter <a href="exp_PLS.html#exp_PLS">Experimentally enhanced PLS</a>. To make the phenology modelling approach work with historic and experimental data, we would need to use phenology records from the same species and cultivar (pear cultivar ‘Conference’). Fortunately, we do have historic records for full bloom for this cultivar between 1958 and 2019. However, we may want to subset the experimental data used for the <em>convex-hull</em> plot to only retain seasons that were more or less normal. This is to reduce the misleading effects we may have introduced by using extremely warm treatments.</p>
 <p>So let’s draw a new <em>convex-hull</em> plot without these unusually warm seasons.</p>
@@ -921,13 +926,13 @@ div.csl-indent {
 <tbody>
 <tr class="odd">
 <td align="left">RMSEP</td>
-<td align="right">12.530207</td>
-<td align="right">4.704829</td>
+<td align="right">9.972836</td>
+<td align="right">3.477322</td>
 </tr>
 <tr class="even">
 <td align="left">RPIQ</td>
-<td align="right">1.616095</td>
-<td align="right">4.304088</td>
+<td align="right">3.434329</td>
+<td align="right">9.849535</td>
 </tr>
 </tbody>
 </table>
