@@ -591,7 +591,7 @@ div.csl-indent {
 </div>
 <div id="frost-risk-for-future-scenarios" class="section level2 hasAnchor" number="34.1">
 <h2><span class="header-section-number">34.1</span> Frost risk for future scenarios<a href="a-robust-method-to-estimate-future-frost-risks.html#frost-risk-for-future-scenarios" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We have seen in the previous chapter the importance of analyzing the risk of spring frost events in temperate fruit trees for historic periods. However, such analysis provides little information for planning strategies to adapt fruit orchards to potential frost events occurring in the future. What we actually need for supporting farmers in making decisions is an assessment of the probability of experiencing frost events (and ideally also their severity) in the future. Such an assessment should consider the prospective impacts of climate change.</p>
+<p>We have seen in the previous chapter the importance of analyzing the risk of spring frost events in temperate fruit trees for historical periods. However, such analysis provides little information for planning strategies to adapt fruit orchards to potential frost events occurring in the future. What we actually need for supporting farmers in making decisions is an assessment of the probability of experiencing frost events (and ideally also their severity) in the future. Such an assessment should consider the prospective impacts of climate change.</p>
 <p>This is not an easy task. On the one hand, spring frosts result from the occurrence of temperatures below the sensitivity threshold of the tree, which varies according to which kind of plant tissue is exposed to the cold. Plants become more sensitive to freezing temperatures as they develop from dormancy to harvest. On the other hand, tree development during and after dormancy is itself driven by temperature, with advancing or delaying effects depending on particular factors such as the species, cultivar and ultimately the place.</p>
 <p>In our lab, we therefore believe that conducting a proper frost risk analysis for future scenarios requires i) a robust method for estimating future temperatures, and ii) a valid modeling framework to predict bloom dates in temperate fruit trees. Fortunately, we may be very close to fulfilling these two requirements as we have seen in chapters <a href="future-temperature-scenarios.html#future-temperature-scenarios">Future temperature scenarios</a> and, most recently, <a href="phenoflex.html#phenoflex">The <code>PhenoFlex</code> model</a>.</p>
 <p>We will use some content of the chapter <a href="model_validity.html#model_validity">Making valid tree phenology models</a>. As you (hopefully) remember, in that chapter we combined our dataset of past conditions in Campus Klein-Altendorf with the simulated conditions from our <a href="exp_PLS.html#exp_PLS">Experimentally enhanced PLS</a> chapter. We used this to determine to what extent the combined temperature domain of these datasets covers the climatic conditions that are projected for future climate scenarios.</p>
@@ -742,13 +742,13 @@ div.csl-indent {
 <span id="cb484-33"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-33" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Mean daily maximum temperature (°C)&quot;</span>) <span class="sc">+</span></span>
 <span id="cb484-34"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb484-34" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">15</span>)</span></code></pre></div>
 <p><img src="Book_files/figure-html/plot_model_validity-1.png" width="672" /></p>
-<p>This <em>convex-hull</em> plot is showing the coverage considering temperatures in CKA between 1958 and 2019 as well as all experimental seasons analyzed in chapter <a href="exp_PLS.html#exp_PLS">Experimentally enhanced PLS</a>. To make the phenology modelling approach work with historic and experimental data, we would need to use phenology records from the same species and cultivar (pear cultivar ‘Conference’). Fortunately, we do have historic records for full bloom for this cultivar between 1958 and 2019. However, we may want to subset the experimental data used for the <em>convex-hull</em> plot to only retain seasons that were more or less normal. This is to reduce the misleading effects we may have introduced by using extremely warm treatments.</p>
+<p>This <em>convex-hull</em> plot is showing the coverage considering temperatures in CKA between 1958 and 2019 as well as all experimental seasons analyzed in chapter <a href="exp_PLS.html#exp_PLS">Experimentally enhanced PLS</a>. To make the phenology modelling approach work with historical and experimental data, we would need to use phenology records from the same species and cultivar (pear cultivar ‘Conference’). Fortunately, we do have historical records for full bloom for this cultivar between 1958 and 2019. However, we may want to subset the experimental data used for the <em>convex-hull</em> plot to only retain seasons that were more or less normal. This is to reduce the misleading effects we may have introduced by using extremely warm treatments.</p>
 <p>So let’s draw a new <em>convex-hull</em> plot without these unusually warm seasons.</p>
 <p><img src="Book_files/figure-html/plot_conference_subset-1.png" width="672" /></p>
 <p>This is not a perfect coverage of course but we don’t have more data (for now) for October and November. There is little we can do to fill the coverage gap as we did not include warmer conditions in our experiments during these months.</p>
 <p><em>We will proceed with these data hoping that in the near future we are able to identify ‘normal seasons’ in the experimental dataset that help us to improve our modelling validity domain.</em></p>
-<p>We can now implement our dormancy modelling framework <code>PhenoFlex</code> by combining historic and experimental records. In this code chunk, we will import and format the data so we can calibrate the model using these records.</p>
-<div class="sourceCode" id="cb485"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb485-1"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-1" tabindex="-1"></a><span class="co"># Import the phenology data for the historic period 1958-2019</span></span>
+<p>We can now implement our dormancy modelling framework <code>PhenoFlex</code> by combining historical and experimental records. In this code chunk, we will import and format the data so we can calibrate the model using these records.</p>
+<div class="sourceCode" id="cb485"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb485-1"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-1" tabindex="-1"></a><span class="co"># Import the phenology data for the historical period 1958-2019</span></span>
 <span id="cb485-2"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-2" tabindex="-1"></a><span class="co"># Note that we are selecting only the Year and full bloom columns</span></span>
 <span id="cb485-3"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-3" tabindex="-1"></a>historic_pheno_conference <span class="ot">&lt;-</span> </span>
 <span id="cb485-4"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-4" tabindex="-1"></a>  <span class="fu">read_tab</span>(<span class="st">&quot;data/Pheno_pear_conference_1958_2019.csv&quot;</span>)[<span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>,</span>
@@ -810,19 +810,19 @@ div.csl-indent {
 <span id="cb485-60"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-60" tabindex="-1"></a>                                                    <span class="dv">2045</span>, <span class="dv">2047</span>, <span class="dv">2048</span>, <span class="dv">2049</span>, <span class="dv">2050</span>, <span class="dv">2051</span>, <span class="dv">2054</span>)),</span>
 <span id="cb485-61"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-61" tabindex="-1"></a>                       <span class="fu">c</span>(<span class="st">&quot;Treatment&quot;</span>, <span class="st">&quot;pheno&quot;</span>)]</span>
 <span id="cb485-62"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-62" tabindex="-1"></a></span>
-<span id="cb485-63"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-63" tabindex="-1"></a><span class="co"># Rename the columns to match the names of the historic dataset</span></span>
+<span id="cb485-63"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-63" tabindex="-1"></a><span class="co"># Rename the columns to match the names of the historical dataset</span></span>
 <span id="cb485-64"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-64" tabindex="-1"></a><span class="fu">colnames</span>(exp_pheno) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;pheno&quot;</span>)</span>
 <span id="cb485-65"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-65" tabindex="-1"></a></span>
 <span id="cb485-66"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-66" tabindex="-1"></a></span>
-<span id="cb485-67"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-67" tabindex="-1"></a><span class="co"># Merge the historic and experimental phenology data</span></span>
+<span id="cb485-67"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-67" tabindex="-1"></a><span class="co"># Merge the historical and experimental phenology data</span></span>
 <span id="cb485-68"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-68" tabindex="-1"></a>pheno_merged <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">filter</span>(historic_pheno_conference, Year <span class="sc">!=</span> <span class="dv">1958</span>),</span>
 <span id="cb485-69"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-69" tabindex="-1"></a>                          exp_pheno)</span>
 <span id="cb485-70"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-70" tabindex="-1"></a></span>
 <span id="cb485-71"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-71" tabindex="-1"></a></span>
-<span id="cb485-72"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-72" tabindex="-1"></a><span class="co"># Merge the historic and experimental phenology data</span></span>
+<span id="cb485-72"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-72" tabindex="-1"></a><span class="co"># Merge the historical and experimental phenology data</span></span>
 <span id="cb485-73"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-73" tabindex="-1"></a>weather_merged <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(past_weather[, <span class="fu">colnames</span>(past_weather) <span class="sc">%in%</span> <span class="fu">names</span>(exp_weather)],</span>
 <span id="cb485-74"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb485-74" tabindex="-1"></a>                            exp_weather)</span></code></pre></div>
-<p>For phenology and weather records, we now have the historic and experimental data in the same dataset. We can follow the same procedure we implemented in the chapter <a href="phenoflex3.html#phenoflex3">Can we improve the performance of <code>PhenoFlex</code>?</a> to fit the parameters of <code>PhenoFlex</code> to data.</p>
+<p>For phenology and weather records, we now have the historical and experimental data in the same dataset. We can follow the same procedure we implemented in the chapter <a href="phenoflex3.html#phenoflex3">Can we improve the performance of <code>PhenoFlex</code>?</a> to fit the parameters of <code>PhenoFlex</code> to data.</p>
 <div class="sourceCode" id="cb486"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb486-1"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb486-1" tabindex="-1"></a><span class="co"># Define the season used for calibration and validation in the PhenoFlex modelling approach</span></span>
 <span id="cb486-2"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb486-2" tabindex="-1"></a>calibration_seasons <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">sample</span>(pheno_merged<span class="sc">$</span>Year, <span class="dv">50</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>))</span>
 <span id="cb486-3"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb486-3" tabindex="-1"></a>validation_seasons <span class="ot">&lt;-</span> <span class="fu">sort</span>(pheno_merged[<span class="sc">!</span>(pheno_merged<span class="sc">$</span>Year <span class="sc">%in%</span> calibration_seasons), <span class="st">&quot;Year&quot;</span>])</span>
@@ -926,13 +926,13 @@ div.csl-indent {
 <tbody>
 <tr class="odd">
 <td align="left">RMSEP</td>
-<td align="right">9.972836</td>
-<td align="right">3.477322</td>
+<td align="right">10.445490</td>
+<td align="right">3.792648</td>
 </tr>
 <tr class="even">
 <td align="left">RPIQ</td>
-<td align="right">3.434329</td>
-<td align="right">9.849535</td>
+<td align="right">2.848119</td>
+<td align="right">7.844124</td>
 </tr>
 </tbody>
 </table>
@@ -1003,9 +1003,9 @@ div.csl-indent {
 <span id="cb493-48"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb493-48" tabindex="-1"></a>    }</span>
 <span id="cb493-49"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb493-49" tabindex="-1"></a>  }</span>
 <span id="cb493-50"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb493-50" tabindex="-1"></a>}</span></code></pre></div>
-<p>We can now implement the same procedure to estimate bloom dates for historic simulated scenarios.</p>
+<p>We can now implement the same procedure to estimate bloom dates for historical simulated scenarios.</p>
 <div class="sourceCode" id="cb494"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb494-1"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb494-1" tabindex="-1"></a><span class="co"># Bloom for past simulated scenarios ####</span></span>
-<span id="cb494-2"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb494-2" tabindex="-1"></a><span class="co"># Load the historic simulated scenarios</span></span>
+<span id="cb494-2"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb494-2" tabindex="-1"></a><span class="co"># Load the historical simulated scenarios</span></span>
 <span id="cb494-3"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb494-3" tabindex="-1"></a>temps_past_scenarios <span class="ot">&lt;-</span> <span class="fu">load_temperature_scenarios</span>(<span class="st">&quot;data&quot;</span>,</span>
 <span id="cb494-4"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb494-4" tabindex="-1"></a>                                    <span class="st">&quot;Bonn_hist_scenarios&quot;</span>)</span>
 <span id="cb494-5"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb494-5" tabindex="-1"></a></span>
@@ -1054,11 +1054,11 @@ div.csl-indent {
 <span id="cb494-48"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb494-48" tabindex="-1"></a>}</span>
 <span id="cb494-49"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb494-49" tabindex="-1"></a></span>
 <span id="cb494-50"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb494-50" tabindex="-1"></a><span class="fu">write.csv</span>(simulated_bloom, <span class="st">&quot;data/frost_simulated_bloom.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
-<p>We are going to produce a plot now to show the likely bloom dates for historic and future scenarios. We will also add the data used for calibration of the PhenoFlex model. The plot is a bit complicated, because it’s difficult to plot two datasets with different axes in the same plot panel. The plotting strategy below goes as follows:</p>
+<p>We are going to produce a plot now to show the likely bloom dates for historical and future scenarios. We will also add the data used for calibration of the PhenoFlex model. The plot is a bit complicated, because it’s difficult to plot two datasets with different axes in the same plot panel. The plotting strategy below goes as follows:</p>
 <ul>
 <li>We start with a violin plot of the simulated bloom data for the past scenarios.</li>
 <li>Then we extract the x and y axis limits from this plot (using the <code>layer_scales</code> command).</li>
-<li>We make a density plot of the calibration data (distinguishing between the historic and experimental data), but only to extract the data from it (the <code>ggplot_build</code> part below).</li>
+<li>We make a density plot of the calibration data (distinguishing between the historical and experimental data), but only to extract the data from it (the <code>ggplot_build</code> part below).</li>
 <li>We convert the density data that we extracted from the plot into numeric values that can be plotted on the same axis as the years in the first plot.</li>
 <li>We then add these data to the first plot as a <code>geom_ribbon</code>.</li>
 <li>We make a plot of the future data (much easier).</li>
@@ -1069,7 +1069,7 @@ div.csl-indent {
 <p>So this wasn’t easy but in the end we got something that was pretty close to what we had in mind.</p>
 <div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb495-1"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-1" tabindex="-1"></a><span class="co"># Plot all bloom prediction results</span></span>
 <span id="cb495-2"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-2" tabindex="-1"></a></span>
-<span id="cb495-3"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-3" tabindex="-1"></a><span class="co"># Plot showing the violins for historic simulated scenarios</span></span>
+<span id="cb495-3"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-3" tabindex="-1"></a><span class="co"># Plot showing the violins for historical simulated scenarios</span></span>
 <span id="cb495-4"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-4" tabindex="-1"></a>past_simulated_plot <span class="ot">&lt;-</span></span>
 <span id="cb495-5"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">data =</span> simulated_bloom) <span class="sc">+</span></span>
 <span id="cb495-6"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-6" tabindex="-1"></a>  <span class="fu">geom_violin</span>(</span>
@@ -1079,7 +1079,7 @@ div.csl-indent {
 <span id="cb495-10"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-10" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="fl">0.35</span>,</span>
 <span id="cb495-11"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-11" tabindex="-1"></a>    <span class="at">draw_quantiles =</span> <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>),</span>
 <span id="cb495-12"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-12" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb495-13"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-13" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span> <span class="st">&quot;Historic&quot;</span>) <span class="sc">+</span></span>
+<span id="cb495-13"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-13" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span> <span class="st">&quot;Historical&quot;</span>) <span class="sc">+</span></span>
 <span id="cb495-14"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-14" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb495-15"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-15" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x=</span><span class="fu">element_blank</span>(),</span>
 <span id="cb495-16"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-16" tabindex="-1"></a>        <span class="at">axis.title.y=</span><span class="fu">element_blank</span>(),</span>
@@ -1098,7 +1098,7 @@ div.csl-indent {
 <span id="cb495-29"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-29" tabindex="-1"></a>             <span class="at">Facet =</span> <span class="st">&quot;Past scenarios&quot;</span>,</span>
 <span id="cb495-30"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-30" tabindex="-1"></a>             <span class="at">Dataset =</span> <span class="fu">if_else</span>(out_df<span class="sc">$</span>Year <span class="sc">&gt;</span> <span class="dv">2010</span>, </span>
 <span id="cb495-31"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-31" tabindex="-1"></a>                               <span class="st">&quot;Experimental&quot;</span>, </span>
-<span id="cb495-32"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-32" tabindex="-1"></a>                               <span class="st">&quot;Historic&quot;</span>))</span>
+<span id="cb495-32"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-32" tabindex="-1"></a>                               <span class="st">&quot;Historical&quot;</span>))</span>
 <span id="cb495-33"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-33" tabindex="-1"></a></span>
 <span id="cb495-34"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-34" tabindex="-1"></a><span class="co"># Make a density plot of the bloom dates included in the calibration dataset</span></span>
 <span id="cb495-35"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-35" tabindex="-1"></a>gg_density_plot <span class="ot">&lt;-</span>   </span>
@@ -1118,7 +1118,7 @@ div.csl-indent {
 <span id="cb495-49"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-49" tabindex="-1"></a></span>
 <span id="cb495-50"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-50" tabindex="-1"></a><span class="co"># Scale data so that they can be plotted on the Year axis</span></span>
 <span id="cb495-51"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-51" tabindex="-1"></a>density_data[density_data<span class="sc">$</span>group <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;Dataset&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;Experimental&quot;</span></span>
-<span id="cb495-52"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-52" tabindex="-1"></a>density_data[density_data<span class="sc">$</span>group <span class="sc">==</span> <span class="dv">2</span>, <span class="st">&quot;Dataset&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;Historic&quot;</span></span>
+<span id="cb495-52"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-52" tabindex="-1"></a>density_data[density_data<span class="sc">$</span>group <span class="sc">==</span> <span class="dv">2</span>, <span class="st">&quot;Dataset&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;Historical&quot;</span></span>
 <span id="cb495-53"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-53" tabindex="-1"></a>density_data <span class="ot">&lt;-</span> </span>
 <span id="cb495-54"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-54" tabindex="-1"></a>  density_data <span class="sc">%&gt;%</span></span>
 <span id="cb495-55"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb495-55" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">density_scaled =</span> x <span class="sc">/</span> <span class="fu">max</span>(x),</span>
@@ -1217,11 +1217,11 @@ div.csl-indent {
 <span id="cb497-15"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb497-15" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Beginning =</span> pheno <span class="sc">-</span> bloom_buffer,</span>
 <span id="cb497-16"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb497-16" tabindex="-1"></a>         <span class="at">End =</span> pheno <span class="sc">+</span> bloom_buffer)</span>
 <span id="cb497-17"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb497-17" tabindex="-1"></a></span>
-<span id="cb497-18"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb497-18" tabindex="-1"></a><span class="co"># Same with the past simulated data from historic scenarios</span></span>
+<span id="cb497-18"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb497-18" tabindex="-1"></a><span class="co"># Same with the past simulated data from historical scenarios</span></span>
 <span id="cb497-19"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb497-19" tabindex="-1"></a>simulated_bloom <span class="ot">&lt;-</span> simulated_bloom <span class="sc">%&gt;%</span></span>
 <span id="cb497-20"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb497-20" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Beginning =</span> Pheno <span class="sc">-</span> bloom_buffer,</span>
 <span id="cb497-21"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb497-21" tabindex="-1"></a>         <span class="at">End =</span> Pheno <span class="sc">+</span> bloom_buffer)</span></code></pre></div>
-<p>We will now compute the number of frost hours expected to occur under future scenarios as well as under historic simulated scenarios. We implement this by using several <em>for</em> loops.</p>
+<p>We will now compute the number of frost hours expected to occur under future scenarios as well as under historical simulated scenarios. We implement this by using several <em>for</em> loops.</p>
 <div class="sourceCode" id="cb498"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb498-1"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb498-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span> <span class="sc">:</span> <span class="fu">nrow</span>(observed_bloom_calibration)){</span>
 <span id="cb498-2"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb498-2" tabindex="-1"></a>  </span>
 <span id="cb498-3"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb498-3" tabindex="-1"></a>  <span class="co"># Extract the beginning and end date for observed bloom</span></span>
@@ -1375,7 +1375,7 @@ div.csl-indent {
 <span id="cb501-12"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb501-12" tabindex="-1"></a>                     <span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="dv">0</span>)) <span class="sc">+</span></span>
 <span id="cb501-13"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb501-13" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Year&quot;</span>,</span>
 <span id="cb501-14"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb501-14" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Spring frost (hours &lt;0 °C)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb501-15"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb501-15" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span> <span class="st">&quot;Historic&quot;</span>) <span class="sc">+</span></span>
+<span id="cb501-15"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb501-15" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span> <span class="st">&quot;Historical&quot;</span>) <span class="sc">+</span></span>
 <span id="cb501-16"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb501-16" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb501-17"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb501-17" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, </span>
 <span id="cb501-18"><a href="a-robust-method-to-estimate-future-frost-risks.html#cb501-18" tabindex="-1"></a>                                   <span class="at">angle =</span> <span class="dv">60</span>, </span>
