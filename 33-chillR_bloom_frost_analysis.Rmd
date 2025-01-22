@@ -46,7 +46,7 @@ library(tidyverse)
 leaflet() %>%
   setView(lng = 6.99,
           lat = 50.625,
-          zoom=12) %>%
+          zoom = 12) %>%
   addTiles() %>%
   addMarkers(lng = 6.99,
              lat = 50.625,

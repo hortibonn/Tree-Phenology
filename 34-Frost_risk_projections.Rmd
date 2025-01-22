@@ -139,6 +139,11 @@ write.csv(hull_temps_both_conference, "data/hull_temps_both_conference.csv",row.
 ```{r plot_model_validity}
 hull_temps_both <- read_tab("data/hull_temps_both.csv")
 
+hull_temps_both$month_name <-
+  factor(hull_temps_both$Month,
+         levels = c(6:12, 1:5),
+         labels = month.name[c(6:12, 1:5)])
+
 # Implement the plot showing the overlap among conditions
 ggplot(hull_temps_both[which(hull_temps_both$Month %in% c(10,11,12,1,2,3)),],
        aes(Tmin, Tmax, fill = factor(SSP_Time))) +
@@ -177,6 +182,12 @@ So let's draw a new *convex-hull* plot without these unusually warm seasons.
 hull_temps_both_conference <- read_tab("data/hull_temps_both_conference.csv")
 
 # Plot the model validity domain
+
+hull_temps_both_conference$month_name <-
+  factor(hull_temps_both_conference$Month,
+         levels = c(6:12, 1:5),
+         labels = month.name[c(6:12, 1:5)])
+
 
 ggplot(hull_temps_both_conference[which(hull_temps_both_conference$Month %in% c(10,11,12,1,2,3)),],
        aes(Tmin, Tmax, fill = factor(SSP_Time))) +
