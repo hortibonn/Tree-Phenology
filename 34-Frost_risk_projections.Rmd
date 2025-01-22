@@ -8,7 +8,7 @@
 
 ## Frost risk for future scenarios
 
-We have seen in the previous chapter the importance of analyzing the risk of spring frost events in temperate fruit trees for historic periods. However, such analysis provides little information for planning strategies to adapt fruit orchards to potential frost events occurring in the future. What we actually need for supporting farmers in making decisions is an assessment of the probability of experiencing frost events (and ideally also their severity) in the future. Such an assessment should consider the prospective impacts of climate change.
+We have seen in the previous chapter the importance of analyzing the risk of spring frost events in temperate fruit trees for historical periods. However, such analysis provides little information for planning strategies to adapt fruit orchards to potential frost events occurring in the future. What we actually need for supporting farmers in making decisions is an assessment of the probability of experiencing frost events (and ideally also their severity) in the future. Such an assessment should consider the prospective impacts of climate change.
 
 This is not an easy task. On the one hand, spring frosts result from the occurrence of temperatures below the sensitivity threshold of the tree, which varies according to which kind of plant tissue is exposed to the cold. Plants become more sensitive to freezing temperatures as they develop from dormancy to harvest. On the other hand, tree development during and after dormancy is itself driven by temperature, with advancing or delaying effects depending on particular factors such as the species, cultivar and ultimately the place.
 
@@ -173,7 +173,7 @@ ggplot(hull_temps_both[which(hull_temps_both$Month %in% c(10,11,12,1,2,3)),],
   theme_bw(base_size = 15)
 ```
 
-This *convex-hull* plot is showing the coverage considering temperatures in CKA between 1958 and 2019 as well as all experimental seasons analyzed in chapter [Experimentally enhanced PLS]. To make the phenology modelling approach work with historic and experimental data, we would need to use phenology records from the same species and cultivar (pear cultivar 'Conference'). Fortunately, we do have historic records for full bloom for this cultivar between 1958 and 2019. However, we may want to subset the experimental data used for the *convex-hull* plot to only retain seasons that were more or less normal. This is to reduce the misleading effects we may have introduced by using extremely warm treatments.
+This *convex-hull* plot is showing the coverage considering temperatures in CKA between 1958 and 2019 as well as all experimental seasons analyzed in chapter [Experimentally enhanced PLS]. To make the phenology modelling approach work with historical and experimental data, we would need to use phenology records from the same species and cultivar (pear cultivar 'Conference'). Fortunately, we do have historical records for full bloom for this cultivar between 1958 and 2019. However, we may want to subset the experimental data used for the *convex-hull* plot to only retain seasons that were more or less normal. This is to reduce the misleading effects we may have introduced by using extremely warm treatments.
 
 So let's draw a new *convex-hull* plot without these unusually warm seasons.
 
@@ -224,10 +224,10 @@ This is not a perfect coverage of course but we don't have more data (for now) f
 
 *We will proceed with these data hoping that in the near future we are able to identify 'normal seasons' in the experimental dataset that help us to improve our modelling validity domain.*
 
-We can now implement our dormancy modelling framework `PhenoFlex` by combining historic and experimental records. In this code chunk, we will import and format the data so we can calibrate the model using these records.
+We can now implement our dormancy modelling framework `PhenoFlex` by combining historical and experimental records. In this code chunk, we will import and format the data so we can calibrate the model using these records.
 
 ```{r data_preparation}
-# Import the phenology data for the historic period 1958-2019
+# Import the phenology data for the historical period 1958-2019
 # Note that we are selecting only the Year and full bloom columns
 historic_pheno_conference <- 
   read_tab("data/Pheno_pear_conference_1958_2019.csv")[c("Year",
@@ -289,21 +289,21 @@ exp_pheno <- exp_pheno[!(exp_pheno$Treatment %in% c(2025, 2030, 2031, 2034, 2035
                                                     2045, 2047, 2048, 2049, 2050, 2051, 2054)),
                        c("Treatment", "pheno")]
 
-# Rename the columns to match the names of the historic dataset
+# Rename the columns to match the names of the historical dataset
 colnames(exp_pheno) <- c("Year", "pheno")
 
 
-# Merge the historic and experimental phenology data
+# Merge the historical and experimental phenology data
 pheno_merged <- bind_rows(filter(historic_pheno_conference, Year != 1958),
                           exp_pheno)
 
 
-# Merge the historic and experimental phenology data
+# Merge the historical and experimental phenology data
 weather_merged <- bind_rows(past_weather[, colnames(past_weather) %in% names(exp_weather)],
                             exp_weather)
 ```
 
-For phenology and weather records, we now have the historic and experimental data in the same dataset. We can follow the same procedure we implemented in the chapter [Can we improve the performance of `PhenoFlex`?] to fit the parameters of `PhenoFlex` to data.
+For phenology and weather records, we now have the historical and experimental data in the same dataset. We can follow the same procedure we implemented in the chapter [Can we improve the performance of `PhenoFlex`?] to fit the parameters of `PhenoFlex` to data.
 
 ```{r season_selection, eval=FALSE}
 # Define the season used for calibration and validation in the PhenoFlex modelling approach
@@ -536,12 +536,12 @@ write.csv(future_bloom, "data/frost_future_bloom.csv", row.names = FALSE)
 
 ```
 
-We can now implement the same procedure to estimate bloom dates for historic simulated scenarios.
+We can now implement the same procedure to estimate bloom dates for historical simulated scenarios.
 
 ```{r historic_sim_bloom, message = FALSE, eval= FALSE}
 
 # Bloom for past simulated scenarios ####
-# Load the historic simulated scenarios
+# Load the historical simulated scenarios
 temps_past_scenarios <- load_temperature_scenarios("data",
                                     "Bonn_hist_scenarios")
 
@@ -592,11 +592,11 @@ for (scen_year in scen_years){
 write.csv(simulated_bloom, "data/frost_simulated_bloom.csv", row.names = FALSE)
 ```
 
-We are going to produce a plot now to show the likely bloom dates for historic and future scenarios. We will also add the data used for calibration of the PhenoFlex model. The plot is a bit complicated, because it's difficult to plot two datasets with different axes in the same plot panel. The plotting strategy below goes as follows:
+We are going to produce a plot now to show the likely bloom dates for historical and future scenarios. We will also add the data used for calibration of the PhenoFlex model. The plot is a bit complicated, because it's difficult to plot two datasets with different axes in the same plot panel. The plotting strategy below goes as follows:
 
 * We start with a violin plot of the simulated bloom data for the past scenarios.
 * Then we extract the x and y axis limits from this plot (using the `layer_scales` command).
-* We make a density plot of the calibration data (distinguishing between the historic and experimental data), but only to extract the data from it (the `ggplot_build` part below).
+* We make a density plot of the calibration data (distinguishing between the historical and experimental data), but only to extract the data from it (the `ggplot_build` part below).
 * We convert the density data that we extracted from the plot into numeric values that can be plotted on the same axis as the years in the first plot.
 * We then add these data to the first plot as a `geom_ribbon`.
 * We make a plot of the future data (much easier).
@@ -618,7 +618,7 @@ future_bloom <- read_tab("data/frost_future_bloom.csv")
 
 # Plot all bloom prediction results
 
-# Plot showing the violins for historic simulated scenarios
+# Plot showing the violins for historical simulated scenarios
 past_simulated_plot <-
   ggplot(data = simulated_bloom) +
   geom_violin(
@@ -628,7 +628,7 @@ past_simulated_plot <-
     linewidth = 0.35,
     draw_quantiles = c(0.25, 0.5, 0.75),
     alpha = 0.5) +
-  facet_grid(~ "Historic") +
+  facet_grid(~ "Historical") +
   theme_bw() +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank(),
@@ -647,7 +647,7 @@ observed_bloom_calibration <-
              Facet = "Past scenarios",
              Dataset = if_else(out_df$Year > 2010, 
                                "Experimental", 
-                               "Historic"))
+                               "Historical"))
 
 # Make a density plot of the bloom dates included in the calibration dataset
 gg_density_plot <-   
@@ -667,7 +667,7 @@ density_data <-
 
 # Scale data so that they can be plotted on the Year axis
 density_data[density_data$group == 1, "Dataset"] <- "Experimental"
-density_data[density_data$group == 2, "Dataset"] <- "Historic"
+density_data[density_data$group == 2, "Dataset"] <- "Historical"
 density_data <- 
   density_data %>%
   mutate(density_scaled = x / max(x),
@@ -774,13 +774,13 @@ observed_bloom_calibration <- observed_bloom_calibration %>%
   mutate(Beginning = pheno - bloom_buffer,
          End = pheno + bloom_buffer)
 
-# Same with the past simulated data from historic scenarios
+# Same with the past simulated data from historical scenarios
 simulated_bloom <- simulated_bloom %>%
   mutate(Beginning = Pheno - bloom_buffer,
          End = Pheno + bloom_buffer)
 ```
 
-We will now compute the number of frost hours expected to occur under future scenarios as well as under historic simulated scenarios. We implement this by using several *for* loops.
+We will now compute the number of frost hours expected to occur under future scenarios as well as under historical simulated scenarios. We implement this by using several *for* loops.
 
 ```{r frost_hours_observed}
 for (i in 1 : nrow(observed_bloom_calibration)){
@@ -967,7 +967,7 @@ past_frost_plot <- ggplot(simulated_frost,
                      expand = expansion(mult = 0)) +
   labs(x = "Year",
        y = "Spring frost (hours <0 °C)") +
-  facet_grid(~ "Historic") +
+  facet_grid(~ "Historical") +
   theme_bw() +
   theme(axis.text.x = element_text(size = 7, 
                                    angle = 60, 
